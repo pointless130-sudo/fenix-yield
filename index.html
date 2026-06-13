@@ -438,21 +438,16 @@ window.signWithPasskey = async function() {
   btn.disabled  = true;
   btn.innerHTML = '<div class="spinner"></div> Waiting for biometric...';
   icon.className = 'passkey-icon waiting';
-  const safeTxHash = currentTx.contractTransactionHash 
-  || currentTx.safeTxHash 
-  || currentTx.transactionHash;
-  if (!safeTxHash) throw new Error('No tx hash found. Fields: '+Object.keys(currentTx).join(', '));
 
   try {
     log('sign-log','Getting tx hash...','info');
-    const safeTxHash = currentTx.contractTransactionHash;
-    if (!safeTxHash) throw new Error('No contractTransactionHash on transaction');
+    const safeTxHash = currentTx.safeTxHash || currentTx.contractTransactionHash;
+    if (!safeTxHash) throw new Error('No tx hash found. Fields: '+Object.keys(currentTx).join(', '));
 
     log('sign-log','Hash: '+safeTxHash.slice(0,10)+'...','info');
     const hashBytes = hexToBytes(safeTxHash);
     log('sign-log','Challenge bytes: '+hashBytes.length,'info');
 
-    // Get passkey assertion — declared with let so it's in outer scope
     let assertion;
     try {
       assertion = await navigator.credentials.get({
@@ -467,20 +462,18 @@ window.signWithPasskey = async function() {
       throw new Error('Biometric failed: ' + credErr.name + ' — ' + credErr.message);
     }
 
-    if (!assertion) throw new Error('credentials.get returned null — no passkey found for this site');
+    if (!assertion) throw new Error('credentials.get returned null');
     if (!assertion.response) throw new Error('assertion.response is undefined');
 
     log('sign-log','✅ Biometric confirmed','ok');
-    log('sign-log','Response keys: '+Object.keys(assertion.response).join(', '),'info');
 
-    // Extract response components
     const authenticatorData = assertion.response.authenticatorData;
     const clientDataJSON    = assertion.response.clientDataJSON;
     const signature         = assertion.response.signature;
 
-    if (!authenticatorData) throw new Error('authenticatorData missing from response');
-    if (!clientDataJSON)    throw new Error('clientDataJSON missing from response');
-    if (!signature)         throw new Error('signature missing from response');
+    if (!authenticatorData) throw new Error('authenticatorData missing');
+    if (!clientDataJSON)    throw new Error('clientDataJSON missing');
+    if (!signature)         throw new Error('signature missing');
 
     const authData   = new Uint8Array(authenticatorData);
     const clientData = new Uint8Array(clientDataJSON);
@@ -501,6 +494,26 @@ window.signWithPasskey = async function() {
         body: JSON.stringify({ signature: bytesToHex(encodedSig) }),
       }
     );
+
+    if (submitRes.ok || submitRes.status===201) {
+      log('sign-log','✅ Signature submitted!','ok');
+      log('sign-log','Transaction confirmed — will execute shortly.','ok');
+      document.getElementById('tx-status-pill').innerHTML =
+        '<div class="pill pill-success"><div class="dot"></div>Signed ✓</div>';
+      icon.className='passkey-icon'; icon.textContent='✅';
+      btn.innerHTML='✅ Signed Successfully'; btn.className='btn btn-success';
+    } else {
+      const errData = await submitRes.json().catch(()=>({}));
+      throw new Error('Safe API error: '+JSON.stringify(errData));
+    }
+
+  } catch(err) {
+    log('sign-log','❌ '+err.name+': '+err.message,'err');
+    btn.disabled=false;
+    btn.innerHTML='Sign with Face ID / Fingerprint';
+    icon.className='passkey-icon';
+  }
+};
 
     if (submitRes.ok || submitRes.status===201) {
       log('sign-log','✅ Signature submitted!','ok');
