@@ -381,15 +381,78 @@ window.signWithPasskey = async function() {
     var sig        = new Uint8Array(assertion.response.signature);
 
     log('sign-log', 'Building signature...', 'info');
+
+    function abiEncodePasskeySig(authData, clientDataFields, r, s) {
+  // Manual ABI encoding of (bytes, string, uint256, uint256)
+  // Each dynamic type has an offset, then length, then data (padded to 32 bytes)
+  function pad32(n) {
+    var hex = n.toString(16).padStart(64, '0');
+    var bytes = new Uint8Array(32);
+    for (var i = 0; i < 32; i++) bytes[i] = parseInt(hex.substr(i*2, 2), 16);
+    return bytes;
+  }
+
+  function encodeBytes(data) {
+    var len = pad32(BigInt(data.length));
+    var padded = new Uint8Array(Math.ceil(data.length / 32) * 32);
+    padded.set(data);
+    return concat([len, padded]);
+  }
+
+  function encodeString(str) {
+    var data = new TextEncoder().encode(str);
+    return encodeBytes(data);
+  }
+
+  function concat(arrays) {
+    var total = arrays.reduce(function(s, a) { return s + a.length; }, 0);
+    var out = new Uint8Array(total);
+    var off = 0;
+    arrays.forEach(function(a) { out.set(a, off); off += a.length; });
+    return out;
+  }
+
+  // 4 params: authData (bytes), clientDataFields (string), r (uint256), s (uint256)
+  // Offsets: authData at 128 (4*32), clientDataFields after authData, r and s are static
+  var authDataEncoded        = encodeBytes(authData);
+  var clientDataEncoded      = encodeString(clientDataFields);
+  var authDataOffset         = BigInt(128); // 4 * 32
+  var clientDataOffset       = authDataOffset + BigInt(authDataEncoded.length);
+
+  return concat([
+    pad32(authDataOffset),
+    pad32(clientDataOffset),
+    pad32(r),
+    pad32(s),
+    authDataEncoded,
+    clientDataEncoded,
+  ]);
+}
+    
     var rs = extractRS(sig);
-    var encoded = JSON.stringify({
-      authenticatorData: toBase64url(authData),
-      clientData:        toBase64url(clientData),
-      r:                 bytesToHex(rs.r),
-      s:                 bytesToHex(rs.s),
-      credentialId:      toBase64url(new Uint8Array(assertion.rawId))
-    });
-    var encodedSig = new TextEncoder().encode(encoded);
+
+    // Safe WebAuthn signature format:
+    // abi.encode(authenticatorData, clientDataFields, r, s)
+    // clientDataFields = everything in clientDataJSON between
+    // the challenge field and the closing brace
+    var clientDataStr = new TextDecoder().decode(clientData);
+    log('sign-log', 'clientData: ' + clientDataStr.slice(0, 80), 'info');
+
+    // Extract clientDataFields — the part after "challenge":"..." 
+    var challengeEnd = clientDataStr.indexOf('"', clientDataStr.indexOf('"challenge"') + 13);
+    var clientDataFields = clientDataStr.slice(challengeEnd + 1);
+    // Remove trailing closing brace if present
+    if (clientDataFields.endsWith('}')) {
+      clientDataFields = clientDataFields.slice(0, -1);
+    }
+    log('sign-log', 'clientDataFields: ' + clientDataFields.slice(0, 40), 'info');
+
+    var rBig = BigInt(bytesToHex(rs.r));
+    var sBig = BigInt(bytesToHex(rs.s));
+
+    // ABI encode: (bytes authenticatorData, string clientDataFields, uint256 r, uint256 s)
+    var encodedSig = abiEncodePasskeySig(authData, clientDataFields, rBig, sBig);
+    log('sign-log', 'Encoded sig length: ' + encodedSig.length, 'info');
 
     log('sign-log', 'Submitting to Safe...', 'info');
     var submitRes = await fetch(
