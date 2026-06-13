@@ -384,7 +384,7 @@ window.loadPendingTx = async function() {
   try {
     const res  = await fetch(SAFE_API+'/safes/'+safeAddr+'/multisig-transactions/?executed=false&limit=10');
     const data = await res.json();
-    const pending = (data.results||[]).filter(tx=>tx.confirmations.length < tx.confirmationsRequired);
+    const pending = (data.results||[]).filter(tx=>!tx.isExecuted);
 
     if (!pending.length) {
       log('sign-log','✅ No pending transactions found','ok');
