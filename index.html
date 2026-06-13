@@ -395,6 +395,10 @@ window.loadPendingTx = async function() {
     const pending  = allUnexecuted.filter(tx => tx.nonce === maxNonce);
     currentTx = pending[0];
 
+    log('sign-log', 'TX fields: '+Object.keys(currentTx).join(', '), 'info');
+    log('sign-log', 'safeTxHash: '+(currentTx.safeTxHash || 'MISSING'), 'info');
+    log('sign-log', 'transactionHash: '+(currentTx.transactionHash || 'MISSING'), 'info');
+    log('sign-log', 'contractTransactionHash: '+(currentTx.contractTransactionHash || 'MISSING'), 'info');
     log('sign-log','Found '+allUnexecuted.length+' unexecuted tx(s) — showing nonce '+currentTx.nonce,'ok');
 
     document.getElementById('tx-rows').innerHTML =
@@ -434,6 +438,10 @@ window.signWithPasskey = async function() {
   btn.disabled  = true;
   btn.innerHTML = '<div class="spinner"></div> Waiting for biometric...';
   icon.className = 'passkey-icon waiting';
+  const safeTxHash = currentTx.contractTransactionHash 
+  || currentTx.safeTxHash 
+  || currentTx.transactionHash;
+  if (!safeTxHash) throw new Error('No tx hash found. Fields: '+Object.keys(currentTx).join(', '));
 
   try {
     log('sign-log','Getting tx hash...','info');
