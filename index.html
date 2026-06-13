@@ -75,7 +75,7 @@
   </style>
 </head>
 <body>
-<!-- v5 -->
+<!-- v6 -->
 <header>
   <div class="logo">⚡</div>
   <div>
@@ -143,6 +143,10 @@
 <script type="module">
 const SAFE_API = 'https://safe-transaction-mainnet.safe.global/api/v1';
 
+// ── Passkey signer address (added as Safe owner) ───────────────────────────
+const PASSKEY_SIGNER = '0x317D078C3dBe76fffD7C68D542F0F7849797BC08';
+
+// ── Logging ───────────────────────────────────────────────────────────────────
 function log(id, msg, type) {
   type = type || 'info';
   var el = document.getElementById(id);
@@ -154,63 +158,127 @@ function log(id, msg, type) {
   el.scrollTop = el.scrollHeight;
 }
 
+// ── Encoding helpers ──────────────────────────────────────────────────────────
 function hexToBytes(hex) {
   hex = hex.replace(/^0x/, '');
   var b = new Uint8Array(hex.length / 2);
-  for (var i = 0; i < hex.length; i += 2) {
-    b[i / 2] = parseInt(hex.substr(i, 2), 16);
-  }
+  for (var i = 0; i < hex.length; i += 2) b[i/2] = parseInt(hex.substr(i,2),16);
   return b;
 }
 
 function bytesToHex(bytes) {
-  return '0x' + Array.from(bytes).map(function(b) {
-    return b.toString(16).padStart(2, '0');
-  }).join('');
+  return '0x' + Array.from(bytes).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 }
 
 function toBase64url(input) {
-  var bytes;
-  if (input instanceof Uint8Array) {
-    bytes = input;
-  } else {
-    bytes = new Uint8Array(input);
-  }
+  var bytes = (input instanceof Uint8Array) ? input : new Uint8Array(input);
   var str = '';
-  for (var i = 0; i < bytes.length; i++) {
-    str += String.fromCharCode(bytes[i]);
-  }
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  for (var i = 0; i < bytes.length; i++) str += String.fromCharCode(bytes[i]);
+  return btoa(str).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
 }
 
 function fromBase64url(b64) {
-  var base64 = b64.replace(/-/g, '+').replace(/_/g, '/');
+  var base64 = b64.replace(/-/g,'+').replace(/_/g,'/');
   var str = atob(base64);
   var bytes = new Uint8Array(str.length);
   for (var i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
   return bytes.buffer;
 }
 
-function shortAddr(a) { return a.slice(0, 6) + '...' + a.slice(-4); }
+function shortAddr(a) { return a.slice(0,6)+'...'+a.slice(-4); }
 
+function concat(arrays) {
+  var total = arrays.reduce(function(s,a){ return s+a.length; }, 0);
+  var out = new Uint8Array(total);
+  var off = 0;
+  arrays.forEach(function(a){ out.set(a,off); off+=a.length; });
+  return out;
+}
+
+function pad32(n) {
+  var hex = (typeof n === 'bigint' ? n : BigInt(n)).toString(16).padStart(64,'0');
+  var b = new Uint8Array(32);
+  for (var i = 0; i < 32; i++) b[i] = parseInt(hex.substr(i*2,2),16);
+  return b;
+}
+
+// ── ABI encode passkey signature ──────────────────────────────────────────────
+// Safe WebAuthn format: abi.encode(bytes authData, string clientDataFields, uint256 r, uint256 s)
+function abiEncodePasskeySig(authData, clientDataFields, r, s) {
+  function encodeBytes(data) {
+    var padded = new Uint8Array(Math.ceil(data.length/32)*32);
+    padded.set(data);
+    return concat([pad32(BigInt(data.length)), padded]);
+  }
+  function encodeString(str) {
+    return encodeBytes(new TextEncoder().encode(str));
+  }
+  var authEnc    = encodeBytes(authData);
+  var clientEnc  = encodeString(clientDataFields);
+  var authOffset = BigInt(128); // 4 params * 32 bytes each
+  var clientOffset = authOffset + BigInt(authEnc.length);
+  return concat([
+    pad32(authOffset),
+    pad32(clientOffset),
+    pad32(r),
+    pad32(s),
+    authEnc,
+    clientEnc,
+  ]);
+}
+
+// ── Build ERC-1271 contract signature wrapper ─────────────────────────────────
+// Safe format for contract signers:
+// r = signer address (32 bytes), s = offset (65), v = 0, then dynamic sig data
+function buildContractSignature(signerAddress, innerSig) {
+  var addrHex = signerAddress.replace('0x','').toLowerCase().padStart(64,'0');
+  var r = new Uint8Array(32);
+  for (var i = 0; i < 32; i++) r[i] = parseInt(addrHex.substr(i*2,2),16);
+  var s = pad32(BigInt(65));
+  var v = new Uint8Array([0]);
+  var sigLen = pad32(BigInt(innerSig.length));
+  return concat([r, s, v, sigLen, innerSig]);
+}
+
+// ── DER signature parser ──────────────────────────────────────────────────────
+function extractRS(derSig) {
+  var off = 2;
+  if (derSig[1] & 0x80) off += derSig[1] & 0x7f;
+  off++;
+  var rLen = derSig[off++];
+  var r = derSig.slice(off, off+rLen); off += rLen;
+  off++;
+  var sLen = derSig[off++];
+  var s = derSig.slice(off, off+sLen);
+  function norm(b) {
+    var a = Array.from(b).filter(function(v,i){ return !(i===0 && b[i]===0); });
+    while (a.length < 32) a.unshift(0);
+    return new Uint8Array(a.slice(-32));
+  }
+  return { r: norm(r), s: norm(s) };
+}
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
 window.switchTab = function(tab) {
-  document.querySelectorAll('.tab').forEach(function(t, i) {
+  document.querySelectorAll('.tab').forEach(function(t,i) {
     t.classList.remove('active');
-    if (i === 0 && tab === 'sign') t.classList.add('active');
-    if (i === 1 && tab === 'register') t.classList.add('active');
+    if (i===0 && tab==='sign') t.classList.add('active');
+    if (i===1 && tab==='register') t.classList.add('active');
   });
-  document.getElementById('tab-sign').className = 'tab-panel' + (tab === 'sign' ? ' active' : '');
-  document.getElementById('tab-register').className = 'tab-panel' + (tab === 'register' ? ' active' : '');
+  document.getElementById('tab-sign').className     = 'tab-panel'+(tab==='sign'?' active':'');
+  document.getElementById('tab-register').className = 'tab-panel'+(tab==='register'?' active':'');
 };
 
+// ── Auto-fill from URL ?safe= ─────────────────────────────────────────────────
 var params = new URLSearchParams(window.location.search);
 var safePrefill = params.get('safe');
 if (safePrefill) {
   document.getElementById('safe-address-sign').value = safePrefill;
-  document.getElementById('safe-address-reg').value = safePrefill;
-  setTimeout(function() { loadPendingTx(); }, 600);
+  document.getElementById('safe-address-reg').value  = safePrefill;
+  setTimeout(function(){ loadPendingTx(); }, 600);
 }
 
+// ── Public key extraction ─────────────────────────────────────────────────────
 async function extractPublicKey(authResponse) {
   if (typeof authResponse.getPublicKey === 'function') {
     try {
@@ -218,60 +286,60 @@ async function extractPublicKey(authResponse) {
       if (rawKey && rawKey.byteLength > 0) {
         var imported = await crypto.subtle.importKey('raw', rawKey, {name:'ECDSA',namedCurve:'P-256'}, true, ['verify']);
         var jwk = await crypto.subtle.exportKey('jwk', imported);
-        var xbuf = fromBase64url(jwk.x);
-        var ybuf = fromBase64url(jwk.y);
         return {
-          x: '0x' + Array.from(new Uint8Array(xbuf)).map(function(b){return b.toString(16).padStart(2,'0');}).join(''),
-          y: '0x' + Array.from(new Uint8Array(ybuf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('')
+          x: '0x'+Array.from(new Uint8Array(fromBase64url(jwk.x))).map(function(b){return b.toString(16).padStart(2,'0');}).join(''),
+          y: '0x'+Array.from(new Uint8Array(fromBase64url(jwk.y))).map(function(b){return b.toString(16).padStart(2,'0');}).join('')
         };
       }
-    } catch(e) { log('reg-log', 'getPublicKey failed: ' + e.message, 'info'); }
+    } catch(e) { log('reg-log','getPublicKey failed: '+e.message,'info'); }
   }
   var att = new Uint8Array(authResponse.attestationObject);
-  for (var i = 0; i < att.length - 65; i++) {
+  for (var i = 0; i < att.length-65; i++) {
     if (att[i] === 0x04) {
-      var cand = att.slice(i, i + 65);
+      var cand = att.slice(i,i+65);
       try {
-        await crypto.subtle.importKey('raw', cand, {name:'ECDSA',namedCurve:'P-256'}, true, ['verify']);
-        var xh = Array.from(cand.slice(1,33)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
-        var yh = Array.from(cand.slice(33,65)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
-        return { x: '0x'+xh, y: '0x'+yh };
-      } catch(_) {}
+        await crypto.subtle.importKey('raw',cand,{name:'ECDSA',namedCurve:'P-256'},true,['verify']);
+        return {
+          x: '0x'+Array.from(cand.slice(1,33)).map(function(b){return b.toString(16).padStart(2,'0');}).join(''),
+          y: '0x'+Array.from(cand.slice(33,65)).map(function(b){return b.toString(16).padStart(2,'0');}).join('')
+        };
+      } catch(_){}
     }
   }
   throw new Error('Could not extract public key');
 }
 
+// ── REGISTER ──────────────────────────────────────────────────────────────────
 window.registerPasskey = async function() {
   var safeAddr = document.getElementById('safe-address-reg').value.trim();
-  var name = document.getElementById('passkey-name').value.trim();
+  var name     = document.getElementById('passkey-name').value.trim();
   if (!safeAddr.startsWith('0x') || safeAddr.length !== 42) { alert('Invalid Safe address'); return; }
   if (!name) { alert('Enter a device name'); return; }
-  var btn = document.getElementById('reg-btn');
+  var btn  = document.getElementById('reg-btn');
   var icon = document.getElementById('reg-icon');
   document.getElementById('reg-log').innerHTML = '';
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Creating passkey...';
   icon.className = 'passkey-icon waiting';
   try {
-    log('reg-log', 'Requesting passkey...', 'info');
+    log('reg-log','Requesting passkey from device...','info');
     var cred = await navigator.credentials.create({
       publicKey: {
-        rp: { name: 'Yield Butler', id: window.location.hostname },
+        rp: { name:'Yield Butler', id:window.location.hostname },
         user: {
-          id: new TextEncoder().encode(safeAddr.toLowerCase() + '_' + Date.now()),
-          name: name + ' (' + shortAddr(safeAddr) + ')',
+          id: new TextEncoder().encode(safeAddr.toLowerCase()+'_'+Date.now()),
+          name: name+' ('+shortAddr(safeAddr)+')',
           displayName: name
         },
-        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-        authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' },
+        pubKeyCredParams: [{ alg:-7, type:'public-key' }],
+        authenticatorSelection: { authenticatorAttachment:'platform', userVerification:'required', residentKey:'preferred' },
         timeout: 120000,
         challenge: crypto.getRandomValues(new Uint8Array(32)),
         attestation: 'direct'
       }
     });
     if (!cred) throw new Error('No credential returned');
-    log('reg-log', 'Passkey created', 'ok');
+    log('reg-log','Passkey created on device','ok');
     var pubKey = await extractPublicKey(cred.response);
     var credId = toBase64url(new Uint8Array(cred.rawId));
     var result = {
@@ -281,11 +349,11 @@ window.registerPasskey = async function() {
     };
     document.getElementById('reg-output').textContent = JSON.stringify(result, null, 2);
     document.getElementById('reg-result').style.display = 'block';
-    log('reg-log', 'Done! Copy output and send to admin.', 'ok');
+    log('reg-log','Done! Copy output below and send to admin.','ok');
     icon.className = 'passkey-icon'; icon.textContent = '✅';
-    btn.innerHTML = '✅ Registered'; btn.className = 'btn btn-success';
+    btn.innerHTML = '✅ Passkey Registered'; btn.className = 'btn btn-success';
   } catch(err) {
-    log('reg-log', err.name + ': ' + err.message, 'err');
+    log('reg-log',err.name+': '+err.message,'err');
     btn.disabled = false; btn.innerHTML = 'Register Passkey on This Device';
     icon.textContent = '🔑'; icon.className = 'passkey-icon';
   }
@@ -300,44 +368,46 @@ window.copyRegOutput = function() {
   });
 };
 
+// ── SIGN ──────────────────────────────────────────────────────────────────────
 var currentTx = null, currentSafe = null;
 
 window.loadPendingTx = async function() {
   var safeAddr = document.getElementById('safe-address-sign').value.trim();
   if (!safeAddr.startsWith('0x') || safeAddr.length !== 42) { alert('Invalid Safe address'); return; }
   currentSafe = safeAddr;
-  document.getElementById('sign-form').style.display = 'none';
+  document.getElementById('sign-form').style.display  = 'none';
   document.getElementById('tx-details').style.display = 'none';
   document.getElementById('sign-log').innerHTML = '';
-  log('sign-log', 'Loading transactions...', 'info');
+  log('sign-log','Loading transactions...','info');
   try {
-    var res = await fetch(SAFE_API + '/safes/' + safeAddr + '/multisig-transactions/?executed=false&limit=10');
+    var res  = await fetch(SAFE_API+'/safes/'+safeAddr+'/multisig-transactions/?executed=false&limit=10');
     var data = await res.json();
-    var all = (data.results || []).filter(function(tx) { return !tx.isExecuted; });
+    var all  = (data.results||[]).filter(function(tx){ return !tx.isExecuted; });
     if (!all.length) {
-      log('sign-log', 'No pending transactions found', 'ok');
+      log('sign-log','No pending transactions found','ok');
       document.getElementById('sign-form').style.display = 'block';
       return;
     }
     var maxNonce = Math.max.apply(null, all.map(function(tx){ return tx.nonce; }));
     currentTx = all.filter(function(tx){ return tx.nonce === maxNonce; })[0];
-    log('sign-log', 'Found tx at nonce ' + currentTx.nonce, 'ok');
-    log('sign-log', 'safeTxHash: ' + (currentTx.safeTxHash || 'missing'), 'info');
+    log('sign-log','Found tx at nonce '+currentTx.nonce,'ok');
+    log('sign-log','safeTxHash: '+currentTx.safeTxHash,'info');
     document.getElementById('tx-rows').innerHTML =
-      '<div class="detail-row"><span class="detail-label">Protocol</span><span class="detail-value">' + guessProtocol(currentTx.to) + '</span></div>' +
-      '<div class="detail-row"><span class="detail-label">To</span><span class="detail-value mono">' + shortAddr(currentTx.to) + '</span></div>' +
-      '<div class="detail-row"><span class="detail-label">Value</span><span class="detail-value">' + formatEth(currentTx.value) + ' ETH</span></div>' +
-      '<div class="detail-row"><span class="detail-label">Nonce</span><span class="detail-value">' + currentTx.nonce + '</span></div>';
-    document.getElementById('tx-status-pill').innerHTML = '<div class="pill pill-pending"><div class="dot"></div>Ready to sign</div>';
+      '<div class="detail-row"><span class="detail-label">Protocol</span><span class="detail-value">'+guessProtocol(currentTx.to)+'</span></div>'+
+      '<div class="detail-row"><span class="detail-label">To</span><span class="detail-value mono">'+shortAddr(currentTx.to)+'</span></div>'+
+      '<div class="detail-row"><span class="detail-label">Value</span><span class="detail-value">'+formatEth(currentTx.value)+' ETH</span></div>'+
+      '<div class="detail-row"><span class="detail-label">Nonce</span><span class="detail-value">'+currentTx.nonce+'</span></div>';
+    document.getElementById('tx-status-pill').innerHTML =
+      '<div class="pill pill-pending"><div class="dot"></div>Ready to sign</div>';
     document.getElementById('tx-details').style.display = 'block';
   } catch(err) {
-    log('sign-log', 'Error: ' + err.message, 'err');
+    log('sign-log','Error: '+err.message,'err');
     document.getElementById('sign-form').style.display = 'block';
   }
 };
 
 window.resetSignForm = function() {
-  document.getElementById('sign-form').style.display = 'block';
+  document.getElementById('sign-form').style.display  = 'block';
   document.getElementById('tx-details').style.display = 'none';
   var el = document.getElementById('sign-log');
   el.style.display = 'none'; el.innerHTML = '';
@@ -346,18 +416,21 @@ window.resetSignForm = function() {
 
 window.signWithPasskey = async function() {
   if (!currentTx || !currentSafe) return;
-  var btn = document.getElementById('sign-btn');
+  var btn  = document.getElementById('sign-btn');
   var icon = document.getElementById('passkey-icon');
-  btn.disabled = true;
+  btn.disabled  = true;
   btn.innerHTML = '<div class="spinner"></div> Waiting for biometric...';
   icon.className = 'passkey-icon waiting';
-  try {
-    var safeTxHash = currentTx.safeTxHash || currentTx.contractTransactionHash;
-    if (!safeTxHash) throw new Error('No tx hash. Available fields: ' + Object.keys(currentTx).join(', '));
-    log('sign-log', 'Hash: ' + safeTxHash.slice(0, 10) + '...', 'info');
 
+  try {
+    // Step 1: Get the safe tx hash
+    var safeTxHash = currentTx.safeTxHash || currentTx.contractTransactionHash;
+    if (!safeTxHash) throw new Error('No tx hash found. Fields: '+Object.keys(currentTx).join(', '));
+    log('sign-log','Hash: '+safeTxHash.slice(0,10)+'...','info');
+
+    // Step 2: Request biometric
     var hashBytes = hexToBytes(safeTxHash);
-    log('sign-log', 'Requesting biometric...', 'info');
+    log('sign-log','Requesting biometric...','info');
 
     var assertion;
     try {
@@ -370,131 +443,93 @@ window.signWithPasskey = async function() {
         }
       });
     } catch(ce) {
-      throw new Error('Biometric error: ' + ce.name + ' — ' + ce.message);
+      throw new Error('Biometric error: '+ce.name+' — '+ce.message);
     }
 
-    if (!assertion || !assertion.response) throw new Error('No assertion returned');
-    log('sign-log', 'Biometric confirmed', 'ok');
+    if (!assertion || !assertion.response) throw new Error('No assertion returned from device');
+    log('sign-log','Biometric confirmed','ok');
 
+    // Step 3: Extract response data
     var authData   = new Uint8Array(assertion.response.authenticatorData);
     var clientData = new Uint8Array(assertion.response.clientDataJSON);
     var sig        = new Uint8Array(assertion.response.signature);
 
-    log('sign-log', 'Building signature...', 'info');
+    if (!authData.length)   throw new Error('authenticatorData empty');
+    if (!clientData.length) throw new Error('clientDataJSON empty');
+    if (!sig.length)        throw new Error('signature empty');
 
-    function abiEncodePasskeySig(authData, clientDataFields, r, s) {
-  // Manual ABI encoding of (bytes, string, uint256, uint256)
-  // Each dynamic type has an offset, then length, then data (padded to 32 bytes)
-  function pad32(n) {
-    var hex = n.toString(16).padStart(64, '0');
-    var bytes = new Uint8Array(32);
-    for (var i = 0; i < 32; i++) bytes[i] = parseInt(hex.substr(i*2, 2), 16);
-    return bytes;
-  }
+    log('sign-log','authData: '+authData.length+' bytes','info');
+    log('sign-log','clientData: '+clientData.length+' bytes','info');
+    log('sign-log','sig: '+sig.length+' bytes','info');
 
-  function encodeBytes(data) {
-    var len = pad32(BigInt(data.length));
-    var padded = new Uint8Array(Math.ceil(data.length / 32) * 32);
-    padded.set(data);
-    return concat([len, padded]);
-  }
-
-  function encodeString(str) {
-    var data = new TextEncoder().encode(str);
-    return encodeBytes(data);
-  }
-
-  function concat(arrays) {
-    var total = arrays.reduce(function(s, a) { return s + a.length; }, 0);
-    var out = new Uint8Array(total);
-    var off = 0;
-    arrays.forEach(function(a) { out.set(a, off); off += a.length; });
-    return out;
-  }
-
-  // 4 params: authData (bytes), clientDataFields (string), r (uint256), s (uint256)
-  // Offsets: authData at 128 (4*32), clientDataFields after authData, r and s are static
-  var authDataEncoded        = encodeBytes(authData);
-  var clientDataEncoded      = encodeString(clientDataFields);
-  var authDataOffset         = BigInt(128); // 4 * 32
-  var clientDataOffset       = authDataOffset + BigInt(authDataEncoded.length);
-
-  return concat([
-    pad32(authDataOffset),
-    pad32(clientDataOffset),
-    pad32(r),
-    pad32(s),
-    authDataEncoded,
-    clientDataEncoded,
-  ]);
-}
-    
-    var rs = extractRS(sig);
-
-    // Safe WebAuthn signature format:
-    // abi.encode(authenticatorData, clientDataFields, r, s)
-    // clientDataFields = everything in clientDataJSON between
-    // the challenge field and the closing brace
+    // Step 4: Parse clientDataFields
+    // clientDataJSON looks like: {"type":"webauthn.get","challenge":"...","origin":"..."}
+    // clientDataFields = everything after the challenge value to end (Safe needs this)
     var clientDataStr = new TextDecoder().decode(clientData);
-    log('sign-log', 'clientData: ' + clientDataStr.slice(0, 80), 'info');
+    log('sign-log','clientData preview: '+clientDataStr.slice(0,60),'info');
 
-    // Extract clientDataFields — the part after "challenge":"..." 
-    var challengeEnd = clientDataStr.indexOf('"', clientDataStr.indexOf('"challenge"') + 13);
-    var clientDataFields = clientDataStr.slice(challengeEnd + 1);
-    // Remove trailing closing brace if present
-    if (clientDataFields.endsWith('}')) {
-      clientDataFields = clientDataFields.slice(0, -1);
-    }
-    log('sign-log', 'clientDataFields: ' + clientDataFields.slice(0, 40), 'info');
+    // Find end of challenge value and extract the rest
+    var challengeKey = '"challenge":"';
+    var challengeStart = clientDataStr.indexOf(challengeKey);
+    if (challengeStart === -1) throw new Error('challenge not found in clientDataJSON');
+    var afterChallenge = clientDataStr.indexOf('"', challengeStart + challengeKey.length);
+    if (afterChallenge === -1) throw new Error('challenge end not found');
+    // clientDataFields is everything from after the challenge closing quote to end
+    // but we strip the leading comma and closing brace
+    var clientDataFields = clientDataStr.slice(afterChallenge + 1);
+    // Remove trailing }
+    if (clientDataFields.endsWith('}')) clientDataFields = clientDataFields.slice(0, -1);
+    log('sign-log','clientDataFields: '+clientDataFields.slice(0,40),'info');
 
-    var rBig = BigInt(bytesToHex(rs.r));
-    var sBig = BigInt(bytesToHex(rs.s));
+    // Step 5: Extract r and s from DER signature
+    var rs = extractRS(sig);
+    var r  = BigInt(bytesToHex(rs.r));
+    var s  = BigInt(bytesToHex(rs.s));
+    log('sign-log','Building signature...','info');
 
-    // ABI encode: (bytes authenticatorData, string clientDataFields, uint256 r, uint256 s)
-    var encodedSig = abiEncodePasskeySig(authData, clientDataFields, rBig, sBig);
-    log('sign-log', 'Encoded sig length: ' + encodedSig.length, 'info');
+    // Step 6: ABI encode as Safe WebAuthn signature
+    var innerSig = abiEncodePasskeySig(authData, clientDataFields, r, s);
+    log('sign-log','Inner sig: '+innerSig.length+' bytes','info');
 
-    log('sign-log', 'Submitting to Safe...', 'info');
+    // Step 7: Wrap in ERC-1271 contract signature format
+    var contractSig = buildContractSignature(PASSKEY_SIGNER, innerSig);
+    log('sign-log','Contract sig: '+contractSig.length+' bytes','info');
+
+    // Step 8: Submit to Safe API
+    log('sign-log','Submitting to Safe...','info');
     var submitRes = await fetch(
-      SAFE_API + '/multisig-transactions/' + safeTxHash + '/confirmations/',
-      { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ signature: bytesToHex(encodedSig) }) }
+      SAFE_API+'/multisig-transactions/'+safeTxHash+'/confirmations/',
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          signature: bytesToHex(contractSig),
+          sender: PASSKEY_SIGNER
+        })
+      }
     );
 
     if (submitRes.ok || submitRes.status === 201) {
-      log('sign-log', 'Signature submitted!', 'ok');
-      log('sign-log', 'Transaction will execute shortly.', 'ok');
-      document.getElementById('tx-status-pill').innerHTML = '<div class="pill pill-success"><div class="dot"></div>Signed ✓</div>';
+      log('sign-log','Signature submitted!','ok');
+      log('sign-log','Transaction confirmed — will execute shortly.','ok');
+      document.getElementById('tx-status-pill').innerHTML =
+        '<div class="pill pill-success"><div class="dot"></div>Signed ✓</div>';
       icon.className = 'passkey-icon'; icon.textContent = '✅';
       btn.innerHTML = '✅ Signed Successfully'; btn.className = 'btn btn-success';
     } else {
       var errData = await submitRes.json().catch(function(){ return {}; });
-      throw new Error('Safe API: ' + JSON.stringify(errData));
+      throw new Error('Safe API: '+JSON.stringify(errData));
     }
+
   } catch(err) {
-    log('sign-log', err.name + ': ' + err.message, 'err');
+    log('sign-log',err.name+': '+err.message,'err');
     btn.disabled = false;
     btn.innerHTML = 'Sign with Face ID / Fingerprint';
     icon.className = 'passkey-icon';
   }
 };
 
-function extractRS(derSig) {
-  var off = 2;
-  if (derSig[1] & 0x80) off += derSig[1] & 0x7f;
-  off++;
-  var rLen = derSig[off++];
-  var r = derSig.slice(off, off + rLen); off += rLen;
-  off++;
-  var sLen = derSig[off++];
-  var s = derSig.slice(off, off + sLen);
-  function norm(b) {
-    var a = Array.from(b).filter(function(v,i){ return !(i===0 && b[i]===0); });
-    while (a.length < 32) a.unshift(0);
-    return new Uint8Array(a.slice(-32));
-  }
-  return { r: norm(r), s: norm(s) };
-}
-
+// ── UI helpers ────────────────────────────────────────────────────────────────
 function guessProtocol(addr) {
   var map = {
     '0xae7ab96520de3a18e5e111b5eaab095312d7fe84': 'Lido (stETH)',
@@ -504,12 +539,12 @@ function guessProtocol(addr) {
     '0x06325440d014e39736583c165c2963ba99faf14e': 'Curve LP',
     '0xd6a2d6ee1209e938f297b41b631aed3f10684e07': 'Safe (owner change)'
   };
-  return map[addr.toLowerCase()] || addr.slice(0, 8) + '...';
+  return map[addr.toLowerCase()] || addr.slice(0,8)+'...';
 }
 
 function formatEth(wei) {
   if (!wei || wei === '0') return '0';
-  return (parseFloat(wei) / 1e18).toFixed(4);
+  return (parseFloat(wei)/1e18).toFixed(4);
 }
 </script>
 </body>
