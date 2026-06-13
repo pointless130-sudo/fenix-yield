@@ -182,11 +182,17 @@ function base64urlToBuffer(b64) {
 function shortAddr(a) { return a.slice(0,6)+'...'+a.slice(-4); }
 
 window.switchTab = function(tab) {
-  document.querySelectorAll('.tab').forEach((t,i)=>{
-    t.classList.toggle('active',(i===0&&tab==='sign')||(i===1&&tab==='register'));
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.remove('active');
+    if (i === 0 && tab === 'sign') t.classList.add('active');
+    if (i === 1 && tab === 'register') t.classList.add('active');
   });
-  document.getElementById('tab-sign').classList.toggle('active',tab==='sign');
-  document.getElementById('tab-register').classList.toggle('active',tab==='register');
+  const signPanel     = document.getElementById('tab-sign');
+  const registerPanel = document.getElementById('tab-register');
+  signPanel.classList.remove('active');
+  registerPanel.classList.remove('active');
+  if (tab === 'sign')     signPanel.classList.add('active');
+  if (tab === 'register') registerPanel.classList.add('active');
 };
 
 // Auto-fill from URL param ?safe=0x...
