@@ -13,7 +13,8 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;
       display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
-    header{width:100%;max-width:480px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding-top:8px}
+    header{width:100%;max-width:480px;display:flex;align-items:center;gap:12px;
+      margin-bottom:32px;padding-top:8px}
     .logo{width:38px;height:38px;border-radius:10px;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
       display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -50,7 +51,8 @@
     .detail-value.mono{font-family:'SF Mono','Fira Code',monospace;font-size:12px}
     .log{font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:var(--muted);
       background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;
-      min-height:60px;max-height:200px;overflow-y:auto;line-height:1.6;white-space:pre-wrap;margin-top:14px}
+      min-height:60px;max-height:220px;overflow-y:auto;line-height:1.6;
+      white-space:pre-wrap;margin-top:14px}
     .log-line{display:block}
     .log-ok{color:var(--success)}
     .log-err{color:var(--error)}
@@ -73,6 +75,8 @@
   </style>
 </head>
 <body>
+
+<!-- v3 -->
 
 <header>
   <div class="logo">⚡</div>
@@ -143,6 +147,7 @@
 <script type="module">
 const SAFE_API = 'https://safe-transaction-mainnet.safe.global/api/v1';
 
+// ── Logging ───────────────────────────────────────────────────────────────────
 function log(id, msg, type='info') {
   const el = document.getElementById(id);
   el.style.display = 'block';
@@ -153,6 +158,7 @@ function log(id, msg, type='info') {
   el.scrollTop = el.scrollHeight;
 }
 
+// ── Encoding helpers ──────────────────────────────────────────────────────────
 function hexToBytes(hex) {
   hex = hex.replace(/^0x/,'');
   const b = new Uint8Array(hex.length/2);
@@ -165,9 +171,16 @@ function bytesToHex(bytes) {
 }
 
 function bufferToBase64url(buf) {
-  const bytes = new Uint8Array(buf);
-  let str='';
-  bytes.forEach(b=>str+=String.fromCharCode(b));
+  let bytes;
+  if (buf instanceof Uint8Array) {
+    bytes = buf;
+  } else if (buf instanceof ArrayBuffer) {
+    bytes = new Uint8Array(buf);
+  } else {
+    bytes = new Uint8Array(buf);
+  }
+  let str = '';
+  bytes.forEach(b => str += String.fromCharCode(b));
   return btoa(str).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
 }
 
@@ -181,32 +194,32 @@ function base64urlToBuffer(b64) {
 
 function shortAddr(a) { return a.slice(0,6)+'...'+a.slice(-4); }
 
+// ── Tab switching ─────────────────────────────────────────────────────────────
 window.switchTab = function(tab) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
+  document.querySelectorAll('.tab').forEach((t,i) => {
     t.classList.remove('active');
-    if (i === 0 && tab === 'sign') t.classList.add('active');
-    if (i === 1 && tab === 'register') t.classList.add('active');
+    if (i===0 && tab==='sign') t.classList.add('active');
+    if (i===1 && tab==='register') t.classList.add('active');
   });
   const signPanel     = document.getElementById('tab-sign');
   const registerPanel = document.getElementById('tab-register');
   signPanel.classList.remove('active');
   registerPanel.classList.remove('active');
-  if (tab === 'sign')     signPanel.classList.add('active');
-  if (tab === 'register') registerPanel.classList.add('active');
+  if (tab==='sign') signPanel.classList.add('active');
+  if (tab==='register') registerPanel.classList.add('active');
 };
 
-// Auto-fill from URL param ?safe=0x...
+// ── Auto-fill from URL param ?safe=0x... ──────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
 const safePrefill = params.get('safe');
 if (safePrefill) {
   document.getElementById('safe-address-sign').value = safePrefill;
   document.getElementById('safe-address-reg').value  = safePrefill;
-  setTimeout(()=>loadPendingTx(), 600);
+  setTimeout(() => loadPendingTx(), 600);
 }
 
-// ── Public key extraction — works on Android Chrome + iOS Safari ──────────────
+// ── Public key extraction ─────────────────────────────────────────────────────
 async function extractPublicKey(authResponse) {
-
   // Method 1: getPublicKey() — Chrome 87+
   if (typeof authResponse.getPublicKey === 'function') {
     try {
@@ -222,11 +235,11 @@ async function extractPublicKey(authResponse) {
           y:'0x'+Array.from(base64urlToBuffer(jwk.y)).map(b=>b.toString(16).padStart(2,'0')).join(''),
         };
       }
-    } catch(e) { log('reg-log','Method 1 failed: '+e.message+' — trying fallback','info'); }
+    } catch(e) { log('reg-log','Method 1 failed: '+e.message,'info'); }
   }
 
-  // Method 2: Scan attestationObject for 04 || x || y uncompressed point
-  log('reg-log','Method 2: scanning attestation for public key...','info');
+  // Method 2: Scan for uncompressed point 04||x||y
+  log('reg-log','Method 2: scanning attestation...','info');
   const attestation = new Uint8Array(authResponse.attestationObject);
   for (let i=0; i<attestation.length-65; i++) {
     if (attestation[i] === 0x04) {
@@ -237,16 +250,16 @@ async function extractPublicKey(authResponse) {
         );
         const xHex = Array.from(candidate.slice(1,33)).map(b=>b.toString(16).padStart(2,'0')).join('');
         const yHex = Array.from(candidate.slice(33,65)).map(b=>b.toString(16).padStart(2,'0')).join('');
-        log('reg-log','Method 2: found uncompressed point at offset '+i,'info');
+        log('reg-log','Method 2: found key at offset '+i,'info');
         return { x:'0x'+xHex, y:'0x'+yHex };
-      } catch(_) { /* not a valid key here, keep scanning */ }
+      } catch(_) {}
     }
   }
 
-  // Method 3: CBOR hex pattern search
-  log('reg-log','Method 3: CBOR pattern search...','info');
+  // Method 3: CBOR pattern search
+  log('reg-log','Method 3: CBOR search...','info');
   const hex = Array.from(attestation).map(b=>b.toString(16).padStart(2,'0')).join('');
-  const markers = ['a5010203262001215820','a401020326215820','010203262158 20'];
+  const markers = ['a5010203262001215820','a401020326215820'];
   for (const marker of markers) {
     const idx = hex.indexOf(marker);
     if (idx === -1) continue;
@@ -256,7 +269,7 @@ async function extractPublicKey(authResponse) {
     if (yIdx === -1) continue;
     const yHex = hex.slice(yIdx+6, yIdx+70);
     if (xHex.length===64 && yHex.length===64) {
-      log('reg-log','Method 3: found key via CBOR marker','info');
+      log('reg-log','Method 3: found key via CBOR','info');
       return { x:'0x'+xHex, y:'0x'+yHex };
     }
   }
@@ -268,14 +281,13 @@ async function extractPublicKey(authResponse) {
 window.registerPasskey = async function() {
   const safeAddr = document.getElementById('safe-address-reg').value.trim();
   const name     = document.getElementById('passkey-name').value.trim();
-
   if (!safeAddr.startsWith('0x') || safeAddr.length !== 42) {
-    alert('Please enter a valid Safe address (0x... 42 characters)'); return;
+    alert('Please enter a valid Safe address'); return;
   }
   if (!name) { alert('Please enter a device name'); return; }
 
-  const btn  = document.getElementById('reg-btn');
-  const icon = document.getElementById('reg-icon');
+  const btn   = document.getElementById('reg-btn');
+  const icon  = document.getElementById('reg-icon');
   const logEl = document.getElementById('reg-log');
   logEl.innerHTML = '';
   btn.disabled = true;
@@ -284,7 +296,6 @@ window.registerPasskey = async function() {
 
   try {
     log('reg-log','Requesting passkey from device...','info');
-
     const credential = await navigator.credentials.create({
       publicKey: {
         rp: { name:'Yield Butler', id:window.location.hostname },
@@ -306,51 +317,39 @@ window.registerPasskey = async function() {
     });
 
     if (!credential) throw new Error('No credential returned');
-    log('reg-log','✅ Passkey created on device','ok');
+    log('reg-log','✅ Passkey created','ok');
     log('reg-log','Extracting public key...','info');
 
     const pubKey = await extractPublicKey(credential.response);
     const credId = bufferToBase64url(credential.rawId);
 
     log('reg-log','✅ Public key extracted','ok');
-    log('reg-log','X: '+pubKey.x.slice(0,20)+'...','info');
-    log('reg-log','Y: '+pubKey.y.slice(0,20)+'...','info');
-    log('reg-log','Credential: '+credId.slice(0,20)+'...','info');
 
     const result = {
-      safeAddress: safeAddr,
-      deviceName:  name,
+      safeAddress: safeAddr, deviceName: name,
       credentialId: credId,
       publicKey: { x: pubKey.x, y: pubKey.y },
-      rpId:      window.location.hostname,
+      rpId: window.location.hostname,
       createdAt: new Date().toISOString(),
     };
 
     document.getElementById('reg-output').textContent = JSON.stringify(result, null, 2);
     document.getElementById('reg-result').style.display = 'block';
-    log('reg-log','✅ Done! Copy the output below and send to admin.','ok');
+    log('reg-log','✅ Done! Copy output below and send to admin.','ok');
 
-    icon.className   = 'passkey-icon';
-    icon.textContent = '✅';
-    btn.innerHTML    = '✅ Passkey Registered';
-    btn.className    = 'btn btn-success';
+    icon.className='passkey-icon'; icon.textContent='✅';
+    btn.innerHTML='✅ Passkey Registered'; btn.className='btn btn-success';
 
   } catch(err) {
-    const name2 = err.name || 'Error';
-    const msg   = err.message || 'Unknown';
-    if (name2 === 'NotAllowedError') {
-      log('reg-log','❌ Cancelled — make sure screen lock / biometric is enabled on this device','err');
-    } else if (name2 === 'NotSupportedError') {
+    if (err.name==='NotAllowedError') {
+      log('reg-log','❌ Cancelled — ensure screen lock/biometric is enabled','err');
+    } else if (err.name==='NotSupportedError') {
       log('reg-log','❌ Not supported — use Chrome on Android or Safari on iOS','err');
-    } else if (name2 === 'SecurityError') {
-      log('reg-log','❌ Security error — page must be served over HTTPS','err');
     } else {
-      log('reg-log','❌ '+name2+': '+msg,'err');
+      log('reg-log','❌ '+err.name+': '+err.message,'err');
     }
-    btn.disabled     = false;
-    btn.innerHTML    = 'Register Passkey on This Device';
-    icon.textContent = '🔑';
-    icon.className   = 'passkey-icon';
+    btn.disabled=false; btn.innerHTML='Register Passkey on This Device';
+    icon.textContent='🔑'; icon.className='passkey-icon';
   }
 };
 
@@ -360,7 +359,7 @@ window.copyRegOutput = function() {
     .then(()=>alert('Copied!'))
     .catch(()=>{
       const ta = document.createElement('textarea');
-      ta.value = text; document.body.appendChild(ta);
+      ta.value=text; document.body.appendChild(ta);
       ta.select(); document.execCommand('copy');
       document.body.removeChild(ta); alert('Copied!');
     });
@@ -384,18 +383,19 @@ window.loadPendingTx = async function() {
   try {
     const res  = await fetch(SAFE_API+'/safes/'+safeAddr+'/multisig-transactions/?executed=false&limit=10');
     const data = await res.json();
-    const allUnexecuted = (data.results||[]).filter(tx => !tx.isExecuted);
-    const maxNonce = Math.max(...allUnexecuted.map(tx => tx.nonce));
-    const pending  = allUnexecuted.filter(tx => tx.nonce === maxNonce);
 
-    if (!pending.length) {
+    // Show all unexecuted txs, pick the one with the highest nonce
+    const allUnexecuted = (data.results||[]).filter(tx => !tx.isExecuted);
+    if (!allUnexecuted.length) {
       log('sign-log','✅ No pending transactions found','ok');
       document.getElementById('sign-form').style.display = 'block';
       return;
     }
-
+    const maxNonce = Math.max(...allUnexecuted.map(tx => tx.nonce));
+    const pending  = allUnexecuted.filter(tx => tx.nonce === maxNonce);
     currentTx = pending[0];
-    log('sign-log','Found '+pending.length+' pending tx(s) — nonce '+currentTx.nonce,'ok');
+
+    log('sign-log','Found '+allUnexecuted.length+' unexecuted tx(s) — showing nonce '+currentTx.nonce,'ok');
 
     document.getElementById('tx-rows').innerHTML =
       row('Protocol', guessProtocol(currentTx.to)) +
@@ -405,7 +405,7 @@ window.loadPendingTx = async function() {
       row('Signatures', currentTx.confirmations.length+'/'+currentTx.confirmationsRequired);
 
     document.getElementById('tx-status-pill').innerHTML =
-      '<div class="pill pill-pending"><div class="dot"></div>Awaiting signature</div>';
+      '<div class="pill pill-pending"><div class="dot"></div>Awaiting biometric signature</div>';
     document.getElementById('tx-details').style.display = 'block';
 
   } catch(err) {
@@ -423,7 +423,7 @@ window.resetSignForm = function() {
   document.getElementById('sign-form').style.display  = 'block';
   document.getElementById('tx-details').style.display = 'none';
   const logEl = document.getElementById('sign-log');
-  logEl.style.display = 'none'; logEl.innerHTML = '';
+  logEl.style.display='none'; logEl.innerHTML='';
   currentTx = null;
 };
 
@@ -436,102 +436,65 @@ window.signWithPasskey = async function() {
   icon.className = 'passkey-icon waiting';
 
   try {
-    log('sign-log','Requesting signature...','info');
+    log('sign-log','Getting tx hash...','info');
     const safeTxHash = currentTx.contractTransactionHash;
+    if (!safeTxHash) throw new Error('No contractTransactionHash on transaction');
 
-window.signWithPasskey = async function() {
-  if (!currentTx || !currentSafe) return;
-  const btn  = document.getElementById('sign-btn');
-  const icon = document.getElementById('passkey-icon');
-  btn.disabled  = true;
-  btn.innerHTML = '<div class="spinner"></div> Waiting for biometric...';
-  icon.className = 'passkey-icon waiting';
-
-  try {
-    log('sign-log', 'Getting tx hash...', 'info');
-    const safeTxHash = currentTx.contractTransactionHash;
-    log('sign-log', 'Hash: ' + (safeTxHash ? safeTxHash.slice(0,10)+'...' : 'MISSING'), 'info');
-
-    if (!safeTxHash) throw new Error('No contractTransactionHash on tx');
-
+    log('sign-log','Hash: '+safeTxHash.slice(0,10)+'...','info');
     const hashBytes = hexToBytes(safeTxHash);
-    log('sign-log', 'Hash bytes length: ' + hashBytes.length, 'info');
+    log('sign-log','Challenge bytes: '+hashBytes.length,'info');
 
-    log('sign-log', 'Calling credentials.get...', 'info');
-    const assertion = await navigator.credentials.get({
-      publicKey: {
-        rpId:             window.location.hostname,
-        challenge:        hashBytes,
-        userVerification: 'required',
-        timeout:          120000,
-      }
-    });
+    // Get passkey assertion — declared with let so it's in outer scope
+    let assertion;
+    try {
+      assertion = await navigator.credentials.get({
+        publicKey: {
+          rpId:             window.location.hostname,
+          challenge:        hashBytes,
+          userVerification: 'required',
+          timeout:          120000,
+        }
+      });
+    } catch(credErr) {
+      throw new Error('Biometric failed: ' + credErr.name + ' — ' + credErr.message);
+    }
 
-    log('sign-log', 'assertion: ' + (assertion ? 'received' : 'NULL'), 'info');
-    if (!assertion) throw new Error('credentials.get returned null');
+    if (!assertion) throw new Error('credentials.get returned null — no passkey found for this site');
     if (!assertion.response) throw new Error('assertion.response is undefined');
 
-    log('sign-log', 'response keys: ' + Object.keys(assertion.response).join(', '), 'info');
-    log('sign-log', 'authenticatorData: ' + (assertion.response.authenticatorData ? 'ok' : 'MISSING'), 'info');
-    log('sign-log', 'clientDataJSON: ' + (assertion.response.clientDataJSON ? 'ok' : 'MISSING'), 'info');
-    log('sign-log', 'signature: ' + (assertion.response.signature ? 'ok' : 'MISSING'), 'info');
+    log('sign-log','✅ Biometric confirmed','ok');
+    log('sign-log','Response keys: '+Object.keys(assertion.response).join(', '),'info');
 
-    log('sign-log', '✅ Biometric confirmed', 'ok');
+    // Extract response components
+    const authenticatorData = assertion.response.authenticatorData;
+    const clientDataJSON    = assertion.response.clientDataJSON;
+    const signature         = assertion.response.signature;
 
-    const authData   = new Uint8Array(assertion.response.authenticatorData);
-    const clientData = new Uint8Array(assertion.response.clientDataJSON);
-    const sig        = new Uint8Array(assertion.response.signature);
+    if (!authenticatorData) throw new Error('authenticatorData missing from response');
+    if (!clientDataJSON)    throw new Error('clientDataJSON missing from response');
+    if (!signature)         throw new Error('signature missing from response');
+
+    const authData   = new Uint8Array(authenticatorData);
+    const clientData = new Uint8Array(clientDataJSON);
+    const sig        = new Uint8Array(signature);
+
+    log('sign-log','authData: '+authData.length+' bytes','info');
+    log('sign-log','clientData: '+clientData.length+' bytes','info');
+    log('sign-log','sig: '+sig.length+' bytes','info');
 
     const encodedSig = encodePasskeySignature(sig, authData, clientData, assertion.rawId);
+    log('sign-log','Submitting to Safe API...','info');
 
-    log('sign-log', 'Submitting to Safe API...', 'info');
-
-    const res = await fetch(
+    const submitRes = await fetch(
       SAFE_API+'/multisig-transactions/'+safeTxHash+'/confirmations/',
-      { method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ signature: bytesToHex(encodedSig) }) }
+      {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ signature: bytesToHex(encodedSig) }),
+      }
     );
 
-    if (res.ok || res.status===201) {
-      log('sign-log', '✅ Signature submitted!', 'ok');
-      log('sign-log', 'Transaction confirmed — will execute shortly.', 'ok');
-      document.getElementById('tx-status-pill').innerHTML =
-        '<div class="pill pill-success"><div class="dot"></div>Signed ✓</div>';
-      icon.className='passkey-icon'; icon.textContent='✅';
-      btn.innerHTML='✅ Signed Successfully'; btn.className='btn btn-success';
-    } else {
-      const errData = await res.json().catch(()=>({}));
-      throw new Error(JSON.stringify(errData));
-    }
-  } catch(err) {
-    log('sign-log', '❌ ' + err.name + ': ' + err.message, 'err');
-    if (err.stack) log('sign-log', err.stack.split('\n')[1] || '', 'err');
-    btn.disabled=false;
-    btn.innerHTML='Sign with Face ID / Fingerprint';
-    icon.className='passkey-icon';
-  }
-};
-
-    log('sign-log','✅ Biometric confirmed','ok');
-
-    const authData   = assertion.response.authenticatorData
-      ? new Uint8Array(assertion.response.authenticatorData) : new Uint8Array(0);
-    const clientData = assertion.response.clientDataJSON
-      ? new Uint8Array(assertion.response.clientDataJSON) : new Uint8Array(0);
-    const sig        = assertion.response.signature
-      ? new Uint8Array(assertion.response.signature) : new Uint8Array(0);
-
-    log('sign-log', 'authData length: ' + authData.length, 'info');
-    log('sign-log', 'clientData length: ' + clientData.length, 'info');
-    log('sign-log', 'sig length: ' + sig.length, 'info');
-
-    const res = await fetch(
-      SAFE_API+'/multisig-transactions/'+safeTxHash+'/confirmations/',
-      { method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ signature: bytesToHex(encodedSig) }) }
-    );
-
-    if (res.ok || res.status===201) {
+    if (submitRes.ok || submitRes.status===201) {
       log('sign-log','✅ Signature submitted!','ok');
       log('sign-log','Transaction confirmed — will execute shortly.','ok');
       document.getElementById('tx-status-pill').innerHTML =
@@ -539,62 +502,63 @@ window.signWithPasskey = async function() {
       icon.className='passkey-icon'; icon.textContent='✅';
       btn.innerHTML='✅ Signed Successfully'; btn.className='btn btn-success';
     } else {
-      const errData = await res.json().catch(()=>({}));
-      throw new Error(JSON.stringify(errData));
+      const errData = await submitRes.json().catch(()=>({}));
+      throw new Error('Safe API error: '+JSON.stringify(errData));
     }
+
   } catch(err) {
-    if (err.name==='NotAllowedError') {
-      log('sign-log','❌ Biometric cancelled','err');
-    } else {
-      log('sign-log','❌ '+err.name+': '+err.message,'err');
-    }
+    log('sign-log','❌ '+err.name+': '+err.message,'err');
     btn.disabled=false;
     btn.innerHTML='Sign with Face ID / Fingerprint';
     icon.className='passkey-icon';
   }
 };
 
+// ── Signature helpers ─────────────────────────────────────────────────────────
 function encodePasskeySignature(sig, authData, clientData, rawId) {
-  try {
-    const { r, s } = extractRS(sig);
-    const encoded = JSON.stringify({
-      authenticatorData: bufferToBase64url(authData.buffer || authData),
-      clientData:        bufferToBase64url(clientData.buffer || clientData),
-      r:                 bytesToHex(r),
-      s:                 bytesToHex(s),
-      credentialId:      bufferToBase64url(rawId),
-    });
-    return new TextEncoder().encode(encoded);
-  } catch(e) {
-    throw new Error('Signature encoding failed: ' + e.message);
-  }
+  const {r, s} = extractRS(sig);
+  const encoded = JSON.stringify({
+    authenticatorData: bufferToBase64url(authData),
+    clientData:        bufferToBase64url(clientData),
+    r:                 bytesToHex(r),
+    s:                 bytesToHex(s),
+    credentialId:      bufferToBase64url(new Uint8Array(rawId)),
+  });
+  return new TextEncoder().encode(encoded);
 }
 
 function extractRS(derSig) {
-  let off=2;
-  if (derSig[1]&0x80) off+=derSig[1]&0x7f;
+  let off = 2;
+  if (derSig[1] & 0x80) off += derSig[1] & 0x7f;
   off++;
-  const rLen=derSig[off++]; const r=derSig.slice(off,off+rLen); off+=rLen;
+  const rLen = derSig[off++];
+  const r    = derSig.slice(off, off+rLen); off += rLen;
   off++;
-  const sLen=derSig[off++]; const s=derSig.slice(off,off+sLen);
-  const norm=b=>{const a=Array.from(b).filter((_,i)=>!(i===0&&b[i]===0));
-    while(a.length<32)a.unshift(0);return new Uint8Array(a.slice(-32))};
-  return {r:norm(r),s:norm(s)};
+  const sLen = derSig[off++];
+  const s    = derSig.slice(off, off+sLen);
+  const norm = b => {
+    const a = Array.from(b).filter((_,i) => !(i===0 && b[i]===0));
+    while (a.length < 32) a.unshift(0);
+    return new Uint8Array(a.slice(-32));
+  };
+  return { r: norm(r), s: norm(s) };
 }
 
+// ── UI helpers ────────────────────────────────────────────────────────────────
 function guessProtocol(addr) {
-  const map={
-    '0xae7ab96520de3a18e5e111b5eaab095312d7fe84':'🔵 Lido (stETH)',
-    '0xdc24316b9ae028f1497c275eb9192a3ea0f67022':'🟡 Curve stETH/ETH',
-    '0xeffc18fc3b7eb8e676dac549e0c693ad50d1ce31':'🟣 Aave v3',
-    '0xf403c135812408bfbe8713b5a23a04b3d48aae31':'🟠 Convex',
-    '0x06325440d014e39736583c165c2963ba99faf14e':'🟡 Curve LP',
+  const map = {
+    '0xae7ab96520de3a18e5e111b5eaab095312d7fe84': '🔵 Lido (stETH)',
+    '0xdc24316b9ae028f1497c275eb9192a3ea0f67022': '🟡 Curve stETH/ETH',
+    '0xeffc18fc3b7eb8e676dac549e0c693ad50d1ce31': '🟣 Aave v3',
+    '0xf403c135812408bfbe8713b5a23a04b3d48aae31': '🟠 Convex',
+    '0x06325440d014e39736583c165c2963ba99faf14e': '🟡 Curve LP',
+    '0xd6a2d6ee1209e938f297b41b631aed3f10684e07': '🔐 Safe (addOwner)',
   };
-  return map[addr.toLowerCase()]||'Unknown ('+addr.slice(0,8)+'...)';
+  return map[addr.toLowerCase()] || 'Unknown ('+addr.slice(0,8)+'...)';
 }
 
 function formatEth(wei) {
-  if (!wei||wei==='0') return '0';
+  if (!wei || wei==='0') return '0';
   return (parseFloat(wei)/1e18).toFixed(4);
 }
 </script>
