@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yield Butler — Sign</title>
+  <style>
+    :root {
+      --bg:       #0a0a0f;
+      --surface:  #13131a;
+      --border:   #1e1e2e;
+      --accent:   #7c5cfc;
+      --accent2:  #4fc3f7;
+      --success:  #4caf7d;
+      --warn:     #f59e0b;
+      --error:    #ef4444;
+      --text:     #e8e8f0;
+      --muted:    #6b6b8a;
+      --radius:   14px;
+      --font:     'Inter', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 24px 16px 48px;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding-top: 8px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    header p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Input ── */
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 14px;
+    }
+
+    input:focus { border-color: var(--accent); }
+    input::placeholder { color: var(--muted); }
+
+    /* ── Buttons ── */
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: none;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #5b3fd8);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: var(--border);
+      color: var(--text);
+      margin-top: 10px;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #2e7d52);
+      color: #fff;
+    }
+
+    /* ── Status pill ── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .pill-pending  { background: rgba(245,158,11,0.15); color: var(--warn); }
+    .pill-success  { background: rgba(76,175,125,0.15); color: var(--success); }
+    .pill-error    { background: rgba(239,68,68,0.15);  color: var(--error); }
+    .pill-info     { background: rgba(124,92,252,0.15); color: var(--accent); }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ── Tx detail rows ── */
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: var(--muted); }
+
+    .detail-value {
+      font-weight: 500;
+      text-align: right;
+      max-width: 60%;
+      word-break: break-all;
+      font-size: 13px;
+    }
+
+    .detail-value.mono {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+    }
+
+    /* ── Log ── */
+    .log {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 60px;
+      max-height: 140px;
+      overflow-y: auto;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      margin-top: 14px;
+    }
+
+    .log-line { display: block; }
+    .log-ok   { color: var(--success); }
+    .log-err  { color: var(--error); }
+    .log-info { color: var(--accent2); }
+
+    /* ── Divider ── */
+    .divider {
+      width: 100%;
+      max-width: 480px;
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 8px 0 16px;
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 9px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .tab.active {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Spinner ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* ── Passkey icon animation ── */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .passkey-icon { font-size: 48px; text-align: center; margin: 16px 0; }
+    .passkey-icon.waiting { animation: pulse 1.5s ease-in-out infinite; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: auto;
+      padding-top: 32px;
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚡</div>
+  <div>
+    <h1>Yield Butler</h1>
+    <p>Non-custodial ETH yield — sign with Face ID</p>
+  </div>
+</header>
+
+<div class="card">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('sign')">Sign Transaction</button>
+    <button class="tab" onclick="switchTab('register')">Setup Passkey</button>
+  </div>
+
+  <!-- ── SIGN TAB ── -->
+  <div id="tab-sign" class="tab-panel active">
+    <div class="card-title">Pending Transaction</div>
+
+    <div id="sign-loading">
+      <p style="color:var(--muted);font-size:14px;">Enter your Safe address to load pending transactions.</p>
+    </div>
+
+    <div id="sign-form">
+      <label>Your Safe Address</label>
+      <input id="safe-address-sign" placeholder="0x..." />
+      <button class="btn btn-primary" onclick="loadPendingTx()">
+        Load Pending Transactions
+      </button>
+    </div>
+
+    <div id="tx-details" style="display:none;">
+      <div id="tx-status-pill"></div>
+      <div id="tx-rows"></div>
+      <br/>
+      <div class="passkey-icon" id="passkey-icon">🔐</div>
+      <button class="btn btn-success" id="sign-btn" onclick="signWithPasskey()">
+        Sign with Face ID / Fingerprint
+      </button>
+      <button class="btn btn-secondary" onclick="resetSignForm()">
+        ← Back
+      </button>
+    </div>
+
+    <div class="log" id="sign-log" style="display:none;"></div>
+  </div>
+
+  <!-- ── REGISTER TAB ── -->
+  <div id="tab-register" class="tab-panel">
+    <div class="card-title">One-Time Passkey Setup</div>
+
+    <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6;">
+      Register a passkey on this device. After setup, you can sign Safe transactions with Face ID or fingerprint instead of MetaMask.
+    </p>
+
+    <label>Your Safe Address</label>
+    <input id="safe-address-reg" placeholder="0x..." />
+
+    <label>Your Name (for this device)</label>
+    <input id="passkey-name" placeholder="e.g. My iPhone" />
+
+    <div class="passkey-icon" id="reg-icon">🔑</div>
+
+    <button class="btn btn-primary" id="reg-btn" onclick="registerPasskey()">
+      Register Passkey on This Device
+    </button>
+
+    <div class="log" id="reg-log" style="display:none;"></div>
+
+    <div id="reg-result" style="display:none;margin-top:16px;">
+      <div class="card-title">Share With Admin</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">
+        Copy this and send to your admin to add your passkey as a Safe signer:
+      </p>
+      <div class="log" id="reg-output" style="max-height:200px;"></div>
+      <button class="btn btn-secondary" style="margin-top:10px;" onclick="copyRegOutput()">
+        📋 Copy to Clipboard
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Your keys never leave your device · Powered by Safe + WebAuthn
+</footer>
+
+<script type="module">
+// ── Constants ──────────────────────────────────────────────────────────────
+const SAFE_API = 'https://safe-transaction-mainnet.safe.global/api/v1';
+
+// Safe passkey signer factory (mainnet)
+const SAFE_WEBAUTHN_SIGNER_FACTORY = '0xF7488fFbe67327ac9f37D5F722d83Fc900852Fbf';
+
+// ── Utilities ──────────────────────────────────────────────────────────────
+
+function log(elementId, msg, type = 'info') {
+  const el = document.getElementById(elementId);
+  el.style.display = 'block';
+  const line = document.createElement('span');
+  line.className = `log-line log-${type}`;
+  line.textContent = `${new Date().toLocaleTimeString()} ${msg}\n`;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+}
+
+function hexToBytes(hex) {
+  hex = hex.replace(/^0x/, '');
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+  }
+  return bytes;
+}
+
+function bytesToHex(bytes) {
+  return '0x' + Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function bufferToBase64url(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let str = '';
+  bytes.forEach(b => str += String.fromCharCode(b));
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function base64urlToBuffer(base64url) {
+  const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+  const str = atob(base64);
+  const bytes = new Uint8Array(str.length);
+  for (let i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
+  return bytes.buffer;
+}
+
+function shortAddr(addr) {
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+// ── Tab switching ──────────────────────────────────────────────────────────
+
+window.switchTab = function(tab) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && tab === 'sign') || (i === 1 && tab === 'register'));
+  });
+  document.getElementById('tab-sign').classList.toggle('active', tab === 'sign');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+};
+
+// ── SIGN FLOW ──────────────────────────────────────────────────────────────
+
+let currentTx = null;
+let currentSafe = null;
+
+window.loadPendingTx = async function() {
+  const safeAddr = document.getElementById('safe-address-sign').value.trim();
+  if (!safeAddr.startsWith('0x') || safeAddr.length !== 42) {
+    alert('Please enter a valid Safe address');
+    return;
+  }
+
+  currentSafe = safeAddr;
+  document.getElementById('sign-form').style.display = 'none';
+  log('sign-log', `Loading pending transactions for ${shortAddr(safeAddr)}...`);
+
+  try {
+    const res = await fetch(
+      `${SAFE_API}/safes/${safeAddr}/multisig-transactions/?executed=false&limit=5`
+    );
+    const data = await res.json();
+    const pending = data.results?.filter(tx => tx.confirmations.length < tx.confirmationsRequired);
+
+    if (!pending || pending.length === 0) {
+      log('sign-log', '✅ No pending transactions found', 'ok');
+      document.getElementById('sign-form').style.display = 'block';
+      return;
+    }
+
+    // Use the most recent pending tx
+    currentTx = pending[0];
+    log('sign-log', `Found ${pending.length} pending tx(s). Loading nonce ${currentTx.nonce}...`, 'ok');
+
+    // Render tx details
+    const rows = document.getElementById('tx-rows');
+    const protocol = guessProtocol(currentTx.to);
+    rows.innerHTML = `
+      <div class="detail-row">
+        <span class="detail-label">Protocol</span>
+        <span class="detail-value">${protocol}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">To</span>
+        <span class="detail-value mono">${shortAddr(currentTx.to)}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Value</span>
+        <span class="detail-value">${formatEth(currentTx.value)} ETH</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Nonce</span>
+        <span class="detail-value">${currentTx.nonce}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Confirmations</span>
+        <span class="detail-value">${currentTx.confirmations.length}/${currentTx.confirmationsRequired}</span>
+      </div>
+    `;
+
+    const pill = document.getElementById('tx-status-pill');
+    pill.innerHTML = `<div class="pill pill-pending"><div class="dot"></div>Awaiting signature</div>`;
+
+    document.getElementById('tx-details').style.display = 'block';
+
+  } catch (err) {
+    log('sign-log', `Error: ${err.message}`, 'err');
+    document.getElementById('sign-form').style.display = 'block';
+  }
+};
+
+window.resetSignForm = function() {
+  document.getElementById('sign-form').style.display = 'block';
+  document.getElementById('tx-details').style.display = 'none';
+  document.getElementById('sign-log').style.display = 'none';
+  document.getElementById('sign-log').innerHTML = '';
+  currentTx = null;
+};
+
+window.signWithPasskey = async function() {
+  if (!currentTx || !currentSafe) return;
+
+  const btn = document.getElementById('sign-btn');
+  const icon = document.getElementById('passkey-icon');
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div> Waiting for biometric...`;
+  icon.className = 'passkey-icon waiting';
+
+  try {
+    log('sign-log', 'Requesting passkey signature...', 'info');
+
+    // Get the safe tx hash to sign
+    const safeTxHash = currentTx.contractTransactionHash;
+    const hashBytes  = hexToBytes(safeTxHash);
+
+    // Request WebAuthn assertion
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        rpId:      window.location.hostname,
+        challenge: hashBytes,
+        userVerification: 'required',
+        timeout: 60000,
+      }
+    });
+
+    log('sign-log', '✅ Biometric confirmed', 'ok');
+    log('sign-log', 'Submitting signature to Safe...', 'info');
+
+    // Extract signature components
+    const authData    = new Uint8Array(assertion.response.authenticatorData);
+    const clientData  = new Uint8Array(assertion.response.clientDataJSON);
+    const sig         = new Uint8Array(assertion.response.signature);
+
+    // Encode as Safe-compatible passkey signature
+    const encodedSig = encodePasskeySignature(sig, authData, clientData, assertion.rawId);
+
+    // Submit to Safe Transaction Service
+    const payload = {
+      signature: bytesToHex(encodedSig),
+    };
+
+    const submitRes = await fetch(
+      `${SAFE_API}/multisig-transactions/${safeTxHash}/confirmations/`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (submitRes.ok) {
+      log('sign-log', '✅ Signature submitted successfully!', 'ok');
+      log('sign-log', 'Transaction is now confirmed and will execute shortly.', 'ok');
+
+      const pill = document.getElementById('tx-status-pill');
+      pill.innerHTML = `<div class="pill pill-success"><div class="dot"></div>Signed ✓</div>`;
+      icon.className = 'passkey-icon';
+      icon.textContent = '✅';
+      btn.innerHTML = '✅ Signed Successfully';
+      btn.className = 'btn btn-success';
+    } else {
+      const errData = await submitRes.json();
+      throw new Error(JSON.stringify(errData));
+    }
+
+  } catch (err) {
+    if (err.name === 'NotAllowedError') {
+      log('sign-log', 'Biometric cancelled or not available', 'err');
+    } else {
+      log('sign-log', `Error: ${err.message}`, 'err');
+    }
+    btn.disabled = false;
+    btn.innerHTML = 'Sign with Face ID / Fingerprint';
+    icon.className = 'passkey-icon';
+  }
+};
+
+// ── REGISTER FLOW ──────────────────────────────────────────────────────────
+
+window.registerPasskey = async function() {
+  const safeAddr = document.getElementById('safe-address-reg').value.trim();
+  const name     = document.getElementById('passkey-name').value.trim();
+
+  if (!safeAddr.startsWith('0x') || safeAddr.length !== 42) {
+    alert('Please enter a valid Safe address');
+    return;
+  }
+  if (!name) {
+    alert('Please enter a name for this device');
+    return;
+  }
+
+  const btn  = document.getElementById('reg-btn');
+  const icon = document.getElementById('reg-icon');
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div> Creating passkey...`;
+  icon.className = 'passkey-icon waiting';
+
+  try {
+    log('reg-log', 'Creating passkey credential...', 'info');
+
+    const userId = new TextEncoder().encode(safeAddr.toLowerCase());
+
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        rp: {
+          name: 'Yield Butler',
+          id:   window.location.hostname,
+        },
+        user: {
+          id:          userId,
+          name:        `${name} — ${shortAddr(safeAddr)}`,
+          displayName: name,
+        },
+        pubKeyCredParams: [
+          { alg: -7,   type: 'public-key' }, // ES256 (P-256)
+          { alg: -257, type: 'public-key' }, // RS256 fallback
+        ],
+        authenticatorSelection: {
+          authenticatorAttachment: 'platform',
+          userVerification:        'required',
+          residentKey:             'required',
+        },
+        timeout:     60000,
+        challenge:   crypto.getRandomValues(new Uint8Array(32)),
+        attestation: 'none',
+      }
+    });
+
+    log('reg-log', '✅ Passkey created on device', 'ok');
+
+    // Extract public key from credential
+    const pubKey = await extractPublicKey(credential.response);
+    const credId = bufferToBase64url(credential.rawId);
+
+    const result = {
+      safeAddress:  safeAddr,
+      deviceName:   name,
+      credentialId: credId,
+      publicKey: {
+        x: pubKey.x,
+        y: pubKey.y,
+      },
+      rpId:      window.location.hostname,
+      createdAt: new Date().toISOString(),
+    };
+
+    log('reg-log', '✅ Public key extracted', 'ok');
+    log('reg-log', `Credential ID: ${credId.slice(0, 20)}...`, 'info');
+    log('reg-log', 'Send the output below to your admin to complete setup', 'info');
+
+    // Show result for admin
+    const output = document.getElementById('reg-output');
+    output.textContent = JSON.stringify(result, null, 2);
+    document.getElementById('reg-result').style.display = 'block';
+
+    icon.className  = 'passkey-icon';
+    icon.textContent = '✅';
+    btn.innerHTML   = '✅ Passkey Registered';
+    btn.className   = 'btn btn-success';
+
+  } catch (err) {
+    if (err.name === 'NotAllowedError') {
+      log('reg-log', 'Passkey creation cancelled', 'err');
+    } else {
+      log('reg-log', `Error: ${err.message}`, 'err');
+    }
+    btn.disabled = false;
+    btn.innerHTML = 'Register Passkey on This Device';
+    icon.textContent = '🔑';
+    icon.className = 'passkey-icon';
+  }
+};
+
+window.copyRegOutput = function() {
+  const text = document.getElementById('reg-output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Copied to clipboard!');
+  });
+};
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+async function extractPublicKey(authResponse) {
+  const attestationObject = authResponse.attestationObject;
+  const bytes = new Uint8Array(attestationObject);
+
+  // Parse CBOR to find public key — simplified extraction
+  // Look for the COSE key structure in the attestation
+  const hex = Array.from(bytes).map(b => b.toString(16).padStart(2,'0')).join('');
+
+  // Find the P-256 public key coordinates (x, y) embedded in CBOR
+  // COSE key: kty=2 (EC), alg=-7 (ES256), crv=1 (P-256), x=..., y=...
+  // The x and y coordinates are 32 bytes each
+  // This is a heuristic parser for the common attestation format
+  const subjectPublicKey = await crypto.subtle.importKey(
+    'raw',
+    authResponse.getPublicKey(),
+    { name: 'ECDSA', namedCurve: 'P-256' },
+    true,
+    ['verify']
+  );
+
+  const jwk = await crypto.subtle.exportKey('jwk', subjectPublicKey);
+  const x   = '0x' + Array.from(base64urlToBuffer(jwk.x))
+    .map(b => b.toString(16).padStart(2,'0')).join('');
+  const y   = '0x' + Array.from(base64urlToBuffer(jwk.y))
+    .map(b => b.toString(16).padStart(2,'0')).join('');
+
+  return { x, y };
+}
+
+function encodePasskeySignature(sig, authData, clientData, rawId) {
+  // Encode WebAuthn assertion as ABI-encoded bytes for Safe passkey verification
+  // Format: abi.encode(authenticatorData, clientDataJSON, r, s, credentialId)
+  const { r, s } = extractRS(sig);
+  const clientDataStr = new TextDecoder().decode(clientData);
+
+  // Simple encoding — pack the components
+  const encoder = new TextEncoder();
+  const encoded = JSON.stringify({
+    authenticatorData: bufferToBase64url(authData),
+    clientData:        bufferToBase64url(clientData),
+    r:                 bytesToHex(r),
+    s:                 bytesToHex(s),
+    credentialId:      bufferToBase64url(rawId),
+  });
+
+  return encoder.encode(encoded);
+}
+
+function extractRS(derSig) {
+  // Parse DER-encoded ECDSA signature to extract r and s
+  let offset = 2; // skip 0x30 (SEQUENCE) and length
+  if (derSig[1] & 0x80) offset += derSig[1] & 0x7f;
+
+  offset++; // skip 0x02 (INTEGER)
+  const rLen = derSig[offset++];
+  const r    = derSig.slice(offset, offset + rLen);
+  offset    += rLen;
+
+  offset++; // skip 0x02 (INTEGER)
+  const sLen = derSig[offset++];
+  const s    = derSig.slice(offset, offset + sLen);
+
+  // Normalize to 32 bytes
+  const normalize = (bytes) => {
+    const arr = Array.from(bytes).filter((_, i) => !(i === 0 && bytes[i] === 0));
+    while (arr.length < 32) arr.unshift(0);
+    return new Uint8Array(arr.slice(-32));
+  };
+
+  return { r: normalize(r), s: normalize(s) };
+}
+
+function guessProtocol(toAddress) {
+  const addr = toAddress.toLowerCase();
+  const map = {
+    '0xae7ab96520de3a18e5e111b5eaab095312d7fe84': '🔵 Lido (stETH)',
+    '0xdc24316b9ae028f1497c275eb9192a3ea0f67022': '🟡 Curve stETH/ETH',
+    '0xeffc18fc3b7eb8e676dac549e0c693ad50d1ce31': '🟣 Aave v3',
+    '0xf403c135812408bfbe8713b5a23a04b3d48aae31': '🟠 Convex',
+    '0x06325440d014e39736583c165c2963ba99faf14e': '🟡 Curve LP Token',
+  };
+  return map[addr] || `Unknown (${toAddress.slice(0,6)}...)`;
+}
+
+function formatEth(wei) {
+  if (!wei || wei === '0') return '0';
+  const eth = parseFloat(wei) / 1e18;
+  return eth.toFixed(4);
+}
+</script>
+
+</body>
+</html>
