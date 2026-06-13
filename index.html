@@ -790,6 +790,14 @@ function formatEth(wei) {
   const eth = parseFloat(wei) / 1e18;
   return eth.toFixed(4);
 }
+// Auto-fill Safe address from URL parameter
+const params = new URLSearchParams(window.location.search);
+const safePrefill = params.get('safe');
+if (safePrefill) {
+  document.getElementById('safe-address-sign').value = safePrefill;
+  // Auto-load transactions if address is provided
+  setTimeout(() => loadPendingTx(), 500);
+}
 </script>
 
 </body>
