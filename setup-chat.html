@@ -512,7 +512,7 @@ function formatBotResponse(text) {
 async function callClaude(userMessage) {
   conversation.push({ role: 'user', content: userMessage });
 
-  const response = await fetch('http://144.126.209.249:3001/chat', {
+  const response = await fetch('https://deposits-joy-weekend-festivals.trycloudflare.com/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
