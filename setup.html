@@ -1019,6 +1019,10 @@ body{
       <div class="cmd-desc"><strong>Withdraw your funds</strong>Shows your current positions and step-by-step instructions to unstake from each protocol. Includes direct links to Lido, Curve, Aave and Convex withdrawal pages.</div>
     </div>
     <div class="cmd-item">
+      <span class="cmd-tag">/whitelist</span>
+      <div class="cmd-desc"><strong>Auto-execute setup (optional)</strong>Enables Zodiac Roles Module so the bot executes yield transactions automatically — no Safe Mobile approval needed. You stay in full control: bot can only call whitelisted yield protocol functions. Use /whitelist setup to begin, /whitelist disable to turn off anytime.</div>
+    </div>
+    <div class="cmd-item">
       <span class="cmd-tag">/pause</span>
       <div class="cmd-desc"><strong>Pause the bot</strong>Stops the daily yield cycle for your account. Existing pending transactions in Safe are unaffected. Queue will not pile up.</div>
     </div>
@@ -1030,17 +1034,11 @@ body{
       <span class="cmd-tag">/winner</span>
       <div class="cmd-desc"><strong>Current protocol</strong>Which protocol the bot is currently routing new stakes to</div>
     </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/status</span>
-      <div class="cmd-desc"><strong>Pending transactions</strong>Shows any transactions in your Safe queue waiting for your signature. Use this to check if the bot has proposed something.</div>
+    
     </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/history</span>
-      <div class="cmd-desc"><strong>Last transaction</strong>Shows your most recently executed transaction — protocol, amount, date, and hash.</div>
+    
     </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/start</span>
-      <div class="cmd-desc"><strong>Main menu</strong>Shows all commands and your current default stake amount</div>
+    
     </div>
   </div>
 
