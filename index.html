@@ -1,551 +1,742 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yield Butler — Sign</title>
-  <style>
-    :root {
-      --bg:#0a0a0f;--surface:#13131a;--border:#1e1e2e;--accent:#7c5cfc;
-      --accent2:#4fc3f7;--success:#4caf7d;--warn:#f59e0b;--error:#ef4444;
-      --text:#e8e8f0;--muted:#6b6b8a;--radius:14px;--font:'Inter',system-ui,sans-serif;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;
-      display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
-    header{width:100%;max-width:480px;display:flex;align-items:center;gap:12px;
-      margin-bottom:32px;padding-top:8px}
-    .logo{width:38px;height:38px;border-radius:10px;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-    header h1{font-size:17px;font-weight:600;letter-spacing:-0.3px}
-    header p{font-size:12px;color:var(--muted);margin-top:1px}
-    .card{width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border);
-      border-radius:var(--radius);padding:24px;margin-bottom:16px}
-    .card-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;
-      color:var(--muted);margin-bottom:16px}
-    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-    input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;
-      color:var(--text);font-family:var(--font);font-size:14px;padding:11px 14px;
-      outline:none;transition:border-color 0.15s;margin-bottom:14px}
-    input:focus{border-color:var(--accent)}
-    input::placeholder{color:var(--muted)}
-    .btn{width:100%;padding:13px;border-radius:10px;border:none;font-family:var(--font);
-      font-size:15px;font-weight:600;cursor:pointer;transition:opacity 0.15s,transform 0.1s;
-      display:flex;align-items:center;justify-content:center;gap:8px}
-    .btn:active{transform:scale(0.98)}
-    .btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
-    .btn-primary{background:linear-gradient(135deg,var(--accent),#5b3fd8);color:#fff}
-    .btn-secondary{background:var(--border);color:var(--text);margin-top:10px}
-    .btn-success{background:linear-gradient(135deg,var(--success),#2e7d52);color:#fff}
-    .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;
-      padding:4px 10px;border-radius:100px;margin-bottom:16px}
-    .pill-pending{background:rgba(245,158,11,0.15);color:var(--warn)}
-    .pill-success{background:rgba(76,175,125,0.15);color:var(--success)}
-    .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
-    .detail-row{display:flex;justify-content:space-between;align-items:center;
-      padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
-    .detail-row:last-child{border-bottom:none}
-    .detail-label{color:var(--muted)}
-    .detail-value{font-weight:500;text-align:right;max-width:60%;word-break:break-all;font-size:13px}
-    .detail-value.mono{font-family:'SF Mono','Fira Code',monospace;font-size:12px}
-    .log{font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:var(--muted);
-      background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;
-      min-height:60px;max-height:220px;overflow-y:auto;line-height:1.6;
-      white-space:pre-wrap;margin-top:14px}
-    .log-line{display:block}
-    .log-ok{color:var(--success)}
-    .log-err{color:var(--error)}
-    .log-info{color:var(--accent2)}
-    .tabs{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);
-      border-radius:10px;padding:4px;margin-bottom:20px}
-    .tab{flex:1;padding:9px;border-radius:8px;border:none;background:transparent;
-      color:var(--muted);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;
-      transition:background 0.15s,color 0.15s}
-    .tab.active{background:var(--surface);color:var(--text)}
-    .tab-panel{display:none}
-    .tab-panel.active{display:block}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);
-      border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-    .passkey-icon{font-size:48px;text-align:center;margin:16px 0}
-    .passkey-icon.waiting{animation:pulse 1.5s ease-in-out infinite}
-    footer{margin-top:auto;padding-top:32px;font-size:11px;color:var(--muted);text-align:center}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fenix Yield — Put Your Crypto to Work</title>
+<link rel="icon" href="grok_fenix.jpg" type="image/jpeg">
+<style>
+  :root {
+    --navy:   #0d1117;
+    --navy2:  #161b22;
+    --purple: #6B3FA0;
+    --purple2:#8B5FC0;
+    --teal:   #4EC8C4;
+    --teal2:  #38b0ac;
+    --white:  #f0f4f8;
+    --muted:  #8b949e;
+    --border: #21262d;
+    --font:   'Inter', system-ui, -apple-system, sans-serif;
+    --hero-bg: #e8edf2;
+    --hero-text-dark: #1a1f3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: var(--font);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(13,17,23,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(78,205,196,0.1);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 700; letter-spacing: -0.3px;
+    text-decoration: none; color: var(--white);
+  }
+  .nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+  .nav-logo span { color: var(--teal); }
+  .nav-links {
+    display: flex; align-items: center; gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    color: #fff !important; padding: 8px 20px;
+    border-radius: 8px; font-weight: 600 !important;
+  }
+  .nav-cta:hover { opacity: 0.9; }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(78,200,196,0.12) 0%, rgba(107,63,160,0.08) 50%, transparent 70%);
+    border-radius: 50%;
+    top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50%       { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  }
+
+  .hero-logo-wrap {
+    position: relative; z-index: 1;
+    margin-bottom: 36px;
+  }
+
+  .hero-title {
+    font-size: clamp(42px, 8vw, 80px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.0;
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .hero-fenix {
+    color: #1a1f3a;
+  }
+  .hero-yield {
+    background: linear-gradient(135deg, #4EC8C4 0%, #6B9FD4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(14px, 2vw, 17px);
+    color: #8a94a8;
+    margin-bottom: 32px;
+    position: relative; z-index: 1;
+    font-style: italic;
+    letter-spacing: 1px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .hero-desc {
+    font-size: 16px; color: #4a5568;
+    max-width: 560px; margin-bottom: 48px;
+    position: relative; z-index: 1;
+    line-height: 1.8;
+  }
+
+  .hero-btns {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    justify-content: center;
+    position: relative; z-index: 1;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    color: #fff; text-decoration: none;
+    padding: 14px 32px; border-radius: 10px;
+    font-size: 15px; font-weight: 700;
+    transition: opacity 0.15s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white); text-decoration: none;
+    padding: 14px 32px; border-radius: 10px;
+    font-size: 15px; font-weight: 600;
+    border: 1px solid var(--border);
+    transition: border-color 0.15s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--teal); transform: translateY(-1px); }
+
+  /* ── Stats bar ── */
+  .stats {
+    background: var(--navy2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex; justify-content: center;
+    gap: 64px; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-value {
+    font-size: 28px; font-weight: 800;
+    background: linear-gradient(135deg, var(--teal), var(--purple2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Sections ── */
+  section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
+
+  .section-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800; letter-spacing: -1px;
+    margin-bottom: 16px; line-height: 1.15;
+  }
+  .section-desc {
+    font-size: 16px; color: var(--muted);
+    max-width: 560px; line-height: 1.8;
+    margin-bottom: 56px;
+  }
+
+  /* ── How it works ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .step-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .step-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--teal));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .step-card:hover { border-color: rgba(78,205,196,0.3); transform: translateY(-3px); }
+  .step-card:hover::before { opacity: 1; }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; color: #fff;
+    margin-bottom: 16px;
+  }
+  .step-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .step-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* ── Why Fenix ── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .feature {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .feature-icon {
+    font-size: 24px; flex-shrink: 0;
+    width: 48px; height: 48px;
+    background: rgba(78,205,196,0.1);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .feature p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ── Protocols ── */
+  .protocols {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    justify-content: center; margin-top: 40px;
+  }
+  .protocol-badge {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 100px; padding: 10px 20px;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    transition: border-color 0.15s;
+  }
+  .protocol-badge:hover { border-color: var(--teal); }
+
+  /* ── Pricing ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px; max-width: 700px; margin: 0 auto;
+  }
+  .pricing-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 36px 32px;
+    position: relative; overflow: hidden;
+  }
+  .pricing-card.featured {
+    border-color: var(--teal);
+    background: linear-gradient(160deg, rgba(107,63,160,0.15), rgba(78,205,196,0.08));
+  }
+  .pricing-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute; top: 16px; right: -28px;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    color: #fff; font-size: 9px; font-weight: 800;
+    letter-spacing: 1.5px; padding: 4px 40px;
+    transform: rotate(45deg);
+  }
+  .pricing-tier {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .pricing-price {
+    font-size: 52px; font-weight: 900;
+    letter-spacing: -2px; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .pricing-price span { font-size: 20px; font-weight: 400; color: var(--muted); }
+  .pricing-desc { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+  .pricing-features { list-style: none; margin-bottom: 32px; }
+  .pricing-features li {
+    font-size: 14px; padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pricing-features li:last-child { border-bottom: none; }
+  .pricing-features .check { color: var(--teal); font-size: 16px; flex-shrink: 0; }
+  .pricing-features .dim { color: var(--muted); }
+
+  .btn-pricing {
+    display: block; width: 100%;
+    padding: 13px; border-radius: 10px;
+    font-size: 15px; font-weight: 700;
+    text-align: center; text-decoration: none;
+    cursor: pointer; border: none;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn-pricing:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-pricing.primary {
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    color: #fff;
+  }
+  .btn-pricing.outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--white);
+  }
+  .btn-pricing.outline:hover { border-color: var(--teal); }
+
+  .pricing-note {
+    text-align: center; font-size: 13px;
+    color: var(--muted); margin-top: 24px;
+  }
+
+  /* ── Video section ── */
+  .video-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 48px;
+    text-align: center;
+    background: linear-gradient(160deg, rgba(107,63,160,0.1), rgba(78,205,196,0.05));
+    border-color: rgba(78,205,196,0.2);
+  }
+  .video-card h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+  .video-card p  { color: var(--muted); margin-bottom: 28px; font-size: 15px; }
+  .play-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    color: #fff; text-decoration: none;
+    padding: 16px 36px; border-radius: 100px;
+    font-size: 16px; font-weight: 700;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .play-btn:hover { opacity: 0.9; transform: scale(1.03); }
+
+  /* ── Links section ── */
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .link-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px;
+    text-decoration: none; color: var(--white);
+    display: flex; flex-direction: column; gap: 8px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .link-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+  .link-card-icon { font-size: 28px; }
+  .link-card h3 { font-size: 15px; font-weight: 700; }
+  .link-card p  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .link-arrow   { color: var(--teal); font-size: 18px; margin-top: auto; }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--navy2);
+    border-top: 1px solid var(--border);
+    padding: 48px 40px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 16px;
+    text-align: center;
+  }
+  .footer-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 700;
+  }
+  .footer-logo span { color: var(--teal); }
+  .footer-tagline { font-size: 13px; color: var(--muted); font-style: italic; }
+  .footer-links {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    justify-content: center; list-style: none;
+  }
+  .footer-links a {
+    font-size: 13px; color: var(--muted);
+    text-decoration: none; transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--teal); }
+  .footer-contact {
+    font-size: 13px; color: var(--muted);
+  }
+  .footer-contact a { color: var(--teal); text-decoration: none; }
+  .footer-copy { font-size: 12px; color: rgba(139,148,158,0.5); }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px; background: var(--border);
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .stats { gap: 32px; padding: 24px; }
+    section { padding: 64px 20px; }
+    .pricing-card.featured::before { display: none; }
+    footer { padding: 40px 20px; }
+  }
+
+  /* ── Scroll reveal ── */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
 </head>
 <body>
-<!-- v6 -->
-<header>
-  <div class="logo">⚡</div>
-  <div>
-    <h1>Yield Butler</h1>
-    <p>Non-custodial ETH yield — sign with Face ID / Fingerprint</p>
-  </div>
-</header>
 
-<div class="card">
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('sign')">Sign Transaction</button>
-    <button class="tab" onclick="switchTab('register')">Setup Passkey</button>
-  </div>
+<!-- Navigation -->
+<nav>
+  <a class="nav-logo" href="#">
+    <img src="grok_fenix.jpg" alt="Fenix Yield" style="width:28px;height:28px;border-radius:7px;"/>
+    <span>Fenix</span><span style="color:var(--white)"> Yield</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#protocols">Protocols</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#pricing" class="nav-cta">Get Started →</a></li>
+  </ul>
+</nav>
 
-  <div id="tab-sign" class="tab-panel active">
-    <div class="card-title">Pending Transaction</div>
-    <div id="sign-form">
-      <label>Your Safe Address</label>
-      <input id="safe-address-sign" placeholder="0x..." />
-      <button class="btn btn-primary" onclick="loadPendingTx()">Load Pending Transactions</button>
-    </div>
-    <div id="tx-details" style="display:none">
-      <div id="tx-status-pill"></div>
-      <div id="tx-rows"></div>
-      <br/>
-      <div class="passkey-icon" id="passkey-icon">🔐</div>
-      <button class="btn btn-success" id="sign-btn" onclick="signWithPasskey()">
-        Sign with Face ID / Fingerprint
-      </button>
-      <button class="btn btn-secondary" onclick="resetSignForm()">← Back</button>
-    </div>
-    <div class="log" id="sign-log" style="display:none"></div>
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-logo-wrap">
+    <img src="grok_fenix.jpg" alt="Fenix Yield" style="width:150px;height:150px;border-radius:36px;box-shadow:0 8px 40px rgba(107,63,160,0.25),0 4px 24px rgba(78,205,196,0.2);display:block;"/>
   </div>
-
-  <div id="tab-register" class="tab-panel">
-    <div class="card-title">One-Time Passkey Setup</div>
-    <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6">
-      Register a passkey on this device. After setup, approve Safe transactions
-      with Face ID or fingerprint — no MetaMask needed.
-    </p>
-    <label>Your Safe Address</label>
-    <input id="safe-address-reg" placeholder="0x..." />
-    <label>Device Name</label>
-    <input id="passkey-name" placeholder="e.g. My Android, My iPhone" />
-    <div class="passkey-icon" id="reg-icon">🔑</div>
-    <button class="btn btn-primary" id="reg-btn" onclick="registerPasskey()">
-      Register Passkey on This Device
-    </button>
-    <div class="log" id="reg-log" style="display:none"></div>
-    <div id="reg-result" style="display:none;margin-top:16px">
-      <div class="card-title">Share With Admin</div>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:10px">
-        Copy this and send to your admin to complete setup:
-      </p>
-      <div class="log" id="reg-output" style="max-height:220px"></div>
-      <button class="btn btn-secondary" style="margin-top:10px" onclick="copyRegOutput()">
-        📋 Copy to Clipboard
-      </button>
-    </div>
+  <h1 class="hero-title">
+    <span class="hero-fenix">Fenix</span> <span class="hero-yield">Yield</span>
+  </h1>
+  <p class="hero-tagline">Put your crypto to work.</p>
+  <p class="hero-desc">
+    An intelligent Telegram bot that finds the best ETH yield across Lido, Curve, Aave, and Convex — and executes automatically. Your keys. Your funds. Your returns.
+  </p>
+  <div class="hero-btns">
+    <a href="#pricing" class="btn-primary">⚡ Get Started — $29</a>
+    <a href="https://fenix-yield.com/Fenix%20Yield%20Launch%20-%20Offline.html" class="btn-secondary" target="_blank">▶ Watch Video</a>
   </div>
 </div>
 
-<footer>Your keys never leave this device · Powered by Safe + WebAuthn</footer>
+<!-- Stats -->
+<div class="stats reveal">
+  <div class="stat">
+    <div class="stat-value">4.5–5%</div>
+    <div class="stat-label">Effective APY</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">4</div>
+    <div class="stat-label">DeFi Protocols</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">100%</div>
+    <div class="stat-label">Non-Custodial</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">24/7</div>
+    <div class="stat-label">Automated</div>
+  </div>
+</div>
 
-<script type="module">
-const SAFE_API = 'https://safe-transaction-mainnet.safe.global/api/v1';
+<!-- How it works -->
+<section id="how-it-works">
+  <p class="section-eyebrow reveal">Simple by design</p>
+  <h2 class="section-title reveal">How Fenix Yield works</h2>
+  <p class="section-desc reveal">
+    Set it up once in 20 minutes. The bot handles everything daily — finding yield, proposing transactions, and compounding rewards. You just approve with one tap.
+  </p>
+  <div class="steps">
+    <div class="step-card reveal">
+      <div class="step-num">1</div>
+      <h3>Create your Safe wallet</h3>
+      <p>Set up a non-custodial Safe multi-sig wallet at app.safe.global. Your funds stay under your control at all times.</p>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">2</div>
+      <h3>Register with the bot</h3>
+      <p>Send /start on Telegram, enter your invite code, and connect your Safe address. Takes under 2 minutes.</p>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">3</div>
+      <h3>Bot finds best yield daily</h3>
+      <p>Every 24 hours the bot compares APYs across all protocols and routes your ETH to the highest return automatically.</p>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">4</div>
+      <h3>Approve with one tap</h3>
+      <p>Get a push notification in Safe Mobile. Review the transaction details and approve with a single tap. Nothing executes without you.</p>
+    </div>
+  </div>
+</section>
 
-// ── Passkey signer address (added as Safe owner) ───────────────────────────
-const PASSKEY_SIGNER = '0x317D078C3dBe76fffD7C68D542F0F7849797BC08';
+<div class="divider"></div>
 
-// ── Logging ───────────────────────────────────────────────────────────────────
-function log(id, msg, type) {
-  type = type || 'info';
-  var el = document.getElementById(id);
-  el.style.display = 'block';
-  var line = document.createElement('span');
-  line.className = 'log-line log-' + type;
-  line.textContent = new Date().toLocaleTimeString() + ' ' + msg + '\n';
-  el.appendChild(line);
-  el.scrollTop = el.scrollHeight;
+<!-- Why Fenix -->
+<section id="why">
+  <p class="section-eyebrow reveal">Built different</p>
+  <h2 class="section-title reveal">Why Fenix Yield</h2>
+  <p class="section-desc reveal">Most yield tools are custodial — you hand over your keys and hope for the best. Fenix Yield is different. You stay in control of every transaction.</p>
+  <div class="features">
+    <div class="feature reveal">
+      <div class="feature-icon">🔐</div>
+      <div>
+        <h3>Non-custodial</h3>
+        <p>Your ETH never leaves your Safe wallet. The bot can only propose transactions — you approve every single one.</p>
+      </div>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">🤖</div>
+      <div>
+        <h3>Fully automated</h3>
+        <p>Daily yield optimization runs automatically. No manual research, no switching protocols, no missed opportunities.</p>
+      </div>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">📊</div>
+      <div>
+        <h3>Weekly reports</h3>
+        <p>Receive automatic weekly P&L reports every Monday — yield earned, annualized APY, and total position value.</p>
+      </div>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">🚨</div>
+      <div>
+        <h3>Risk monitoring</h3>
+        <p>Hourly monitoring alerts you if ETH drops 10%+, a protocol APY collapses, or a transaction gets stuck.</p>
+      </div>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">🌾</div>
+      <div>
+        <h3>Auto-harvest (Pro)</h3>
+        <p>CRV and CVX rewards claimed every 6 hours, swapped to ETH, and automatically restaked — compounding your returns.</p>
+      </div>
+    </div>
+    <div class="feature reveal">
+      <div class="feature-icon">⚡</div>
+      <div>
+        <h3>Whitelist mode (optional)</h3>
+        <p>Enable Zodiac Roles Module for fully automatic execution. Bot executes within strict whitelisted functions only.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Protocols -->
+<section id="protocols" style="text-align:center">
+  <p class="section-eyebrow reveal">Battle-tested infrastructure</p>
+  <h2 class="section-title reveal">Protocols we route to</h2>
+  <p class="section-desc reveal" style="margin:0 auto 0">
+    Fenix Yield only uses audited, battle-tested DeFi protocols with billions in TVL. No exotic farms, no rug risks.
+  </p>
+  <div class="protocols reveal">
+    <div class="protocol-badge">🔵 Lido — stETH staking</div>
+    <div class="protocol-badge">🟡 Curve — stETH/ETH LP</div>
+    <div class="protocol-badge">🟣 Aave v3 — ETH lending</div>
+    <div class="protocol-badge">🟠 Convex — boosted Curve yield</div>
+  </div>
+  <p style="color:var(--muted);font-size:14px;margin-top:32px;">
+    The bot compares live APYs daily and routes to the highest return. You can also pin a protocol or exclude ones you don't want.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- Video -->
+<section>
+  <div class="video-card reveal">
+    <div style="font-size:48px;margin-bottom:16px">🎬</div>
+    <h2>See Fenix Yield in action</h2>
+    <p>Watch our launch video to see exactly how the bot works — from setup to your first yield transaction.</p>
+    <a href="https://fenix-yield.com/Fenix%20Yield%20Launch%20-%20Offline.html" class="play-btn" target="_blank">
+      ▶ Watch Launch Video
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Pricing -->
+<section id="pricing" style="text-align:center">
+  <p class="section-eyebrow reveal">Simple pricing</p>
+  <h2 class="section-title reveal">One-time fee, no subscriptions</h2>
+  <p class="section-desc reveal" style="margin:0 auto 48px">
+    Pay once, use forever. No monthly fees, no percentage of yield taken. Your returns stay yours.
+  </p>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal">
+      <p class="pricing-tier">Basic</p>
+      <div class="pricing-price">$29 <span>one-time</span></div>
+      <p class="pricing-desc">Perfect for getting started with automated ETH yield.</p>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Daily yield optimization</li>
+        <li><span class="check">✓</span> 4 protocols — Lido, Curve, Aave, Convex</li>
+        <li><span class="check">✓</span> Weekly P&L reports (auto)</li>
+        <li><span class="check">✓</span> Hourly risk alerts</li>
+        <li><span class="check">✓</span> Protocol preferences</li>
+        <li><span class="check">✓</span> Pause / resume anytime</li>
+        <li><span class="check">✓</span> Safe Mobile approvals</li>
+        <li><span class="dim">—</span> <span class="dim">Auto-harvest Convex rewards</span></li>
+      </ul>
+      <button class="btn-pricing outline" onclick="handlePurchase('basic')">Get Basic Access</button>
+    </div>
+    <div class="pricing-card featured reveal">
+      <p class="pricing-tier">Pro</p>
+      <div class="pricing-price">$79 <span>one-time</span></div>
+      <p class="pricing-desc">Maximum yield with auto-compounding Convex rewards.</p>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Everything in Basic</li>
+        <li><span class="check">✓</span> Auto-harvest CRV + CVX every 6h</li>
+        <li><span class="check">✓</span> Auto-swap rewards to ETH</li>
+        <li><span class="check">✓</span> Auto-compound restaking</li>
+        <li><span class="check">✓</span> Optional whitelist mode</li>
+        <li><span class="check">✓</span> Priority support</li>
+        <li><span class="check">✓</span> Early access to new protocols</li>
+        <li><span class="check">✓</span> 1% slippage protection on swaps</li>
+      </ul>
+      <button class="btn-pricing primary" onclick="handlePurchase('pro')">Get Pro Access</button>
+    </div>
+  </div>
+  <p class="pricing-note">
+    After purchase you'll receive an invite code via email within 24 hours.<br/>
+    Questions? <a href="mailto:support@fenix-yield.com" style="color:var(--teal)">support@fenix-yield.com</a>
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- Resources -->
+<section id="resources">
+  <p class="section-eyebrow reveal">Everything you need</p>
+  <h2 class="section-title reveal">Resources</h2>
+  <p class="section-desc reveal">Step-by-step guides and an AI assistant to get you set up fast.</p>
+  <div class="links-grid">
+    <a href="setup.html" class="link-card reveal">
+      <div class="link-card-icon">📋</div>
+      <h3>Setup Guide</h3>
+      <p>10-step interactive guide with progress tracking. From installing apps to your first yield transaction.</p>
+      <div class="link-arrow">→</div>
+    </a>
+    <a href="setup-chat.html" class="link-card reveal">
+      <div class="link-card-icon">💬</div>
+      <h3>AI Assistant</h3>
+      <p>Chat with our AI onboarding assistant. Answers any question about setup in plain English.</p>
+      <div class="link-arrow">→</div>
+    </a>
+    <a href="https://fenix-yield.com/Fenix%20Yield%20Launch%20-%20Offline.html" class="link-card reveal" target="_blank">
+      <div class="link-card-icon">🎬</div>
+      <h3>Launch Video</h3>
+      <p>Watch the full product walkthrough to see Fenix Yield in action before signing up.</p>
+      <div class="link-arrow">→</div>
+    </a>
+    <a href="https://t.me/your_bot_username" class="link-card reveal" target="_blank">
+      <div class="link-card-icon">✈️</div>
+      <h3>Telegram Bot</h3>
+      <p>Already registered? Open the bot directly and send /start to access your dashboard.</p>
+      <div class="link-arrow">→</div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">
+    <img src="grok_fenix.jpg" alt="Fenix Yield" style="width:28px;height:28px;border-radius:7px;"/>
+    <span>Fenix</span>&nbsp;Yield
+  </div>
+  <p class="footer-tagline">Put your crypto to work.</p>
+  <ul class="footer-links">
+    <li><a href="setup.html">Setup Guide</a></li>
+    <li><a href="setup-chat.html">AI Assistant</a></li>
+    <li><a href="https://fenix-yield.com/Fenix%20Yield%20Launch%20-%20Offline.html">Launch Video</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="mailto:support@fenix-yield.com">Contact</a></li>
+  </ul>
+  <p class="footer-contact">
+    📧 <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+  </p>
+  <p class="footer-copy">
+    © 2026 Fenix Yield. Non-custodial yield automation. Not financial advice.<br/>
+    Your funds are always under your control.
+  </p>
+</footer>
+
+<script>
+// ── Purchase placeholder ──────────────────────────────────────────────────────
+function handlePurchase(tier) {
+  const prices = { basic: '$29', pro: '$79' };
+  const names  = { basic: 'Basic', pro: 'Pro' };
+  alert(
+    'Fenix Yield ' + names[tier] + ' — ' + prices[tier] + '\n\n' +
+    'Payment processing coming soon via Stripe.\n\n' +
+    'To purchase now, email us at:\nsupport@fenix-yield.com\n\n' +
+    'We\'ll send your invite code within 24 hours.'
+  );
 }
 
-// ── Encoding helpers ──────────────────────────────────────────────────────────
-function hexToBytes(hex) {
-  hex = hex.replace(/^0x/, '');
-  var b = new Uint8Array(hex.length / 2);
-  for (var i = 0; i < hex.length; i += 2) b[i/2] = parseInt(hex.substr(i,2),16);
-  return b;
-}
-
-function bytesToHex(bytes) {
-  return '0x' + Array.from(bytes).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
-}
-
-function toBase64url(input) {
-  var bytes = (input instanceof Uint8Array) ? input : new Uint8Array(input);
-  var str = '';
-  for (var i = 0; i < bytes.length; i++) str += String.fromCharCode(bytes[i]);
-  return btoa(str).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-}
-
-function fromBase64url(b64) {
-  var base64 = b64.replace(/-/g,'+').replace(/_/g,'/');
-  var str = atob(base64);
-  var bytes = new Uint8Array(str.length);
-  for (var i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
-  return bytes.buffer;
-}
-
-function shortAddr(a) { return a.slice(0,6)+'...'+a.slice(-4); }
-
-function concat(arrays) {
-  var total = arrays.reduce(function(s,a){ return s+a.length; }, 0);
-  var out = new Uint8Array(total);
-  var off = 0;
-  arrays.forEach(function(a){ out.set(a,off); off+=a.length; });
-  return out;
-}
-
-function pad32(n) {
-  var hex = (typeof n === 'bigint' ? n : BigInt(n)).toString(16).padStart(64,'0');
-  var b = new Uint8Array(32);
-  for (var i = 0; i < 32; i++) b[i] = parseInt(hex.substr(i*2,2),16);
-  return b;
-}
-
-// ── ABI encode passkey signature ──────────────────────────────────────────────
-// Safe WebAuthn format: abi.encode(bytes authData, string clientDataFields, uint256 r, uint256 s)
-function abiEncodePasskeySig(authData, clientDataFields, r, s) {
-  function encodeBytes(data) {
-    var padded = new Uint8Array(Math.ceil(data.length/32)*32);
-    padded.set(data);
-    return concat([pad32(BigInt(data.length)), padded]);
-  }
-  function encodeString(str) {
-    return encodeBytes(new TextEncoder().encode(str));
-  }
-  var authEnc    = encodeBytes(authData);
-  var clientEnc  = encodeString(clientDataFields);
-  var authOffset = BigInt(128); // 4 params * 32 bytes each
-  var clientOffset = authOffset + BigInt(authEnc.length);
-  return concat([
-    pad32(authOffset),
-    pad32(clientOffset),
-    pad32(r),
-    pad32(s),
-    authEnc,
-    clientEnc,
-  ]);
-}
-
-// ── Build ERC-1271 contract signature wrapper ─────────────────────────────────
-// Safe format for contract signers:
-// r = signer address (32 bytes), s = offset (65), v = 0, then dynamic sig data
-function buildContractSignature(signerAddress, innerSig) {
-  var addrHex = signerAddress.replace('0x','').toLowerCase().padStart(64,'0');
-  var r = new Uint8Array(32);
-  for (var i = 0; i < 32; i++) r[i] = parseInt(addrHex.substr(i*2,2),16);
-  var s = pad32(BigInt(65));
-  var v = new Uint8Array([0]);
-  var sigLen = pad32(BigInt(innerSig.length));
-  return concat([r, s, v, sigLen, innerSig]);
-}
-
-// ── DER signature parser ──────────────────────────────────────────────────────
-function extractRS(derSig) {
-  var off = 2;
-  if (derSig[1] & 0x80) off += derSig[1] & 0x7f;
-  off++;
-  var rLen = derSig[off++];
-  var r = derSig.slice(off, off+rLen); off += rLen;
-  off++;
-  var sLen = derSig[off++];
-  var s = derSig.slice(off, off+sLen);
-  function norm(b) {
-    var a = Array.from(b).filter(function(v,i){ return !(i===0 && b[i]===0); });
-    while (a.length < 32) a.unshift(0);
-    return new Uint8Array(a.slice(-32));
-  }
-  return { r: norm(r), s: norm(s) };
-}
-
-// ── Tab switching ─────────────────────────────────────────────────────────────
-window.switchTab = function(tab) {
-  document.querySelectorAll('.tab').forEach(function(t,i) {
-    t.classList.remove('active');
-    if (i===0 && tab==='sign') t.classList.add('active');
-    if (i===1 && tab==='register') t.classList.add('active');
+// ── Scroll reveal ─────────────────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
   });
-  document.getElementById('tab-sign').className     = 'tab-panel'+(tab==='sign'?' active':'');
-  document.getElementById('tab-register').className = 'tab-panel'+(tab==='register'?' active':'');
-};
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-// ── Auto-fill from URL ?safe= ─────────────────────────────────────────────────
-var params = new URLSearchParams(window.location.search);
-var safePrefill = params.get('safe');
-if (safePrefill) {
-  document.getElementById('safe-address-sign').value = safePrefill;
-  document.getElementById('safe-address-reg').value  = safePrefill;
-  setTimeout(function(){ loadPendingTx(); }, 600);
-}
-
-// ── Public key extraction ─────────────────────────────────────────────────────
-async function extractPublicKey(authResponse) {
-  if (typeof authResponse.getPublicKey === 'function') {
-    try {
-      var rawKey = authResponse.getPublicKey();
-      if (rawKey && rawKey.byteLength > 0) {
-        var imported = await crypto.subtle.importKey('raw', rawKey, {name:'ECDSA',namedCurve:'P-256'}, true, ['verify']);
-        var jwk = await crypto.subtle.exportKey('jwk', imported);
-        return {
-          x: '0x'+Array.from(new Uint8Array(fromBase64url(jwk.x))).map(function(b){return b.toString(16).padStart(2,'0');}).join(''),
-          y: '0x'+Array.from(new Uint8Array(fromBase64url(jwk.y))).map(function(b){return b.toString(16).padStart(2,'0');}).join('')
-        };
-      }
-    } catch(e) { log('reg-log','getPublicKey failed: '+e.message,'info'); }
-  }
-  var att = new Uint8Array(authResponse.attestationObject);
-  for (var i = 0; i < att.length-65; i++) {
-    if (att[i] === 0x04) {
-      var cand = att.slice(i,i+65);
-      try {
-        await crypto.subtle.importKey('raw',cand,{name:'ECDSA',namedCurve:'P-256'},true,['verify']);
-        return {
-          x: '0x'+Array.from(cand.slice(1,33)).map(function(b){return b.toString(16).padStart(2,'0');}).join(''),
-          y: '0x'+Array.from(cand.slice(33,65)).map(function(b){return b.toString(16).padStart(2,'0');}).join('')
-        };
-      } catch(_){}
-    }
-  }
-  throw new Error('Could not extract public key');
-}
-
-// ── REGISTER ──────────────────────────────────────────────────────────────────
-window.registerPasskey = async function() {
-  var safeAddr = document.getElementById('safe-address-reg').value.trim();
-  var name     = document.getElementById('passkey-name').value.trim();
-  if (!safeAddr.startsWith('0x') || safeAddr.length !== 42) { alert('Invalid Safe address'); return; }
-  if (!name) { alert('Enter a device name'); return; }
-  var btn  = document.getElementById('reg-btn');
-  var icon = document.getElementById('reg-icon');
-  document.getElementById('reg-log').innerHTML = '';
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Creating passkey...';
-  icon.className = 'passkey-icon waiting';
-  try {
-    log('reg-log','Requesting passkey from device...','info');
-    var cred = await navigator.credentials.create({
-      publicKey: {
-        rp: { name:'Yield Butler', id:window.location.hostname },
-        user: {
-          id: new TextEncoder().encode(safeAddr.toLowerCase()+'_'+Date.now()),
-          name: name+' ('+shortAddr(safeAddr)+')',
-          displayName: name
-        },
-        pubKeyCredParams: [{ alg:-7, type:'public-key' }],
-        authenticatorSelection: { authenticatorAttachment:'platform', userVerification:'required', residentKey:'preferred' },
-        timeout: 120000,
-        challenge: crypto.getRandomValues(new Uint8Array(32)),
-        attestation: 'direct'
-      }
-    });
-    if (!cred) throw new Error('No credential returned');
-    log('reg-log','Passkey created on device','ok');
-    var pubKey = await extractPublicKey(cred.response);
-    var credId = toBase64url(new Uint8Array(cred.rawId));
-    var result = {
-      safeAddress: safeAddr, deviceName: name, credentialId: credId,
-      publicKey: { x: pubKey.x, y: pubKey.y },
-      rpId: window.location.hostname, createdAt: new Date().toISOString()
-    };
-    document.getElementById('reg-output').textContent = JSON.stringify(result, null, 2);
-    document.getElementById('reg-result').style.display = 'block';
-    log('reg-log','Done! Copy output below and send to admin.','ok');
-    icon.className = 'passkey-icon'; icon.textContent = '✅';
-    btn.innerHTML = '✅ Passkey Registered'; btn.className = 'btn btn-success';
-  } catch(err) {
-    log('reg-log',err.name+': '+err.message,'err');
-    btn.disabled = false; btn.innerHTML = 'Register Passkey on This Device';
-    icon.textContent = '🔑'; icon.className = 'passkey-icon';
-  }
-};
-
-window.copyRegOutput = function() {
-  var text = document.getElementById('reg-output').textContent;
-  navigator.clipboard.writeText(text).then(function(){ alert('Copied!'); }).catch(function(){
-    var ta = document.createElement('textarea');
-    ta.value = text; document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta); alert('Copied!');
-  });
-};
-
-// ── SIGN ──────────────────────────────────────────────────────────────────────
-var currentTx = null, currentSafe = null;
-
-window.loadPendingTx = async function() {
-  var safeAddr = document.getElementById('safe-address-sign').value.trim();
-  if (!safeAddr.startsWith('0x') || safeAddr.length !== 42) { alert('Invalid Safe address'); return; }
-  currentSafe = safeAddr;
-  document.getElementById('sign-form').style.display  = 'none';
-  document.getElementById('tx-details').style.display = 'none';
-  document.getElementById('sign-log').innerHTML = '';
-  log('sign-log','Loading transactions...','info');
-  try {
-    var res  = await fetch(SAFE_API+'/safes/'+safeAddr+'/multisig-transactions/?executed=false&limit=10');
-    var data = await res.json();
-    var all  = (data.results||[]).filter(function(tx){ return !tx.isExecuted; });
-    if (!all.length) {
-      log('sign-log','No pending transactions found','ok');
-      document.getElementById('sign-form').style.display = 'block';
-      return;
-    }
-    var maxNonce = Math.max.apply(null, all.map(function(tx){ return tx.nonce; }));
-    currentTx = all.filter(function(tx){ return tx.nonce === maxNonce; })[0];
-    log('sign-log','Found tx at nonce '+currentTx.nonce,'ok');
-    log('sign-log','safeTxHash: '+currentTx.safeTxHash,'info');
-    document.getElementById('tx-rows').innerHTML =
-      '<div class="detail-row"><span class="detail-label">Protocol</span><span class="detail-value">'+guessProtocol(currentTx.to)+'</span></div>'+
-      '<div class="detail-row"><span class="detail-label">To</span><span class="detail-value mono">'+shortAddr(currentTx.to)+'</span></div>'+
-      '<div class="detail-row"><span class="detail-label">Value</span><span class="detail-value">'+formatEth(currentTx.value)+' ETH</span></div>'+
-      '<div class="detail-row"><span class="detail-label">Nonce</span><span class="detail-value">'+currentTx.nonce+'</span></div>';
-    document.getElementById('tx-status-pill').innerHTML =
-      '<div class="pill pill-pending"><div class="dot"></div>Ready to sign</div>';
-    document.getElementById('tx-details').style.display = 'block';
-  } catch(err) {
-    log('sign-log','Error: '+err.message,'err');
-    document.getElementById('sign-form').style.display = 'block';
-  }
-};
-
-window.resetSignForm = function() {
-  document.getElementById('sign-form').style.display  = 'block';
-  document.getElementById('tx-details').style.display = 'none';
-  var el = document.getElementById('sign-log');
-  el.style.display = 'none'; el.innerHTML = '';
-  currentTx = null;
-};
-
-window.signWithPasskey = async function() {
-  if (!currentTx || !currentSafe) return;
-  var btn  = document.getElementById('sign-btn');
-  var icon = document.getElementById('passkey-icon');
-  btn.disabled  = true;
-  btn.innerHTML = '<div class="spinner"></div> Waiting for biometric...';
-  icon.className = 'passkey-icon waiting';
-
-  try {
-    // Step 1: Get the safe tx hash
-    var safeTxHash = currentTx.safeTxHash || currentTx.contractTransactionHash;
-    if (!safeTxHash) throw new Error('No tx hash found. Fields: '+Object.keys(currentTx).join(', '));
-    log('sign-log','Hash: '+safeTxHash.slice(0,10)+'...','info');
-
-    // Step 2: Request biometric
-    var hashBytes = hexToBytes(safeTxHash);
-    log('sign-log','Requesting biometric...','info');
-
-    var assertion;
-    try {
-      assertion = await navigator.credentials.get({
-        publicKey: {
-          rpId: window.location.hostname,
-          challenge: hashBytes,
-          userVerification: 'required',
-          timeout: 120000
-        }
-      });
-    } catch(ce) {
-      throw new Error('Biometric error: '+ce.name+' — '+ce.message);
-    }
-
-    if (!assertion || !assertion.response) throw new Error('No assertion returned from device');
-    log('sign-log','Biometric confirmed','ok');
-
-    // Step 3: Extract response data
-    var authData   = new Uint8Array(assertion.response.authenticatorData);
-    var clientData = new Uint8Array(assertion.response.clientDataJSON);
-    var sig        = new Uint8Array(assertion.response.signature);
-
-    if (!authData.length)   throw new Error('authenticatorData empty');
-    if (!clientData.length) throw new Error('clientDataJSON empty');
-    if (!sig.length)        throw new Error('signature empty');
-
-    log('sign-log','authData: '+authData.length+' bytes','info');
-    log('sign-log','clientData: '+clientData.length+' bytes','info');
-    log('sign-log','sig: '+sig.length+' bytes','info');
-
-    // Step 4: Parse clientDataFields
-    // clientDataJSON looks like: {"type":"webauthn.get","challenge":"...","origin":"..."}
-    // clientDataFields = everything after the challenge value to end (Safe needs this)
-    var clientDataStr = new TextDecoder().decode(clientData);
-    log('sign-log','clientData preview: '+clientDataStr.slice(0,60),'info');
-
-    // Find end of challenge value and extract the rest
-    var challengeKey = '"challenge":"';
-    var challengeStart = clientDataStr.indexOf(challengeKey);
-    if (challengeStart === -1) throw new Error('challenge not found in clientDataJSON');
-    var afterChallenge = clientDataStr.indexOf('"', challengeStart + challengeKey.length);
-    if (afterChallenge === -1) throw new Error('challenge end not found');
-    // clientDataFields is everything from after the challenge closing quote to end
-    // but we strip the leading comma and closing brace
-    var clientDataFields = clientDataStr.slice(afterChallenge + 1);
-    // Remove trailing }
-    if (clientDataFields.endsWith('}')) clientDataFields = clientDataFields.slice(0, -1);
-    log('sign-log','clientDataFields: '+clientDataFields.slice(0,40),'info');
-
-    // Step 5: Extract r and s from DER signature
-    var rs = extractRS(sig);
-    var r  = BigInt(bytesToHex(rs.r));
-    var s  = BigInt(bytesToHex(rs.s));
-    log('sign-log','Building signature...','info');
-
-    // Step 6: ABI encode as Safe WebAuthn signature
-    var innerSig = abiEncodePasskeySig(authData, clientDataFields, r, s);
-    log('sign-log','Inner sig: '+innerSig.length+' bytes','info');
-
-    // Step 7: Wrap in ERC-1271 contract signature format
-    var contractSig = buildContractSignature(PASSKEY_SIGNER, innerSig);
-    log('sign-log','Contract sig: '+contractSig.length+' bytes','info');
-
-    // Step 8: Submit to Safe API
-    log('sign-log','Submitting to Safe...','info');
-    var submitRes = await fetch(
-      SAFE_API+'/multisig-transactions/'+safeTxHash+'/confirmations/',
-      {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          signature: bytesToHex(contractSig),
-          sender: PASSKEY_SIGNER
-        })
-      }
-    );
-
-    if (submitRes.ok || submitRes.status === 201) {
-      log('sign-log','Signature submitted!','ok');
-      log('sign-log','Transaction confirmed — will execute shortly.','ok');
-      document.getElementById('tx-status-pill').innerHTML =
-        '<div class="pill pill-success"><div class="dot"></div>Signed ✓</div>';
-      icon.className = 'passkey-icon'; icon.textContent = '✅';
-      btn.innerHTML = '✅ Signed Successfully'; btn.className = 'btn btn-success';
-    } else {
-      var errData = await submitRes.json().catch(function(){ return {}; });
-      throw new Error('Safe API: '+JSON.stringify(errData));
-    }
-
-  } catch(err) {
-    log('sign-log',err.name+': '+err.message,'err');
-    btn.disabled = false;
-    btn.innerHTML = 'Sign with Face ID / Fingerprint';
-    icon.className = 'passkey-icon';
-  }
-};
-
-// ── UI helpers ────────────────────────────────────────────────────────────────
-function guessProtocol(addr) {
-  var map = {
-    '0xae7ab96520de3a18e5e111b5eaab095312d7fe84': 'Lido (stETH)',
-    '0xdc24316b9ae028f1497c275eb9192a3ea0f67022': 'Curve stETH/ETH',
-    '0xeffc18fc3b7eb8e676dac549e0c693ad50d1ce31': 'Aave v3',
-    '0xf403c135812408bfbe8713b5a23a04b3d48aae31': 'Convex',
-    '0x06325440d014e39736583c165c2963ba99faf14e': 'Curve LP',
-    '0xd6a2d6ee1209e938f297b41b631aed3f10684e07': 'Safe (owner change)'
-  };
-  return map[addr.toLowerCase()] || addr.slice(0,8)+'...';
-}
-
-function formatEth(wei) {
-  if (!wei || wei === '0') return '0';
-  return (parseFloat(wei)/1e18).toFixed(4);
-}
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
