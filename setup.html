@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <title>Fenix Yield — Setup Guide</title>
 <style>
 :root {
@@ -1030,6 +1031,14 @@ body{
       <div class="cmd-desc"><strong>Current protocol</strong>Which protocol the bot is currently routing new stakes to</div>
     </div>
     <div class="cmd-item">
+      <span class="cmd-tag">/status</span>
+      <div class="cmd-desc"><strong>Pending transactions</strong>Shows any transactions in your Safe queue waiting for your signature. Use this to check if the bot has proposed something.</div>
+    </div>
+    <div class="cmd-item">
+      <span class="cmd-tag">/history</span>
+      <div class="cmd-desc"><strong>Last transaction</strong>Shows your most recently executed transaction — protocol, amount, date, and hash.</div>
+    </div>
+    <div class="cmd-item">
       <span class="cmd-tag">/start</span>
       <div class="cmd-desc"><strong>Main menu</strong>Shows all commands and your current default stake amount</div>
     </div>
@@ -1060,6 +1069,8 @@ body{
     <div class="final-emoji">🎉</div>
     <h2>You're all set!</h2>
     <p>The bot runs every 24 hours automatically. When it proposes a transaction you'll get a push notification in Safe Mobile — just open it and approve. Your ETH earns yield while you sleep.</p>
+    <br/>
+    <p style="font-size:13px;color:var(--muted)">🔹 <strong style="color:var(--text)">Basic tier</strong> — daily yield + weekly reports + risk alerts<br/>⭐ <strong style="color:var(--text)">Pro tier</strong> — everything in Basic + auto-harvest Convex rewards every 6 hours</p>
   </div>
 
   <div class="checklist">
@@ -1086,6 +1097,14 @@ body{
     <div class="check-item" onclick="toggleCheck(this,'c10-3')" id="c10-3">
       <div class="check-box"><span class="check-mark">✓</span></div>
       <span class="check-label">Checked /dashboard to see yield tracking</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,'c10-6')" id="c10-6">
+      <div class="check-box"><span class="check-mark">✓</span></div>
+      <span class="check-label">Know my tier (Basic or Pro) and what features I have access to</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,'c10-7')" id="c10-7">
+      <div class="check-box"><span class="check-mark">✓</span></div>
+      <span class="check-label">Weekly reports enabled — I'll receive a yield summary every Monday</span>
     </div>
   </div>
 
