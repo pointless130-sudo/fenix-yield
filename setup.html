@@ -267,7 +267,7 @@ body{
 <div class="hero">
   <div class="hero-logo">⚡</div>
   <h1>Fenix Yield Setup Guide</h1>
-  <p>Follow these steps to start earning automated ETH yield. Takes about 20 minutes.</p>
+  <p>Follow these steps to start earning automated ETH yield. Takes about 20–30 minutes.</p>
 
   <div class="progress-wrap">
     <div class="ring-wrap">
@@ -305,6 +305,7 @@ body{
   <button class="step-pill" onclick="goToStep(7)">8 · Chat ID</button>
   <button class="step-pill" onclick="goToStep(8)">9 · Register</button>
   <button class="step-pill" onclick="goToStep(9)">10 · Commands</button>
+  <button class="step-pill" onclick="goToStep(10)">11 · Autopilot</button>
 </div>
 
 <div class="content">
@@ -799,7 +800,7 @@ body{
 
   <div class="alert success">
     <span class="alert-icon">✅</span>
-    <span>Once set up, you'll get a push notification every time the bot proposes a yield transaction. One tap to review, one tap to approve.</span>
+    <span>Once set up, you'll get a push notification every time the bot proposes a yield transaction. Lido and Aave are 1-tap approvals. Curve requires 2 taps, Convex requires 3 — the bot handles all the routing logic, you just confirm.</span>
   </div>
 
   <div class="checklist">
@@ -992,7 +993,7 @@ body{
     </div>
     <div class="cmd-item">
       <span class="cmd-tag">/stake</span>
-      <div class="cmd-desc"><strong>Run cycle now</strong>Manually trigger a yield cycle instead of waiting for the daily one. Bot asks how much ETH to stake.</div>
+      <div class="cmd-desc"><strong>Run cycle now</strong>Manually trigger a yield cycle instead of waiting for the daily one. On Optimizer tier, bot proposes a Safe transaction for your approval. On Autopilot tier, bot executes directly — you'll be asked to confirm first.</div>
     </div>
     <div class="cmd-item">
       <span class="cmd-tag">/status</span>
@@ -1008,7 +1009,7 @@ body{
     </div>
     <div class="cmd-item">
       <span class="cmd-tag">/setprotocol</span>
-      <div class="cmd-desc"><strong>Control which protocols are used</strong>Pin to a specific protocol, exclude ones you don't want, or return to automatic best-APY mode. Examples: /setprotocol lido, /setprotocol auto, /setprotocol exclude convex</div>
+      <div class="cmd-desc"><strong>Control which protocols are used</strong>Pin to a specific protocol, exclude ones you don't want, or return to automatic best-APY mode. Note: the bot routes new stake deposits to the best protocol — it does not withdraw and move existing positions. Examples: /setprotocol lido, /setprotocol auto, /setprotocol exclude convex</div>
     </div>
     <div class="cmd-item">
       <span class="cmd-tag">/harvest</span>
@@ -1066,9 +1067,9 @@ body{
   <div class="final-card">
     <div class="final-emoji">🎉</div>
     <h2>You're all set!</h2>
-    <p>The bot runs every 24 hours automatically. When it proposes a transaction you'll get a push notification in Safe Mobile — just open it and approve. Your ETH earns yield while you sleep.</p>
+    <p>The bot runs every 24 hours automatically. On Optimizer tier, when it proposes a transaction you'll get a push notification in Safe Mobile — open it and approve. On Autopilot tier with Zodiac enabled, it executes automatically with no approval needed. Your ETH earns yield while you sleep.</p>
     <br/>
-    <p style="font-size:13px;color:var(--muted)">🔹 <strong style="color:var(--text)">Basic tier</strong> — daily yield + weekly reports + risk alerts<br/>⭐ <strong style="color:var(--text)">Pro tier</strong> — everything in Basic + auto-harvest Convex rewards every 6 hours</p>
+    <p style="font-size:13px;color:var(--muted)">🔍 <strong style="color:var(--text)">Scout (free)</strong> — APY tracking, risk alerts, portfolio view — manual execution only<br/>⚡ <strong style="color:var(--text)">Optimizer ($19/mo)</strong> — automated Safe tx proposals, 1–3 tap approval in Safe Mobile<br/>🚀 <strong style="color:var(--text)">Autopilot ($59/mo)</strong> — full Zodiac auto-execution, auto-harvest every 6h, no approvals needed</p>
   </div>
 
   <div class="checklist">
@@ -1098,7 +1099,7 @@ body{
     </div>
     <div class="check-item" onclick="toggleCheck(this,'c10-6')" id="c10-6">
       <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Know my tier (Basic or Pro) and what features I have access to</span>
+      <span class="check-label">Know my tier (Scout / Optimizer / Autopilot) and what features I have access to</span>
     </div>
     <div class="check-item" onclick="toggleCheck(this,'c10-7')" id="c10-7">
       <div class="check-box"><span class="check-mark">✓</span></div>
@@ -1112,11 +1113,80 @@ body{
   </div>
 </div>
 
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STEP 11: Autopilot / Zodiac Setup -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="step-section" id="step-10">
+  <div class="step-header">
+    <div class="step-eyebrow">Step 11 — Autopilot tier only</div>
+    <h2 class="step-title">Enable Autopilot (Zodiac Roles Module)</h2>
+    <p class="step-desc">Autopilot tier enables fully automatic execution — no Safe Mobile approvals needed. The bot executes yield transactions directly via a Zodiac Roles Module you deploy and control.</p>
+  </div>
+
+  <div class="alert success">
+    <span class="alert-icon">🔒</span>
+    <span>You remain in full control. The bot can <strong>only</strong> call whitelisted yield functions: Lido stake, Curve LP, Aave deposit, Convex deposit/harvest, token approvals, and Uniswap swap. It <strong>cannot</strong> send ETH to unknown addresses or change your Safe owners.</span>
+  </div>
+
+  <div class="alert warn">
+    <span class="alert-icon">⚠️</span>
+    <span><strong>Known issue:</strong> The Zodiac app inside Safe no longer shows a "Deploy" button on the Roles page. You must deploy from the <strong>original Zodiac app</strong>, not "Zodiac Roles". See instructions below.</span>
+  </div>
+
+  <ul class="instructions">
+    <li><div class="step-num">1</div><div class="body"><strong>Send /whitelist to the bot</strong><span>The bot explains the setup and asks you to reply "yes" to begin.</span></div></li>
+    <li><div class="step-num">2</div><div class="body"><strong>Open app.safe.global on desktop</strong><span>Go to Apps in the left sidebar and search "Zodiac". Open the first result — <strong>Zodiac</strong> (The expansion pack for DAOs), not "Zodiac Roles".</span></div></li>
+    <li><div class="step-num">3</div><div class="body"><strong>Deploy the Roles Modifier</strong><span>Inside the Zodiac app, find Roles Modifier and click Deploy. Confirm the transaction in Safe Mobile. This costs ~$5–15 in gas. <strong>Important:</strong> if you have a transaction pending in your Safe queue, it must be resolved first — Safe executes transactions in nonce order.</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Copy the deployed module address</strong><span>After deployment the Zodiac app shows your new Roles Modifier contract address (starts with 0x, 42 characters). Copy it.</span></div></li>
+    <li><div class="step-num">5</div><div class="body"><strong>Paste the address into the bot</strong><span>Send the address in Telegram. The bot verifies it on-chain, grants the role, and whitelists all yield functions automatically.</span></div></li>
+    <li><div class="step-num">6</div><div class="body"><strong>Done — Autopilot is live</strong><span>The bot sends a confirmation message. From now on the daily yield cycle executes automatically. Use /whitelist to check status, /whitelist disable to turn it off anytime.</span></div></li>
+  </ul>
+
+  <div class="alert info">
+    <span class="alert-icon">💡</span>
+    <span><strong>Transaction queue tip:</strong> If you have a pending transaction in your Safe queue when deploying, approve or reject it first. The Zodiac deployment will sit behind it and won't execute until the queue clears. Use /status in the bot to check for pending transactions.</span>
+  </div>
+
+  <div class="alert info">
+    <span class="alert-icon">💰</span>
+    <span><strong>Minimum ETH for Autopilot:</strong> Make sure your Safe has at least your stake amount plus ~0.005 ETH for gas. If your balance is too low the bot sends an insufficient ETH warning and skips the cycle gracefully — no errors. Use /setstake to lower the stake amount if needed (minimum 0.01 ETH).</span>
+  </div>
+
+  <div class="checklist">
+    <div class="check-item" onclick="toggleCheck(this,'c11-1')" id="c11-1">
+      <div class="check-box"><span class="check-mark">✓</span></div>
+      <span class="check-label">Sent /whitelist to bot and replied "yes"</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,'c11-2')" id="c11-2">
+      <div class="check-box"><span class="check-mark">✓</span></div>
+      <span class="check-label">Deployed Zodiac Roles Modifier via Safe Apps → Zodiac (not Zodiac Roles)</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,'c11-3')" id="c11-3">
+      <div class="check-box"><span class="check-mark">✓</span></div>
+      <span class="check-label">Pasted module address into bot and received verification confirmation</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,'c11-4')" id="c11-4">
+      <div class="check-box"><span class="check-mark">✓</span></div>
+      <span class="check-label">Received "Whitelist fully configured!" message from bot</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,'c11-5')" id="c11-5">
+      <div class="check-box"><span class="check-mark">✓</span></div>
+      <span class="check-label">Sent /whitelist to confirm status shows ACTIVE</span>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn btn-secondary" onclick="goToStep(9)">← Back</button>
+    <button class="btn btn-primary" onclick="goToStep(0)" style="background:linear-gradient(135deg,var(--success),#2e7d52)">↩ Back to Start</button>
+  </div>
+</div>
+
 </div><!-- /content -->
 
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
-var TOTAL_CHECKS = 28; // total checkboxes across all steps
+var TOTAL_CHECKS = 33; // total checkboxes across all steps
 var currentStep  = 0;
 
 // ── Load saved checks from localStorage ───────────────────────────────────
@@ -1160,7 +1230,7 @@ function updateProgress() {
 
   var labels = ['Let\'s get started','Installing apps','Setting up MetaMask',
     'Getting ETH','Creating Safe','Adding bot signer','Funding Safe',
-    'Setting up Safe Mobile','Getting chat ID','Registering','Ready to earn! 🎉'];
+    'Setting up Safe Mobile','Getting chat ID','Registering','Exploring commands','Autopilot enabled! 🚀'];
   var labelIdx = Math.min(Math.floor(checked / total * 10), 10);
   document.getElementById('progressLabel').textContent = labels[labelIdx];
 }
