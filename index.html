@@ -967,5 +967,19 @@ const observer = new IntersectionObserver((entries) => {
 });
 document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 </script>
+<script>
+// ── Referral tracking ──────────────────────────────────────────────────────
+const refParam = new URLSearchParams(window.location.search).get("ref");
+if (refParam) sessionStorage.setItem("fenix_ref", refParam);
+
+const storedRef = sessionStorage.getItem("fenix_ref");
+if (storedRef) {
+  document.querySelectorAll("a[href*="buy.stripe.com"]").forEach(link => {
+    const url = new URL(link.href);
+    url.searchParams.set("client_reference_id", storedRef);
+    link.href = url.toString();
+  });
+}
+</script>
 </body>
 </html>
