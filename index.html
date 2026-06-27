@@ -682,8 +682,8 @@ footer {
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#protocols">Protocols</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="https://app.ens.domains/fenix-yield.eth" target="_blank" rel="noreferrer">fenix-yield.eth ↗</a></li>
     <li><a href="#resources">Resources</a></li>
-    <li><a href="security.html">Security</a></li>
     <li><a class="nav-cta" href="#pricing">Get Started →</a></li>
   </ul>
 </nav>
@@ -891,6 +891,12 @@ footer {
   <!-- Security note -->
   <div style="max-width:720px;margin:40px auto 0;padding:28px 32px;background:var(--navy2);border:1px solid var(--border);border-radius:16px;text-align:left;">
     <p style="color:var(--teal);font-size:11px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;">🔐 Non-Custodial Security</p>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(78,200,196,0.08);border:1px solid rgba(78,200,196,0.25);border-radius:8px;padding:6px 14px;margin-bottom:14px;">
+      <span style="font-size:16px;">🌐</span>
+      <span style="font-size:13px;color:var(--teal);font-weight:600;">fenix-yield.eth</span>
+      <span style="font-size:11px;color:var(--muted);">— verified on-chain identity</span>
+      <a href="https://app.ens.domains/fenix-yield.eth" target="_blank" rel="noreferrer" style="font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);border-radius:4px;padding:2px 8px;margin-left:4px;">View ↗</a>
+    </div>
     <p style="color:var(--white);font-size:15px;font-weight:700;margin-bottom:8px;">We don't hold your funds — your Safe Wallet does.</p>
     <p style="color:var(--muted);font-size:14px;line-height:1.7;margin:0;">Fenix Yield writes code that proposes transactions to your Safe. On Autopilot, our bot signer operates under Zodiac Roles — a strict permission layer limiting it to pre-approved routes only. It cannot move funds to arbitrary addresses or approve unlimited spend. <a href="setup.html" style="color:var(--teal);text-decoration:none;">Learn how it works →</a></p>
   </div>
@@ -924,12 +930,6 @@ footer {
       <p>Watch the full product walkthrough to see Fenix Yield in action before signing up.</p>
       <div class="resource-arrow">→</div>
     </a>
-    <a class="resource-card reveal" href="security.html">
-      <div class="resource-icon">🔐</div>
-      <h3>Security Guide</h3>
-      <p>Best practices for verifying transactions, spotting malicious messages, and a full breakdown of tier capabilities.</p>
-      <div class="resource-arrow">→</div>
-    </a>
     <a class="resource-card reveal" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">
       <div class="resource-icon">✈️</div>
       <h3>Telegram Bot</h3>
@@ -944,12 +944,13 @@ footer {
     <span>Fenix Yield</span>
   </div>
   <p class="footer-tagline">Put your crypto to work.</p>
+  <p style="font-size:12px;color:var(--muted);margin-top:4px;margin-bottom:8px;">🌐 <a href="https://app.ens.domains/fenix-yield.eth" target="_blank" rel="noreferrer" style="color:var(--teal);text-decoration:none;">fenix-yield.eth</a></p>
   <ul class="footer-links">
     <li><a href="setup.html">Setup Guide</a></li>
     <li><a href="setup-chat.html">AI Assistant</a></li>
-    <li><a href="security.html">Security Guide</a></li>
     <li><a href="https://fenix-yield.com/Fenix%20Yield%20Launch%20-%20Offline.html" target="_blank" rel="noreferrer">Launch Video</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="https://app.ens.domains/fenix-yield.eth" target="_blank" rel="noreferrer">fenix-yield.eth ↗</a></li>
     <li><a href="/cdn-cgi/l/email-protection#5f2c2a2f2f302d2b1f393a3136277226363a333b713c3032">Contact</a></li>
   </ul>
   <a class="footer-email" href="/cdn-cgi/l/email-protection#1665636666796462567073787f6e3b6f7f737a723875797b"><span class="__cf_email__" data-cfemail="0b787e7b7b64797f4b6d6e6562732672626e676f25686466">[email&#160;protected]</span></a>
@@ -974,20 +975,6 @@ const observer = new IntersectionObserver((entries) => {
   rootMargin: "0px 0px -40px 0px"
 });
 document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-</script>
-<script>
-// ── Referral tracking ──────────────────────────────────────────────────────
-const refParam = new URLSearchParams(window.location.search).get("ref");
-if (refParam) sessionStorage.setItem("fenix_ref", refParam);
-
-const storedRef = sessionStorage.getItem("fenix_ref");
-if (storedRef) {
-  document.querySelectorAll("a[href*="buy.stripe.com"]").forEach(link => {
-    const url = new URL(link.href);
-    url.searchParams.set("client_reference_id", storedRef);
-    link.href = url.toString();
-  });
-}
 </script>
 </body>
 </html>
