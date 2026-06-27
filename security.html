@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+<title>Fenix Yield — Security Guide & Tier Capabilities</title>
+<style>
+:root {
+  --bg:      #0a0a0f;
+  --surface: #13131a;
+  --surface2:#1a1a24;
+  --border:  #1e1e2e;
+  --accent:  #7c5cfc;
+  --accent2: #4fc3f7;
+  --success: #4caf7d;
+  --warn:    #f59e0b;
+  --danger:  #ef4444;
+  --text:    #e8e8f0;
+  --muted:   #6b6b8a;
+  --radius:  14px;
+  --font:    'Inter', system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font);min-height:100vh;
+  padding:0 0 80px;
+}
+
+/* ── Header ── */
+.hero{
+  background:linear-gradient(160deg,#0e0e1a 0%,#12102a 100%);
+  border-bottom:1px solid var(--border);
+  padding:48px 24px 40px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(124,92,252,0.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-logo{
+  width:56px;height:56px;border-radius:16px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:28px;margin-bottom:16px;
+}
+.hero h1{
+  font-size:clamp(22px,5vw,32px);font-weight:700;
+  letter-spacing:-0.5px;margin-bottom:8px;
+}
+.hero p{color:var(--muted);font-size:15px;max-width:500px;margin:0 auto;}
+
+/* ── Nav tabs ── */
+.tabs{
+  display:flex;overflow-x:auto;gap:4px;
+  padding:16px 24px;scrollbar-width:none;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:10;
+  background:var(--bg);
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;padding:6px 16px;border-radius:100px;
+  font-size:12px;font-weight:600;cursor:pointer;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);transition:all 0.15s;white-space:nowrap;
+  text-decoration:none;
+}
+.tab:hover{border-color:var(--accent);color:var(--text);}
+.tab.active{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+}
+
+/* ── Content ── */
+.content{max-width:680px;margin:0 auto;padding:0 16px;}
+.section{padding-top:40px;}
+
+.section-eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--accent);margin-bottom:8px;
+}
+.section-title{font-size:24px;font-weight:700;letter-spacing:-0.3px;margin-bottom:10px;}
+.section-desc{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:24px;}
+
+/* ── Alert boxes ── */
+.alert{
+  border-radius:10px;padding:14px 16px;margin:16px 0;
+  font-size:13px;line-height:1.6;display:flex;gap:10px;
+}
+.alert.warn{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--warn);}
+.alert.info{background:rgba(124,92,252,0.1);border:1px solid rgba(124,92,252,0.3);color:#a78bfa;}
+.alert.success{background:rgba(76,175,125,0.1);border:1px solid rgba(76,175,125,0.3);color:var(--success);}
+.alert.danger{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* ── Cards ── */
+.card-grid{display:flex;flex-direction:column;gap:12px;margin:20px 0;}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;
+}
+.card-title{font-size:15px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.card-body{color:var(--muted);font-size:13px;line-height:1.7;}
+.card.danger-card{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.04);}
+.card.success-card{border-color:rgba(76,175,125,0.3);background:rgba(76,175,125,0.04);}
+.card.warn-card{border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.04);}
+
+/* ── Step list ── */
+.steps{list-style:none;display:flex;flex-direction:column;gap:10px;margin:16px 0;}
+.steps li{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:14px;font-size:14px;line-height:1.6;
+}
+.step-num{
+  width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#5b3fd8);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;
+}
+.steps li .body{flex:1;}
+.steps li .body strong{display:block;color:var(--text);margin-bottom:2px;}
+.steps li .body span{color:var(--muted);}
+
+/* ── Tier table ── */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;margin:20px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.tier-header{background:var(--surface2);padding:14px 12px;font-size:12px;font-weight:700;text-align:center;border-bottom:1px solid var(--border);}
+.tier-header.scout{color:#6b6b8a;}
+.tier-header.optimizer{color:var(--accent2);}
+.tier-header.autopilot{color:var(--accent);}
+.tier-row{display:contents;}
+.tier-cell{
+  background:var(--surface);padding:10px 12px;
+  font-size:12px;color:var(--muted);line-height:1.5;
+  border-bottom:1px solid var(--border);
+}
+.tier-cell.feature{font-weight:500;color:var(--text);background:var(--surface2);}
+.tier-cell.yes{color:var(--success);text-align:center;font-weight:600;}
+.tier-cell.no{color:var(--border);text-align:center;}
+.tier-cell.partial{color:var(--warn);text-align:center;font-size:11px;}
+
+/* ── Feature list ── */
+.feature-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:16px 0;}
+.feature-list li{
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:13px;line-height:1.6;padding:10px 12px;
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;
+}
+.feature-list li .fi{flex-shrink:0;font-size:15px;margin-top:1px;}
+.feature-list li .ft{flex:1;}
+.feature-list li .ft strong{color:var(--text);display:block;margin-bottom:2px;font-size:13px;}
+.feature-list li .ft span{color:var(--muted);}
+
+/* ── Code box ── */
+.code-box{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px;font-family:'SF Mono','Fira Code',monospace;
+  font-size:12px;color:var(--accent2);margin:8px 0;word-break:break-all;
+}
+
+/* ── Divider ── */
+.divider{border:none;border-top:1px solid var(--border);margin:32px 0;}
+
+/* ── Back link ── */
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--muted);font-size:13px;text-decoration:none;
+  padding:16px 24px 0;
+}
+.back-link:hover{color:var(--text);}
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">← Back to Fenix Yield</a>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-logo">🔐</div>
+  <h1>Security Guide & Tier Capabilities</h1>
+  <p>Best practices for safe transaction approval, protection against malicious messages, and a full breakdown of what each tier actually does.</p>
+</div>
+
+<!-- Tab nav -->
+<div class="tabs">
+  <a class="tab active" href="#security">🛡️ Security Best Practices</a>
+  <a class="tab" href="#verify">✅ Verifying Transactions</a>
+  <a class="tab" href="#threats">⚠️ Threat Awareness</a>
+  <a class="tab" href="#tiers">⚡ Tier Capabilities</a>
+  <a class="tab" href="#zodiac">🤖 How Autopilot Works</a>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 1: Security Best Practices -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section" id="security">
+  <div class="section-eyebrow">Stay safe</div>
+  <h2 class="section-title">Security Best Practices</h2>
+  <p class="section-desc">Fenix Yield is non-custodial — your funds never leave your Safe wallet. But that means you're the last line of defense. Follow these practices every time you approve a transaction.</p>
+
+  <div class="alert success">
+    <span class="alert-icon">✅</span>
+    <span><strong>The golden rule:</strong> Fenix Yield will NEVER ask you to send ETH to an unknown address, approve unlimited token spend, or change your Safe owners. If you see any of these — reject immediately.</span>
+  </div>
+
+  <ul class="steps">
+    <li>
+      <div class="step-num">1</div>
+      <div class="body">
+        <strong>Always review the transaction destination in Safe Mobile</strong>
+        <span>Before tapping approve, check the "Interacted with" address. It should be one of: Lido (0xae7ab96...), Curve stETH pool (0xDC24316...), Aave Gateway (0xEFFC18...), or Convex Booster (0xF403C1...). If it's any other address — reject.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="body">
+        <strong>Check the ETH value being sent</strong>
+        <span>Lido, Curve, and Aave transactions will send your stake amount in ETH. Convex deposit and harvest transactions send zero ETH. If a transaction sends an unexpected amount — reject.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="body">
+        <strong>Verify the function being called</strong>
+        <span>Tap "Transaction details" in Safe Mobile to expand the call. You should see: submit() for Lido, add_liquidity() for Curve, depositETH() for Aave, or deposit()/getReward() for Convex. Anything else is suspicious.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="body">
+        <strong>Approve one transaction at a time</strong>
+        <span>The bot proposes one transaction per cycle and waits. If your Safe queue has multiple pending transactions you didn't initiate, pause the bot with /pause and investigate before approving anything.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">5</div>
+      <div class="body">
+        <strong>Keep your MetaMask seed phrase offline</strong>
+        <span>Your MetaMask wallet is a signer on your Safe. If your seed phrase is compromised, an attacker could approve malicious transactions. Write it on paper, store it securely offline — never digitally.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">6</div>
+      <div class="body">
+        <strong>Never approve from a public or shared device</strong>
+        <span>Only approve Safe Mobile transactions from a personal device you control. Public WiFi and shared computers can expose your wallet to interception.</span>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 2: Verifying Transactions -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section" id="verify">
+  <div class="section-eyebrow">Trust but verify</div>
+  <h2 class="section-title">How to Verify a Transaction</h2>
+  <p class="section-desc">Every transaction the bot proposes can be independently verified on Etherscan before you approve it.</p>
+
+  <div class="card-grid">
+    <div class="card success-card">
+      <div class="card-title">✅ Legitimate Fenix Yield Transactions</div>
+      <div class="card-body">
+        The bot proposer wallet address is always:
+        <div class="code-box">0x739Df18DA29e0B9A408a1a66015f63B035112fBa</div>
+        All transactions will be proposed FROM this address. You can verify this in Safe Mobile under "Created by". If the creator is any other address — do not approve.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔵 Lido — What to expect</div>
+      <div class="card-body">
+        <strong>To:</strong> 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84<br>
+        <strong>Function:</strong> submit(address)<br>
+        <strong>Value:</strong> Your stake amount in ETH<br>
+        <strong>Result:</strong> You receive stETH in your Safe
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🟡 Curve — What to expect</div>
+      <div class="card-body">
+        <strong>To:</strong> 0xDC24316b9AE028F1497c275EB9192a3Ea0f67022<br>
+        <strong>Function:</strong> add_liquidity(uint256[2],uint256)<br>
+        <strong>Value:</strong> Your stake amount in ETH<br>
+        <strong>Result:</strong> You receive steCRV LP tokens in your Safe
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🟣 Aave — What to expect</div>
+      <div class="card-body">
+        <strong>To:</strong> 0xEFFC18fC3b7eb8E676dac549E0c693ad50D1Ce31<br>
+        <strong>Function:</strong> depositETH(address,address,uint16)<br>
+        <strong>Value:</strong> Your stake amount in ETH<br>
+        <strong>Result:</strong> You receive aWETH in your Safe
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🟠 Convex — What to expect (3 transactions)</div>
+      <div class="card-body">
+        <strong>Step 1:</strong> Curve add_liquidity — sends ETH, gets steCRV LP<br>
+        <strong>Step 2:</strong> steCRV approve Convex Booster — zero ETH value<br>
+        <strong>Step 3:</strong> Convex deposit — zero ETH value, gets cvxsteCRV<br><br>
+        Each step is a separate transaction. The bot proposes and waits for each confirmation before proceeding.
+      </div>
+    </div>
+  </div>
+
+  <div class="alert info">
+    <span class="alert-icon">💡</span>
+    <span>You can verify any transaction by searching the Etherscan link the bot sends you after each execution. Check the contract address, function called, and ETH value match what you expected.</span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 3: Threat Awareness -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section" id="threats">
+  <div class="section-eyebrow">Stay alert</div>
+  <h2 class="section-title">Recognising Malicious Messages</h2>
+  <p class="section-desc">The bot communicates only through Telegram. Here's what legitimate messages look like — and red flags to watch for.</p>
+
+  <div class="alert danger">
+    <span class="alert-icon">🚨</span>
+    <span><strong>Fenix Yield will NEVER:</strong> Ask for your seed phrase or private key. Ask you to send ETH directly to a wallet address. Tell you to approve a transaction "urgently" or you'll lose funds. Send you links to sites other than app.safe.global or fenix-yield.com.</span>
+  </div>
+
+  <div class="card-grid">
+    <div class="card danger-card">
+      <div class="card-title">🚫 Red Flag — Fake bot messages</div>
+      <div class="card-body">
+        Scammers create fake Telegram bots with similar names. Always verify you're talking to the correct bot by checking its username matches what the admin gave you at signup. If a "Fenix Yield" bot contacts you that you didn't add yourself — block it.
+      </div>
+    </div>
+    <div class="card danger-card">
+      <div class="card-title">🚫 Red Flag — Approving unknown contracts</div>
+      <div class="card-body">
+        If Safe Mobile shows a transaction to an address not listed in the "What to expect" section above, reject it. Legitimate bot transactions only go to the 5 protocol contracts listed. The bot will never propose a transaction to an arbitrary wallet address.
+      </div>
+    </div>
+    <div class="card danger-card">
+      <div class="card-title">🚫 Red Flag — Unlimited token approvals</div>
+      <div class="card-body">
+        Token approve transactions (for Convex) should show a specific amount matching your LP token balance — not "unlimited" or a huge number like 115792089237... (type(uint256).max). If you see an unlimited approval to any address other than the Convex Booster — reject.
+      </div>
+    </div>
+    <div class="card danger-card">
+      <div class="card-title">🚫 Red Flag — Owner or threshold changes</div>
+      <div class="card-body">
+        The bot will never propose a transaction that adds or removes Safe owners, or changes the signing threshold. If you see "addOwner", "removeOwner", or "changeThreshold" in a pending transaction — reject immediately and contact support.
+      </div>
+    </div>
+    <div class="card success-card">
+      <div class="card-title">✅ What legitimate bot messages look like</div>
+      <div class="card-body">
+        Messages from the bot include: APY updates, stake proposals with protocol name and ETH amount, harvest notifications with CRV/CVX amounts, risk alerts with specific protocol names, and weekly reports. All messages are factual and never create urgency or ask for credentials.
+      </div>
+    </div>
+  </div>
+
+  <div class="alert warn">
+    <span class="alert-icon">⚠️</span>
+    <span><strong>If you're ever unsure:</strong> Use /pause in Telegram to stop the bot, then check your Safe queue at app.safe.global. Reject anything you didn't expect. Better to miss a yield cycle than approve a malicious transaction.</span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 4: Tier Capabilities -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section" id="tiers">
+  <div class="section-eyebrow">What you get</div>
+  <h2 class="section-title">Tier Capabilities — What the Bot Actually Does</h2>
+  <p class="section-desc">Here's an honest breakdown of every feature across all three tiers, and confirmation that each is fully implemented and live.</p>
+
+  <!-- Scout -->
+  <div class="card" style="margin-bottom:12px;border-color:rgba(107,107,138,0.4)">
+    <div class="card-title" style="font-size:17px;">🔍 Scout — Free</div>
+    <div class="card-body" style="margin-bottom:12px;">Intelligence without automation. You see everything, you execute manually.</div>
+    <ul class="feature-list">
+      <li>
+        <span class="fi">📊</span>
+        <span class="ft"><strong>Real-time APY tracking</strong><span>Send /apy to see live rates across Lido, Curve, Aave, and Convex with today's winner highlighted. Data pulled from live protocol APIs.</span></span>
+      </li>
+      <li>
+        <span class="fi">💰</span>
+        <span class="ft"><strong>Safe wallet balance view</strong><span>Send /balance to see your Safe ETH balance and any LP tokens. Works for any registered Safe address — no wallet required beyond registration.</span></span>
+      </li>
+      <li>
+        <span class="fi">📈</span>
+        <span class="ft"><strong>Portfolio & P&L tracking</strong><span>Send /dashboard or /positions to see your full position across all protocols with current USD values, yield earned, and annualized APY.</span></span>
+      </li>
+      <li>
+        <span class="fi">🚨</span>
+        <span class="ft"><strong>Hourly risk alerts</strong><span>Bot monitors every hour. Alerts fire if ETH drops 10%+, a protocol APY collapses below 0.1%, or a transaction has been stuck for 48+ hours. Only fires if you actually have funds in that protocol.</span></span>
+      </li>
+      <li>
+        <span class="fi">📅</span>
+        <span class="ft"><strong>Weekly yield reports</strong><span>Every Monday at 8:00 UTC the bot sends a full yield summary — protocol used, APY earned, total value, and P&L since join. Automatic, no action needed.</span></span>
+      </li>
+      <li>
+        <span class="fi">🛑</span>
+        <span class="ft"><strong>Manual execution only</strong><span>Scout tier gets all the intelligence but no automation. The bot tells you the best protocol — you go to the protocol's website and execute yourself.</span></span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Optimizer -->
+  <div class="card" style="margin-bottom:12px;border-color:rgba(79,195,247,0.4)">
+    <div class="card-title" style="font-size:17px;">⚡ Optimizer — $19/mo</div>
+    <div class="card-body" style="margin-bottom:12px;">Everything in Scout, plus the bot proposes transactions to your Safe for your approval.</div>
+    <ul class="feature-list">
+      <li>
+        <span class="fi">🤖</span>
+        <span class="ft"><strong>Automated Safe Transaction Proposals</strong><span>Every day at 9:00 UTC the bot picks the best-APY protocol and proposes a transaction directly to your Safe Transaction Queue. You get a push notification in Safe Mobile.</span></span>
+      </li>
+      <li>
+        <span class="fi">📱</span>
+        <span class="ft"><strong>1–3 tap approval in Safe Mobile</strong><span>Lido and Aave are single-tap approvals. Curve LP is 2 taps. Convex is 3 taps (Curve LP + approve + deposit). The bot handles all the routing — you just confirm.</span></span>
+      </li>
+      <li>
+        <span class="fi">🚫</span>
+        <span class="ft"><strong>Custom protocol blacklists</strong><span>Use /setprotocol exclude [protocol] to permanently blacklist a protocol. Use /setprotocol auto to return to best-APY mode. Use /setprotocol [lido|curve|aave|convex] to pin to a specific protocol.</span></span>
+      </li>
+      <li>
+        <span class="fi">💸</span>
+        <span class="ft"><strong>Configurable stake amount</strong><span>Use /setstake [amount] to change how much ETH gets staked each cycle. Minimum 0.01 ETH. If your Safe balance drops below stake amount + gas buffer, the bot sends a warning and skips that cycle gracefully.</span></span>
+      </li>
+      <li>
+        <span class="fi">🛡️</span>
+        <span class="ft"><strong>Slippage protection</strong><span>All swap transactions include 1% slippage protection. The bot will not propose a transaction that would result in unacceptable slippage.</span></span>
+      </li>
+      <li>
+        <span class="fi">⏸️</span>
+        <span class="ft"><strong>Pause / resume control</strong><span>Send /pause to stop all bot activity. Send /resume to restart. Existing Safe queue transactions are unaffected — the bot just stops proposing new ones.</span></span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Autopilot -->
+  <div class="card" style="border-color:rgba(124,92,252,0.5);background:rgba(124,92,252,0.05);">
+    <div class="card-title" style="font-size:17px;">🚀 Autopilot — $59/mo</div>
+    <div class="card-body" style="margin-bottom:12px;">Everything in Optimizer, plus fully automatic on-chain execution via Zodiac Roles Module — no Safe Mobile approvals needed.</div>
+    <ul class="feature-list">
+      <li>
+        <span class="fi">⚡</span>
+        <span class="ft"><strong>Full Zodiac Roles Module auto-execution</strong><span>The bot executes yield transactions directly on-chain via a Zodiac Roles Modifier you deploy and control. No Safe Mobile approval needed for daily yield cycles. The bot operates within strictly whitelisted functions only.</span></span>
+      </li>
+      <li>
+        <span class="fi">🌾</span>
+        <span class="ft"><strong>Auto-harvest Convex rewards every 6 hours</strong><span>Every 6 hours the bot checks your CRV and CVX rewards. Once above the $10 threshold, it claims, swaps to ETH via Uniswap with 1% slippage protection, and returns ETH to your Safe for the next cycle.</span></span>
+      </li>
+      <li>
+        <span class="fi">🔄</span>
+        <span class="ft"><strong>Auto-compound — rewards restaked automatically</strong><span>Harvested rewards convert to ETH in your Safe, then get picked up by the next 9:00 UTC yield cycle and restaked. Compounding happens within 24 hours of harvest — no manual action needed.</span></span>
+      </li>
+      <li>
+        <span class="fi">🔒</span>
+        <span class="ft"><strong>Strict permission boundaries</strong><span>The bot can ONLY call: Lido submit(), Curve add_liquidity(), Aave depositETH(), Convex deposit()/getReward(), steCRV/CRV/CVX approve(), and Uniswap exactInputSingle(). It cannot send ETH to arbitrary addresses or change Safe owners.</span></span>
+      </li>
+      <li>
+        <span class="fi">🗝️</span>
+        <span class="ft"><strong>You retain full control</strong><span>Disable Autopilot anytime via /whitelist disable or by disabling the Roles Modifier in app.safe.global → Settings → Modules. The bot immediately loses execution ability — no waiting, no delays.</span></span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 5: How Autopilot Works -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="section" id="zodiac">
+  <div class="section-eyebrow">Under the hood</div>
+  <h2 class="section-title">How Autopilot Works — Zodiac Roles Module</h2>
+  <p class="section-desc">Autopilot uses the Zodiac Roles Modifier — an audited, open-source smart contract by Gnosis Guild that enforces strict execution boundaries on the bot.</p>
+
+  <div class="alert info">
+    <span class="alert-icon">🔬</span>
+    <span>The Zodiac Roles Modifier is open-source and audited. You can verify its source code at <strong>github.com/gnosisguild/zodiac-modifier-roles</strong>. The module you deploy is your own contract — Fenix Yield has no admin access to it.</span>
+  </div>
+
+  <ul class="steps">
+    <li>
+      <div class="step-num">1</div>
+      <div class="body">
+        <strong>You deploy the Roles Modifier</strong>
+        <span>During Autopilot setup, you deploy your own Zodiac Roles Modifier contract via the Safe app. This contract is owned by your Safe — only you can change its permissions.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="body">
+        <strong>Bot is granted a role with strict limits</strong>
+        <span>The setup flow executes a series of permission transactions that assign the Fenix Yield role to the bot's proposer wallet. The role only permits the specific yield protocol functions listed above — nothing else.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="body">
+        <strong>Bot calls execTransactionWithRole</strong>
+        <span>When executing a yield transaction, the bot calls execTransactionWithRole() on your Roles Modifier. The Roles Modifier checks: is the caller assigned this role? Is the target address whitelisted? Is the function whitelisted? Only if all checks pass does it forward the transaction to your Safe.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="body">
+        <strong>Any deviation is rejected on-chain</strong>
+        <span>If the bot attempted to send ETH to an unrecognized address, call an unwhitelisted function, or exceed its permissions in any way — the Roles Modifier would revert the transaction at the smart contract level, before any funds move.</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">5</div>
+      <div class="body">
+        <strong>You can disable anytime</strong>
+        <span>Go to app.safe.global → Settings → Modules → find the Roles Modifier → Disable. Or send /whitelist disable to the bot. The module is instantly disabled and the bot loses all execution capability.</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="alert success">
+    <span class="alert-icon">🔐</span>
+    <span><strong>Security guarantee:</strong> Even if Fenix Yield's servers were completely compromised, an attacker could not steal your funds. The Roles Modifier smart contract enforces all boundaries on-chain, independent of any off-chain code.</span>
+  </div>
+
+  <div class="alert warn">
+    <span class="alert-icon">⚠️</span>
+    <span><strong>Known setup requirement:</strong> When deploying the Zodiac Roles Modifier, use the original <strong>Zodiac</strong> app in Safe (labeled "The expansion pack for DAOs"), not the "Zodiac Roles" app which lacks a deploy button. Also ensure your Safe transaction queue is empty before deploying — pending transactions block deployment due to nonce ordering.</span>
+  </div>
+</div>
+
+<!-- Back to site -->
+<div style="padding:32px 0 0;text-align:center;">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:linear-gradient(135deg,var(--accent),#5b3fd8);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;">← Back to Fenix Yield</a>
+  <a href="setup.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;margin-left:12px;">📋 Setup Guide →</a>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// Smooth scroll to section on tab click
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function(e) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Highlight active tab on scroll
+const sections = document.querySelectorAll('.section[id]');
+const tabs = document.querySelectorAll('.tab');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  tabs.forEach(t => {
+    t.classList.remove('active');
+    if (t.getAttribute('href') === '#' + current) t.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
