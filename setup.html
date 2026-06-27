@@ -19,246 +19,142 @@
   --muted:   #6b6b8a;
   --radius:  14px;
   --font:    'Inter', system-ui, sans-serif;
+  --scout:   #6b6b8a;
+  --optimizer: #4fc3f7;
+  --autopilot: #7c5cfc;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{
-  background:var(--bg);color:var(--text);
-  font-family:var(--font);min-height:100vh;
-  padding:0 0 80px;
-}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:0 0 80px;}
 
-/* ── Header ── */
-.hero{
-  background:linear-gradient(160deg,#0e0e1a 0%,#12102a 100%);
-  border-bottom:1px solid var(--border);
-  padding:48px 24px 40px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(124,92,252,0.15) 0%,transparent 70%);
-  pointer-events:none;
-}
-.hero-logo{
-  width:56px;height:56px;border-radius:16px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:28px;margin-bottom:16px;
-}
-.hero h1{
-  font-size:clamp(22px,5vw,32px);font-weight:700;
-  letter-spacing:-0.5px;margin-bottom:8px;
-}
+/* ── Hero ── */
+.hero{background:linear-gradient(160deg,#0e0e1a 0%,#12102a 100%);border-bottom:1px solid var(--border);padding:48px 24px 40px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(124,92,252,0.15) 0%,transparent 70%);pointer-events:none;}
+.hero-logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:inline-flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:16px;}
+.hero h1{font-size:clamp(22px,5vw,32px);font-weight:700;letter-spacing:-0.5px;margin-bottom:8px;}
 .hero p{color:var(--muted);font-size:15px;max-width:440px;margin:0 auto 28px;}
 
-/* ── Progress ring ── */
-.progress-wrap{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:8px;}
-.ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0;}
-.ring-bg{fill:none;stroke:var(--border);stroke-width:5;}
-.ring-fill{
-  fill:none;stroke:url(#ringGrad);stroke-width:5;
-  stroke-linecap:round;
-  stroke-dasharray:188;
-  stroke-dashoffset:188;
-  transform:rotate(-90deg);transform-origin:50% 50%;
-  transition:stroke-dashoffset 0.6s cubic-bezier(.4,0,.2,1);
-}
-.ring-label{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  font-size:18px;font-weight:700;line-height:1;
-}
-.ring-label span{font-size:10px;color:var(--muted);font-weight:400;margin-top:2px;}
-.progress-text{text-align:left;}
-.progress-text strong{display:block;font-size:15px;}
-.progress-text small{color:var(--muted);font-size:13px;}
+/* ── Tier picker ── */
+.tier-picker{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;}
+.tier-btn{padding:10px 20px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid var(--border);background:var(--surface2);color:var(--muted);transition:all 0.2s;white-space:nowrap;}
+.tier-btn:hover{border-color:var(--accent);color:var(--text);}
+.tier-btn.scout.active{border-color:var(--scout);color:var(--scout);background:rgba(107,107,138,0.15);}
+.tier-btn.optimizer.active{border-color:var(--optimizer);color:var(--optimizer);background:rgba(79,195,247,0.15);}
+.tier-btn.autopilot.active{border-color:var(--autopilot);color:var(--autopilot);background:rgba(124,92,252,0.15);}
+.tier-desc{font-size:13px;color:var(--muted);margin-top:8px;min-height:20px;transition:all 0.2s;}
+
+/* ── Tier badge ── */
+.tier-badge{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600;margin-bottom:16px;}
+.tier-badge.scout{background:rgba(107,107,138,0.15);border:1px solid rgba(107,107,138,0.3);color:var(--scout);}
+.tier-badge.optimizer{background:rgba(79,195,247,0.15);border:1px solid rgba(79,195,247,0.3);color:var(--optimizer);}
+.tier-badge.autopilot{background:rgba(124,92,252,0.15);border:1px solid rgba(124,92,252,0.3);color:var(--autopilot);}
 
 /* ── Steps nav ── */
-.steps-nav{
-  display:flex;overflow-x:auto;gap:4px;
-  padding:16px 24px;scrollbar-width:none;
-  border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:10;
-  background:var(--bg);
-}
+.steps-nav{display:flex;overflow-x:auto;gap:4px;padding:16px 24px;scrollbar-width:none;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;background:var(--bg);}
 .steps-nav::-webkit-scrollbar{display:none;}
-.step-pill{
-  flex-shrink:0;padding:6px 14px;border-radius:100px;
-  font-size:12px;font-weight:500;cursor:pointer;
-  border:1px solid var(--border);background:transparent;
-  color:var(--muted);transition:all 0.15s;white-space:nowrap;
-}
-.step-pill.active{
-  background:var(--accent);border-color:var(--accent);color:#fff;
-}
-.step-pill.done{
-  background:rgba(76,175,125,0.15);border-color:var(--success);color:var(--success);
-}
+.step-pill{flex-shrink:0;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.15s;white-space:nowrap;}
+.step-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.step-pill.done{background:rgba(76,175,125,0.15);border-color:var(--success);color:var(--success);}
 
 /* ── Content ── */
 .content{max-width:600px;margin:0 auto;padding:0 16px;}
-
-.step-section{
-  display:none;padding-top:32px;
-}
+.step-section{display:none;padding-top:32px;}
 .step-section.active{display:block;}
-
 .step-header{margin-bottom:24px;}
-.step-eyebrow{
-  font-size:11px;font-weight:600;letter-spacing:1.5px;
-  text-transform:uppercase;color:var(--accent);margin-bottom:8px;
-}
+.step-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .step-title{font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:8px;}
 .step-desc{color:var(--muted);font-size:14px;line-height:1.7;}
 
+/* ── Tier sections within steps ── */
+.tier-section{display:none;}
+.tier-section.visible{display:block;}
+
 /* ── Illustration ── */
-.illustration{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);overflow:hidden;margin:20px 0;
-}
-.illus-bar{
-  background:var(--surface2);border-bottom:1px solid var(--border);
-  padding:10px 14px;display:flex;align-items:center;gap:8px;
-}
+.illustration{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:20px 0;}
+.illus-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:8px;}
 .illus-dot{width:10px;height:10px;border-radius:50%;}
 .illus-title{font-size:12px;color:var(--muted);margin-left:4px;}
 .illus-body{padding:16px;}
 
 /* ── Instructions ── */
 .instructions{list-style:none;display:flex;flex-direction:column;gap:12px;margin:20px 0;}
-.instructions li{
-  display:flex;gap:14px;align-items:flex-start;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;padding:14px;font-size:14px;line-height:1.6;
-}
-.step-num{
-  width:24px;height:24px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),#5b3fd8);
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;
-}
+.instructions li{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:14px;line-height:1.6;}
+.step-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#5b3fd8);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;}
 .instructions li .body{flex:1;}
 .instructions li .body strong{display:block;color:var(--text);margin-bottom:2px;}
 .instructions li .body span{color:var(--muted);}
 
 /* ── Copy box ── */
-.copy-box{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:8px;padding:12px 14px;font-family:'SF Mono','Fira Code',monospace;
-  font-size:13px;color:var(--accent2);margin:8px 0;
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-  word-break:break-all;
-}
-.copy-btn{
-  background:var(--border);border:none;border-radius:6px;
-  padding:4px 10px;font-size:11px;color:var(--muted);
-  cursor:pointer;flex-shrink:0;transition:all 0.15s;
-}
+.copy-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:var(--accent2);margin:8px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;word-break:break-all;}
+.copy-btn{background:var(--border);border:none;border-radius:6px;padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;flex-shrink:0;transition:all 0.15s;}
 .copy-btn:hover{background:var(--accent);color:#fff;}
 
-/* ── Alert box ── */
-.alert{
-  border-radius:10px;padding:14px 16px;margin:16px 0;
-  font-size:13px;line-height:1.6;display:flex;gap:10px;
-}
+/* ── Alert ── */
+.alert{border-radius:10px;padding:14px 16px;margin:16px 0;font-size:13px;line-height:1.6;display:flex;gap:10px;}
 .alert.warn{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--warn);}
 .alert.info{background:rgba(124,92,252,0.1);border:1px solid rgba(124,92,252,0.3);color:#a78bfa;}
 .alert.success{background:rgba(76,175,125,0.1);border:1px solid rgba(76,175,125,0.3);color:var(--success);}
+.alert.scout-info{background:rgba(107,107,138,0.1);border:1px solid rgba(107,107,138,0.3);color:var(--scout);}
+.alert.optimizer-info{background:rgba(79,195,247,0.1);border:1px solid rgba(79,195,247,0.3);color:var(--optimizer);}
+.alert.autopilot-info{background:rgba(124,92,252,0.1);border:1px solid rgba(124,92,252,0.3);color:#c4b5fd;}
 .alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
 
 /* ── Checklist ── */
 .checklist{display:flex;flex-direction:column;gap:8px;margin:16px 0;}
-.check-item{
-  display:flex;align-items:center;gap:12px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;padding:12px 14px;cursor:pointer;
-  transition:border-color 0.15s;user-select:none;
-}
+.check-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color 0.15s;user-select:none;}
 .check-item:hover{border-color:var(--accent);}
 .check-item.checked{border-color:var(--success);background:rgba(76,175,125,0.05);}
-.check-box{
-  width:20px;height:20px;border-radius:6px;border:2px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:all 0.15s;
-}
-.check-item.checked .check-box{
-  background:var(--success);border-color:var(--success);
-}
+.check-box{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.check-item.checked .check-box{background:var(--success);border-color:var(--success);}
 .check-mark{color:#fff;font-size:12px;opacity:0;}
 .check-item.checked .check-mark{opacity:1;}
 .check-label{font-size:14px;flex:1;}
 .check-item.checked .check-label{color:var(--muted);text-decoration:line-through;}
 
-/* ── App download cards ── */
+/* ── App cards ── */
 .app-cards{display:flex;flex-direction:column;gap:10px;margin:16px 0;}
-.app-card{
-  display:flex;align-items:center;gap:14px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:12px;padding:14px;
-}
-.app-icon{
-  width:48px;height:48px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;flex-shrink:0;
-}
+.app-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.app-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
 .app-info{flex:1;}
 .app-name{font-size:15px;font-weight:600;margin-bottom:2px;}
 .app-desc{font-size:12px;color:var(--muted);}
-.app-badge{
-  background:var(--border);border-radius:6px;
-  padding:5px 12px;font-size:12px;font-weight:500;
-  color:var(--text);text-decoration:none;white-space:nowrap;
-  transition:background 0.15s;
-}
+.app-badge{background:var(--border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--text);text-decoration:none;white-space:nowrap;transition:background 0.15s;}
 .app-badge:hover{background:var(--accent);color:#fff;}
 
-/* ── Navigation buttons ── */
-.nav-btns{
-  display:flex;gap:10px;margin-top:32px;padding-top:24px;
-  border-top:1px solid var(--border);
-}
-.btn{
-  flex:1;padding:13px;border-radius:10px;border:none;
-  font-family:var(--font);font-size:15px;font-weight:600;
-  cursor:pointer;transition:all 0.15s;text-align:center;
-}
+/* ── Nav buttons ── */
+.nav-btns{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:1px solid var(--border);}
+.btn{flex:1;padding:13px;border-radius:10px;border:none;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center;}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#5b3fd8);color:#fff;}
 .btn-primary:hover{opacity:0.9;}
 .btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text);}
 .btn-secondary:hover{border-color:var(--accent);}
-.btn:disabled{opacity:0.3;cursor:not-allowed;}
 
-/* ── Commands reference ── */
+/* ── Commands ── */
 .commands{display:flex;flex-direction:column;gap:8px;margin:16px 0;}
-.cmd-item{
-  display:flex;align-items:flex-start;gap:12px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;padding:12px 14px;
-}
-.cmd-tag{
-  background:rgba(124,92,252,0.2);color:var(--accent);
-  font-family:'SF Mono','Fira Code',monospace;
-  font-size:12px;padding:3px 8px;border-radius:6px;
-  white-space:nowrap;flex-shrink:0;margin-top:1px;
-}
+.cmd-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.cmd-tag{background:rgba(124,92,252,0.2);color:var(--accent);font-family:'SF Mono','Fira Code',monospace;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
 .cmd-desc{font-size:13px;color:var(--muted);line-height:1.5;}
 .cmd-desc strong{color:var(--text);display:block;margin-bottom:2px;font-size:14px;}
+.cmd-autopilot-only{opacity:0.4;}
+.cmd-autopilot-only.visible{opacity:1;}
 
-/* ── Final screen ── */
-.final-card{
-  background:linear-gradient(135deg,rgba(124,92,252,0.15),rgba(79,195,247,0.1));
-  border:1px solid rgba(124,92,252,0.3);border-radius:var(--radius);
-  padding:32px 24px;text-align:center;margin:24px 0;
-}
+/* ── Final card ── */
+.final-card{background:linear-gradient(135deg,rgba(124,92,252,0.15),rgba(79,195,247,0.1));border:1px solid rgba(124,92,252,0.3);border-radius:var(--radius);padding:32px 24px;text-align:center;margin:24px 0;}
 .final-emoji{font-size:56px;margin-bottom:16px;}
 .final-card h2{font-size:22px;font-weight:700;margin-bottom:8px;}
 .final-card p{color:var(--muted);font-size:14px;line-height:1.6;}
 
-/* ── Phone mockup SVG ── */
-.phone-mockup{display:flex;justify-content:center;padding:8px 0;}
+/* ── Tier comparison table ── */
+.tier-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px;}
+.tier-table th{padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);color:var(--muted);font-weight:600;}
+.tier-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.tier-table tr:last-child td{border-bottom:none;}
+.tier-table .check{color:var(--success);}
+.tier-table .cross{color:var(--muted);opacity:0.4;}
+.tier-table .tier-col{font-weight:700;}
+.tier-table .tier-col.scout{color:var(--scout);}
+.tier-table .tier-col.optimizer{color:var(--optimizer);}
+.tier-table .tier-col.autopilot{color:var(--autopilot);}
 </style>
 </head>
 <body>
@@ -267,55 +163,70 @@ body{
 <div class="hero">
   <div class="hero-logo">⚡</div>
   <h1>Fenix Yield Setup Guide</h1>
-  <p>Follow these steps to start earning automated ETH yield. Takes about 20–30 minutes.</p>
+  <p>Select your tier below — the guide will show only the steps you need.</p>
 
-  <div class="progress-wrap">
-    <div class="ring-wrap">
-      <svg viewBox="0 0 64 64" width="72" height="72">
-        <defs>
-          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#7c5cfc"/>
-            <stop offset="100%" stop-color="#4fc3f7"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-bg" cx="32" cy="32" r="30"/>
-        <circle class="ring-fill" id="ringFill" cx="32" cy="32" r="30"/>
-      </svg>
-      <div class="ring-label">
-        <span id="ringPct">0%</span>
-        <span>done</span>
-      </div>
-    </div>
-    <div class="progress-text">
-      <strong id="progressLabel">Let's get started</strong>
-      <small id="progressSub">0 of 10 steps complete</small>
-    </div>
+  <div class="tier-picker">
+    <button class="tier-btn scout" onclick="selectTier('scout')">🔍 Scout — Free</button>
+    <button class="tier-btn optimizer" onclick="selectTier('optimizer')">⚡ Optimizer — $19/mo</button>
+    <button class="tier-btn autopilot" onclick="selectTier('autopilot')">🚀 Autopilot — $59/mo</button>
   </div>
+  <div class="tier-desc" id="tierDesc">Choose your tier to get started</div>
 </div>
 
-<!-- Step nav pills -->
-<div class="steps-nav" id="stepsNav">
-  <button class="step-pill active" onclick="goToStep(0)">1 · Apps</button>
-  <button class="step-pill" onclick="goToStep(1)">2 · MetaMask</button>
-  <button class="step-pill" onclick="goToStep(2)">3 · Buy ETH</button>
-  <button class="step-pill" onclick="goToStep(3)">4 · Safe Wallet</button>
-  <button class="step-pill" onclick="goToStep(4)">5 · Add Signer</button>
-  <button class="step-pill" onclick="goToStep(5)">6 · Fund Safe</button>
-  <button class="step-pill" onclick="goToStep(6)">7 · Safe Mobile</button>
-  <button class="step-pill" onclick="goToStep(7)">8 · Chat ID</button>
-  <button class="step-pill" onclick="goToStep(8)">9 · Register</button>
-  <button class="step-pill" onclick="goToStep(9)">10 · Commands</button>
-  <button class="step-pill" onclick="goToStep(10)">11 · Autopilot</button>
-</div>
+<!-- Step nav pills — dynamically updated -->
+<div class="steps-nav" id="stepsNav"></div>
 
 <div class="content">
 
-<!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 1: Install Apps -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section active" id="step-0">
+<!-- ══════════════════ TIER PICKER LANDING ══════════════════ -->
+<div class="step-section active" id="step-landing">
   <div class="step-header">
-    <div class="step-eyebrow">Step 1 of 10</div>
+    <h2 class="step-title">Which tier are you on?</h2>
+    <p class="step-desc">Each tier has a different setup path. Pick yours above and we'll show you exactly what to do — nothing more, nothing less.</p>
+  </div>
+
+  <table class="tier-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th class="tier-col scout">🔍 Scout</th>
+        <th class="tier-col optimizer">⚡ Optimizer</th>
+        <th class="tier-col autopilot">🚀 Autopilot</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Live APY rates</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Portfolio monitoring</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Risk alerts</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Weekly yield reports</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Safe wallet required</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Daily yield proposals</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>1-tap Safe approval</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Convex harvest (6h)</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Zodiac auto-execution</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
+      <tr><td>No Safe approval needed</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
+      <tr><td>Setup time</td><td>2 min</td><td>~20 min</td><td>~30 min</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert info">
+    <span class="alert-icon">💡</span>
+    <span>Not sure? Start with <strong>Optimizer</strong> — you get daily yield automation with simple one-tap approvals. Upgrade to Autopilot anytime for full hands-free mode.</span>
+  </div>
+
+  <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;">
+    <button class="btn btn-secondary" style="background:rgba(107,107,138,0.1);border-color:var(--scout);color:var(--scout)" onclick="selectTier('scout')">🔍 I'm on Scout (free) →</button>
+    <button class="btn btn-secondary" style="background:rgba(79,195,247,0.1);border-color:var(--optimizer);color:var(--optimizer)" onclick="selectTier('optimizer')">⚡ I'm on Optimizer ($19/mo) →</button>
+    <button class="btn btn-secondary" style="background:rgba(124,92,252,0.1);border-color:var(--autopilot);color:var(--autopilot)" onclick="selectTier('autopilot')">🚀 I'm on Autopilot ($59/mo) →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STEP: Install Apps (Optimizer + Autopilot) -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="step-section" id="step-apps">
+  <div class="step-header">
+    <div class="step-eyebrow" id="apps-eyebrow">Step 1</div>
     <h2 class="step-title">Install 3 apps</h2>
     <p class="step-desc">You need Telegram, MetaMask, and Safe Mobile before anything else. All are free.</p>
   </div>
@@ -323,10 +234,7 @@ body{
   <div class="app-cards">
     <div class="app-card">
       <div class="app-icon" style="background:linear-gradient(135deg,#2ca5e0,#1e90d4)">✈️</div>
-      <div class="app-info">
-        <div class="app-name">Telegram</div>
-        <div class="app-desc">Chat with the yield bot, receive alerts, run commands</div>
-      </div>
+      <div class="app-info"><div class="app-name">Telegram</div><div class="app-desc">Chat with the yield bot, receive alerts, run commands</div></div>
       <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
         <a class="app-badge" href="https://play.google.com/store/apps/details?id=org.telegram.messenger" target="_blank">🤖 Android</a>
         <a class="app-badge" href="https://apps.apple.com/app/telegram-messenger/id686449807" target="_blank">🍎 iPhone</a>
@@ -334,10 +242,7 @@ body{
     </div>
     <div class="app-card">
       <div class="app-icon" style="background:linear-gradient(135deg,#f6851b,#e2761b)">🦊</div>
-      <div class="app-info">
-        <div class="app-name">MetaMask</div>
-        <div class="app-desc">Your Ethereum wallet — signs transactions with your approval</div>
-      </div>
+      <div class="app-info"><div class="app-name">MetaMask</div><div class="app-desc">Your Ethereum wallet — needed to create and sign your Safe</div></div>
       <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
         <a class="app-badge" href="https://play.google.com/store/apps/details?id=io.metamask" target="_blank">🤖 Android</a>
         <a class="app-badge" href="https://apps.apple.com/app/metamask-crypto-wallet/id1438144202" target="_blank">🍎 iPhone</a>
@@ -345,10 +250,7 @@ body{
     </div>
     <div class="app-card">
       <div class="app-icon" style="background:linear-gradient(135deg,#12ff80,#00e676)">🛡️</div>
-      <div class="app-info">
-        <div class="app-name">Safe Mobile</div>
-        <div class="app-desc">Smart wallet app — approve yield transactions with one tap</div>
-      </div>
+      <div class="app-info"><div class="app-name">Safe Mobile</div><div class="app-desc">Approve yield transactions with one tap on your phone</div></div>
       <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
         <a class="app-badge" href="https://play.google.com/store/apps/details?id=global.safe.mobileapp" target="_blank">🤖 Android</a>
         <a class="app-badge" href="https://apps.apple.com/app/safe-multisig/id1515759131" target="_blank">🍎 iPhone</a>
@@ -356,297 +258,99 @@ body{
     </div>
   </div>
 
-  <div class="alert info">
-    <span class="alert-icon">ℹ️</span>
-    <span><strong>iPhone users:</strong> All apps support iOS 15.1+. When connecting MetaMask to Safe Mobile, WalletConnect will deep-link directly into MetaMask — just tap Approve when prompted.</span>
-  </div>
-
   <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c1-1')" id="c1-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Telegram installed and account created</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c1-2')" id="c1-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">MetaMask installed</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c1-3')" id="c1-3">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Safe Mobile installed</span>
-    </div>
+    <div class="check-item" onclick="toggleCheck(this,'apps-1')" id="apps-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Telegram installed</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'apps-2')" id="apps-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">MetaMask installed and wallet created</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'apps-3')" id="apps-3"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Safe Mobile installed</span></div>
   </div>
 
   <div class="nav-btns">
-    <button class="btn btn-secondary" disabled>← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(1)">Next: Set up MetaMask →</button>
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()">Next: Buy ETH →</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 2: MetaMask Setup -->
+<!-- STEP: Buy ETH -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-1">
+<div class="step-section" id="step-eth">
   <div class="step-header">
-    <div class="step-eyebrow">Step 2 of 10</div>
-    <h2 class="step-title">Set up MetaMask</h2>
-    <p class="step-desc">MetaMask is your Ethereum wallet. It signs transactions — nothing moves without your fingerprint or PIN.</p>
-  </div>
-
-  <!-- Phone mockup showing MetaMask seed phrase screen -->
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">MetaMask — Create wallet</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 180" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="180" fill="#1a1a24"/>
-        <!-- MetaMask fox icon area -->
-        <rect x="120" y="12" width="80" height="80" rx="20" fill="#f6851b" opacity="0.2"/>
-        <text x="160" y="58" text-anchor="middle" font-size="36">🦊</text>
-        <!-- Seed phrase grid -->
-        <text x="160" y="106" text-anchor="middle" fill="#6b6b8a" font-size="10" font-family="Inter,sans-serif">Write down your 12 secret words</text>
-        <rect x="20" y="114" width="66" height="20" rx="4" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="53" y="128" text-anchor="middle" fill="#4fc3f7" font-size="9" font-family="mono">1. abandon</text>
-        <rect x="92" y="114" width="66" height="20" rx="4" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="125" y="128" text-anchor="middle" fill="#4fc3f7" font-size="9" font-family="mono">2. ability</text>
-        <rect x="164" y="114" width="66" height="20" rx="4" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="197" y="128" text-anchor="middle" fill="#4fc3f7" font-size="9" font-family="mono">3. about</text>
-        <rect x="236" y="114" width="66" height="20" rx="4" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="269" y="128" text-anchor="middle" fill="#4fc3f7" font-size="9" font-family="mono">4. above</text>
-        <!-- Warning -->
-        <rect x="20" y="142" width="282" height="26" rx="6" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
-        <text x="29" y="158" fill="#f59e0b" font-size="9" font-family="Inter,sans-serif">⚠️  Never share these words with anyone. Write them on paper.</text>
-      </svg>
-    </div>
+    <div class="step-eyebrow" id="eth-eyebrow">Step 2</div>
+    <h2 class="step-title">Get ETH into MetaMask</h2>
+    <p class="step-desc">You need ETH in your MetaMask wallet before creating your Safe. This is what the bot will stake to earn yield.</p>
   </div>
 
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Open MetaMask</strong><span>Tap "Create a new wallet" on the welcome screen</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Set a password</strong><span>Choose a strong password or enable biometrics</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Write down your seed phrase</strong><span>You'll see 12 words. Write them on paper and store somewhere safe. This is the ONLY way to recover your wallet.</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Copy your wallet address</strong><span>Tap your account name at the top — your address starts with 0x. Save it.</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Open MetaMask</strong><span>Tap "Buy" or "Receive" to add ETH</span></div></li>
+    <li><div class="step-num">2</div><div class="body"><strong>Buy ETH via card or bank</strong><span>Use the built-in buy flow (Transak, MoonPay) or transfer from an exchange like Coinbase</span></div></li>
+    <li><div class="step-num">3</div><div class="body"><strong>Get at least 0.1 ETH</strong><span>0.05 ETH for staking + a little extra for gas fees (~$0.50 worth)</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Make sure you're on Ethereum Mainnet</strong><span>Check the network dropdown in MetaMask — should say "Ethereum", not a testnet</span></div></li>
   </ul>
 
   <div class="alert warn">
     <span class="alert-icon">⚠️</span>
-    <span>Never share your 12-word seed phrase with anyone — not the admin, not this bot, not anyone. Anyone who has it can take all your funds.</span>
+    <span>Never send ETH directly to your Safe from an exchange. Always send to MetaMask first, then transfer to your Safe in Step 4.</span>
   </div>
 
   <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c2-1')" id="c2-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">MetaMask wallet created</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c2-2')" id="c2-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Seed phrase written down and stored safely</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c2-3')" id="c2-3">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">MetaMask wallet address copied (starts with 0x...)</span>
-    </div>
+    <div class="check-item" onclick="toggleCheck(this,'eth-1')" id="eth-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">At least 0.1 ETH in MetaMask</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'eth-2')" id="eth-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Network set to Ethereum Mainnet</span></div>
   </div>
 
   <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(0)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(2)">Next: Buy ETH →</button>
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()">Next: Create Safe →</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 3: Buy ETH -->
+<!-- STEP: Create Safe -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-2">
+<div class="step-section" id="step-safe">
   <div class="step-header">
-    <div class="step-eyebrow">Step 3 of 10</div>
-    <h2 class="step-title">Buy ETH</h2>
-    <p class="step-desc">You need ETH to stake. Buy it on an exchange and send it to your MetaMask wallet.</p>
-  </div>
-
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">Exchange → MetaMask transfer</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 140" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="140" fill="#1a1a24"/>
-        <!-- Exchange box -->
-        <rect x="20" y="30" width="110" height="80" rx="10" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="75" y="56" text-anchor="middle" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">EXCHANGE</text>
-        <text x="75" y="76" text-anchor="middle" font-size="20">🏦</text>
-        <text x="75" y="96" text-anchor="middle" fill="#4fc3f7" font-size="10" font-family="Inter,sans-serif">Coinbase / Binance</text>
-        <!-- Arrow -->
-        <path d="M140 70 L180 70" stroke="#7c5cfc" stroke-width="2" stroke-dasharray="4,3"/>
-        <polygon points="180,65 190,70 180,75" fill="#7c5cfc"/>
-        <text x="160" y="62" text-anchor="middle" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">Send ETH</text>
-        <!-- MetaMask box -->
-        <rect x="195" y="30" width="110" height="80" rx="10" fill="#13131a" stroke="#f6851b" stroke-width="1.5"/>
-        <text x="250" y="56" text-anchor="middle" fill="#f6851b" font-size="9" font-family="Inter,sans-serif">YOUR METAMASK</text>
-        <text x="250" y="76" text-anchor="middle" font-size="20">🦊</text>
-        <text x="250" y="96" text-anchor="middle" fill="#4caf7d" font-size="10" font-family="Inter,sans-serif">ETH received ✓</text>
-        <!-- Amount label -->
-        <rect x="108" y="110" width="104" height="20" rx="4" fill="rgba(124,92,252,0.2)"/>
-        <text x="160" y="124" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="Inter,sans-serif">Min 0.05 ETH recommended</text>
-      </svg>
-    </div>
-  </div>
-
-  <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Create account on an exchange</strong><span>Coinbase (coinbase.com) is easiest for beginners. Binance and Kraken also work.</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Verify your identity</strong><span>Exchanges require ID verification. This takes 5-30 minutes.</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Buy ETH</strong><span>Buy at least 0.05 ETH. This covers staking plus gas fees (under $0.10 each).</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Withdraw to MetaMask</strong><span>In the exchange, click Withdraw → Crypto → ETH. Paste your MetaMask address. Select Ethereum network (not BNB or Polygon).</span></div></li>
-  </ul>
-
-  <div class="alert warn">
-    <span class="alert-icon">⚠️</span>
-    <span>Always select <strong>Ethereum (ERC-20)</strong> network when withdrawing. Sending on the wrong network will lose your ETH.</span>
-  </div>
-
-  <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c3-1')" id="c3-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Exchange account created and verified</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c3-2')" id="c3-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">ETH purchased (at least 0.05 ETH)</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c3-3')" id="c3-3">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">ETH withdrawn to MetaMask wallet on Ethereum network</span>
-    </div>
-  </div>
-
-  <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(3)">Next: Create Safe →</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 4: Create Safe -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-3">
-  <div class="step-header">
-    <div class="step-eyebrow">Step 4 of 10</div>
+    <div class="step-eyebrow" id="safe-eyebrow">Step 3</div>
     <h2 class="step-title">Create your Safe wallet</h2>
-    <p class="step-desc">Your Safe is a smart contract wallet. It holds your funds and requires your approval before any transaction executes.</p>
-  </div>
-
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">app.safe.global — Create Safe</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 160" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="160" fill="#1a1a24"/>
-        <!-- Browser bar -->
-        <rect x="10" y="10" width="300" height="24" rx="6" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="160" y="26" text-anchor="middle" fill="#6b6b8a" font-size="9" font-family="mono">app.safe.global</text>
-        <!-- Safe create flow -->
-        <rect x="20" y="44" width="280" height="106" rx="8" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <!-- Progress dots -->
-        <circle cx="90" cy="58" r="8" fill="#7c5cfc"/>
-        <text x="90" y="62" text-anchor="middle" fill="#fff" font-size="8">1</text>
-        <line x1="102" y1="58" x2="138" y2="58" stroke="#2a2a3e" stroke-width="2"/>
-        <circle cx="150" cy="58" r="8" fill="#2a2a3e"/>
-        <text x="150" y="62" text-anchor="middle" fill="#6b6b8a" font-size="8">2</text>
-        <line x1="162" y1="58" x2="198" y2="58" stroke="#2a2a3e" stroke-width="2"/>
-        <circle cx="210" cy="58" r="8" fill="#2a2a3e"/>
-        <text x="210" y="62" text-anchor="middle" fill="#6b6b8a" font-size="8">3</text>
-        <!-- Owner field -->
-        <text x="160" y="84" text-anchor="middle" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">Owner / Signer</text>
-        <rect x="40" y="90" width="240" height="22" rx="5" fill="#0a0a0f" stroke="#7c5cfc" stroke-width="1.5"/>
-        <text x="52" y="105" fill="#4fc3f7" font-size="9" font-family="mono">0x739Df18DA29e0B9A408a1a...</text>
-        <!-- Threshold -->
-        <text x="160" y="126" text-anchor="middle" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">Threshold: 1 of 1 signatures required</text>
-        <!-- Create button -->
-        <rect x="80" y="133" width="160" height="24" rx="6" fill="#7c5cfc"/>
-        <text x="160" y="149" text-anchor="middle" fill="#fff" font-size="10" font-weight="600" font-family="Inter,sans-serif">Create Safe</text>
-      </svg>
-    </div>
+    <p class="step-desc">Your Safe is a smart contract wallet that holds your funds. The bot proposes transactions to it — you always stay in control.</p>
   </div>
 
   <ul class="instructions">
     <li><div class="step-num">1</div><div class="body"><strong>Go to app.safe.global</strong><span>Open in your phone's browser or on desktop</span></div></li>
     <li><div class="step-num">2</div><div class="body"><strong>Click "Create new Safe"</strong><span>Connect your MetaMask when prompted</span></div></li>
     <li><div class="step-num">3</div><div class="body"><strong>Keep default settings</strong><span>Your MetaMask address is already the owner. Threshold stays at 1 of 1.</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Click Create and confirm in MetaMask</strong><span>A small gas fee applies (usually under $0.50). Wait ~30 seconds.</span></div></li>
-    <li><div class="step-num">5</div><div class="body"><strong>Save your Safe address</strong><span>Your Safe address appears after creation. Starts with 0x. Save it — this is different from your MetaMask address.</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Confirm in MetaMask</strong><span>A small gas fee applies (usually under $0.50). Wait ~30 seconds.</span></div></li>
+    <li><div class="step-num">5</div><div class="body"><strong>Save your Safe address</strong><span>Starts with 0x and is different from your MetaMask address. Copy and save it.</span></div></li>
   </ul>
 
+  <div class="alert success">
+    <span class="alert-icon">🛡️</span>
+    <span>Your Safe is non-custodial — only you can move funds. The bot can only propose transactions, never execute them without your approval.</span>
+  </div>
+
   <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c4-1')" id="c4-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Safe wallet created at app.safe.global</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c4-2')" id="c4-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Safe address saved (different from MetaMask address)</span>
-    </div>
+    <div class="check-item" onclick="toggleCheck(this,'safe-1')" id="safe-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Safe created at app.safe.global</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'safe-2')" id="safe-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Safe address saved (0x...)</span></div>
   </div>
 
   <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(4)">Next: Add Bot Signer →</button>
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()">Next: Add Bot Signer →</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 5: Add Bot Signer -->
+<!-- STEP: Add Bot Signer -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-4">
+<div class="step-section" id="step-signer">
   <div class="step-header">
-    <div class="step-eyebrow">Step 5 of 10</div>
+    <div class="step-eyebrow" id="signer-eyebrow">Step 4</div>
     <h2 class="step-title">Add the bot as a signer</h2>
-    <p class="step-desc">The bot needs permission to propose transactions to your Safe. It cannot move funds — you still approve every transaction.</p>
-  </div>
-
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">Safe Settings → Owners → Add Owner</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 150" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="150" fill="#1a1a24"/>
-        <text x="160" y="24" text-anchor="middle" fill="#6b6b8a" font-size="10" font-family="Inter,sans-serif">Settings → Owners → Add Owner</text>
-        <!-- Existing owner -->
-        <rect x="20" y="32" width="280" height="36" rx="8" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <circle cx="44" cy="50" r="10" fill="#7c5cfc" opacity="0.3"/>
-        <text x="44" y="54" text-anchor="middle" font-size="10">👤</text>
-        <text x="62" y="47" fill="#e8e8f0" font-size="10" font-family="Inter,sans-serif">Your MetaMask</text>
-        <text x="62" y="60" fill="#6b6b8a" font-size="9" font-family="mono">0x739Df18...fBa</text>
-        <!-- Add owner field -->
-        <rect x="20" y="78" width="280" height="36" rx="8" fill="#13131a" stroke="#7c5cfc" stroke-width="1.5"/>
-        <circle cx="44" cy="96" r="10" fill="#4fc3f7" opacity="0.2"/>
-        <text x="44" y="100" text-anchor="middle" font-size="10">🤖</text>
-        <text x="62" y="91" fill="#e8e8f0" font-size="10" font-family="Inter,sans-serif">Bot Proposer</text>
-        <text x="62" y="104" fill="#4fc3f7" font-size="9" font-family="mono">0x739Df18DA29e0B9A408a1a66015f63B...</text>
-        <!-- Add button -->
-        <rect x="20" y="124" width="280" height="18" rx="5" fill="rgba(76,175,125,0.2)" stroke="rgba(76,175,125,0.4)" stroke-width="1"/>
-        <text x="160" y="136" text-anchor="middle" fill="#4caf7d" font-size="10" font-family="Inter,sans-serif">✓  Owner added — threshold stays 1 of 1</text>
-      </svg>
-    </div>
+    <p class="step-desc">The bot needs to be an owner of your Safe so it can propose transactions. It can never execute them — you approve every one.</p>
   </div>
 
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Open your Safe at app.safe.global</strong><span>Connect MetaMask to see your Safe</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Open your Safe at app.safe.global</strong><span>Connect MetaMask</span></div></li>
     <li><div class="step-num">2</div><div class="body"><strong>Go to Settings → Owners</strong><span>Click the settings icon in the sidebar</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Click "Add Owner"</strong><span>A form appears asking for an address</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Paste the bot's address</strong><span>Copy the address below exactly:</span></div></li>
+    <li><div class="step-num">3</div><div class="body"><strong>Click "Add Owner" and paste this address:</strong></div></li>
   </ul>
 
   <div class="copy-box">
@@ -655,622 +359,431 @@ body{
   </div>
 
   <ul class="instructions" style="margin-top:0">
-    <li><div class="step-num">5</div><div class="body"><strong>Keep threshold at 1 of 1</strong><span>Do not change the threshold</span></div></li>
-    <li><div class="step-num">6</div><div class="body"><strong>Submit and approve in MetaMask</strong><span>Confirm the transaction. Wait ~30 seconds.</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Keep threshold at 1 of 1</strong><span>Do not change the threshold</span></div></li>
+    <li><div class="step-num">5</div><div class="body"><strong>Submit and confirm in MetaMask</strong><span>Wait ~30 seconds for the transaction to confirm</span></div></li>
   </ul>
 
-  <div class="alert success">
-    <span class="alert-icon">✅</span>
-    <span>The bot can only <strong>propose</strong> transactions — never execute them. Every transaction still requires your signature in Safe Mobile.</span>
-  </div>
-
   <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c5-1')" id="c5-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Bot address added as Safe owner</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c5-2')" id="c5-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Transaction confirmed on-chain</span>
-    </div>
+    <div class="check-item" onclick="toggleCheck(this,'signer-1')" id="signer-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Bot address added as Safe owner</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'signer-2')" id="signer-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Transaction confirmed on-chain</span></div>
   </div>
 
   <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(5)">Next: Fund Safe →</button>
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()">Next: Fund Safe →</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 6: Fund Safe -->
+<!-- STEP: Fund Safe -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-5">
+<div class="step-section" id="step-fund">
   <div class="step-header">
-    <div class="step-eyebrow">Step 6 of 10</div>
+    <div class="step-eyebrow" id="fund-eyebrow">Step 5</div>
     <h2 class="step-title">Fund your Safe</h2>
-    <p class="step-desc">Send ETH from MetaMask to your Safe wallet. This is the ETH the bot will stake to earn yield.</p>
-  </div>
-
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">MetaMask → Send to Safe</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 140" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="140" fill="#1a1a24"/>
-        <!-- MetaMask -->
-        <rect x="20" y="20" width="120" height="100" rx="10" fill="#13131a" stroke="#f6851b" stroke-width="1.5"/>
-        <text x="80" y="45" text-anchor="middle" fill="#f6851b" font-size="9" font-family="Inter,sans-serif">METAMASK</text>
-        <text x="80" y="62" text-anchor="middle" font-size="22">🦊</text>
-        <text x="80" y="80" text-anchor="middle" fill="#e8e8f0" font-size="11" font-family="Inter,sans-serif" font-weight="600">0.05 ETH</text>
-        <rect x="35" y="90" width="90" height="18" rx="5" fill="#f6851b"/>
-        <text x="80" y="102" text-anchor="middle" fill="#fff" font-size="9" font-family="Inter,sans-serif">Send →</text>
-        <!-- Arrow -->
-        <path d="M145 70 L175 70" stroke="#7c5cfc" stroke-width="2.5" stroke-dasharray="5,3"/>
-        <polygon points="175,64 188,70 175,76" fill="#7c5cfc"/>
-        <!-- Safe -->
-        <rect x="188" y="20" width="114" height="100" rx="10" fill="#13131a" stroke="#12ff80" stroke-width="1.5"/>
-        <text x="245" y="45" text-anchor="middle" fill="#4caf7d" font-size="9" font-family="Inter,sans-serif">YOUR SAFE</text>
-        <text x="245" y="62" text-anchor="middle" font-size="22">🛡️</text>
-        <text x="245" y="80" text-anchor="middle" fill="#4caf7d" font-size="11" font-family="Inter,sans-serif" font-weight="600">0.05 ETH ✓</text>
-        <rect x="203" y="90" width="84" height="18" rx="5" fill="rgba(76,175,125,0.2)"/>
-        <text x="245" y="102" text-anchor="middle" fill="#4caf7d" font-size="9" font-family="Inter,sans-serif">Received</text>
-      </svg>
-    </div>
+    <p class="step-desc">Send ETH from MetaMask to your Safe. This is what the bot stakes to earn yield.</p>
   </div>
 
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Open MetaMask</strong><span>Tap the Send button</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Paste your Safe address</strong><span>This is the 0x address from your Safe — not your MetaMask address</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Enter amount</strong><span>Send at least 0.05 ETH. Keep a tiny bit in MetaMask for future gas fees (~0.005 ETH)</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Confirm the transfer</strong><span>Gas fee is usually under $0.05 at current prices</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Open MetaMask and tap Send</strong></div></li>
+    <li><div class="step-num">2</div><div class="body"><strong>Paste your Safe address</strong><span>The 0x address from Safe — not your MetaMask address</span></div></li>
+    <li><div class="step-num">3</div><div class="body"><strong>Send at least 0.05 ETH</strong><span>Keep ~0.005 ETH in MetaMask for future gas fees</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Confirm the transfer</strong><span>Gas fee is usually under $0.05</span></div></li>
   </ul>
 
   <div class="alert info">
     <span class="alert-icon">ℹ️</span>
-    <span>You can verify ETH arrived by checking your Safe at app.safe.global or searching your Safe address on etherscan.io</span>
+    <span>Verify ETH arrived by checking your Safe at app.safe.global or searching your Safe address on etherscan.io</span>
   </div>
 
   <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c6-1')" id="c6-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">ETH sent from MetaMask to Safe address</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c6-2')" id="c6-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">ETH balance visible in Safe wallet</span>
-    </div>
+    <div class="check-item" onclick="toggleCheck(this,'fund-1')" id="fund-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">ETH sent from MetaMask to Safe</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'fund-2')" id="fund-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">ETH balance visible in Safe</span></div>
   </div>
 
   <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(4)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(6)">Next: Safe Mobile →</button>
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()">Next: Safe Mobile →</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 7: Safe Mobile -->
+<!-- STEP: Safe Mobile -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-6">
+<div class="step-section" id="step-mobile">
   <div class="step-header">
-    <div class="step-eyebrow">Step 7 of 10</div>
+    <div class="step-eyebrow" id="mobile-eyebrow">Step 6</div>
     <h2 class="step-title">Set up Safe Mobile</h2>
-    <p class="step-desc">Safe Mobile is how you approve yield transactions with one tap. Enable push notifications so you get alerted instantly.</p>
-  </div>
-
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">Safe Mobile — Transaction approval</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 160" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="160" fill="#1a1a24"/>
-        <!-- Phone outline -->
-        <rect x="100" y="10" width="120" height="140" rx="16" fill="#0a0a0f" stroke="#2a2a3e" stroke-width="2"/>
-        <rect x="106" y="18" width="108" height="124" rx="10" fill="#13131a"/>
-        <!-- Notification banner -->
-        <rect x="110" y="24" width="100" height="34" rx="6" fill="#1a1a24" stroke="#7c5cfc" stroke-width="1"/>
-        <text x="160" y="37" text-anchor="middle" fill="#7c5cfc" font-size="8" font-family="Inter,sans-serif" font-weight="600">⚡ Fenix Yield</text>
-        <text x="160" y="50" text-anchor="middle" fill="#6b6b8a" font-size="7" font-family="Inter,sans-serif">New transaction to approve</text>
-        <!-- Transaction card -->
-        <rect x="110" y="66" width="100" height="54" rx="6" fill="#0a0a0f" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="160" y="80" text-anchor="middle" fill="#6b6b8a" font-size="7" font-family="Inter,sans-serif">Lido — Stake ETH</text>
-        <text x="160" y="94" text-anchor="middle" fill="#e8e8f0" font-size="11" font-family="Inter,sans-serif" font-weight="700">0.05 ETH</text>
-        <text x="160" y="107" text-anchor="middle" fill="#4caf7d" font-size="7" font-family="Inter,sans-serif">APY 3.8% · Nonce 5</text>
-        <!-- Approve button -->
-        <rect x="118" y="128" width="84" height="22" rx="6" fill="#4caf7d"/>
-        <text x="160" y="143" text-anchor="middle" fill="#fff" font-size="9" font-weight="600" font-family="Inter,sans-serif">✓ Approve</text>
-      </svg>
-    </div>
+    <p class="step-desc">Safe Mobile is how you approve yield transactions. Enable push notifications so you get alerted instantly when the bot proposes a transaction.</p>
   </div>
 
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Open Safe Mobile app</strong><span>Tap "Add existing Safe"</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Select Ethereum Mainnet</strong><span>Make sure the network is set to Ethereum, not a testnet</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Paste your Safe address</strong><span>Your Safe is now imported and visible</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Connect MetaMask as signer</strong><span>Go to Settings → Signers → Connect → WalletConnect → approve in MetaMask</span></div></li>
-    <li><div class="step-num">5</div><div class="body"><strong>Enable push notifications</strong><span>Allow notifications when prompted — this is how you get alerted when the bot proposes a transaction</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Open Safe Mobile</strong><span>Tap "Add existing Safe"</span></div></li>
+    <li><div class="step-num">2</div><div class="body"><strong>Select Ethereum Mainnet</strong><span>Make sure the network is Ethereum, not a testnet</span></div></li>
+    <li><div class="step-num">3</div><div class="body"><strong>Paste your Safe address</strong><span>Your Safe wallet is now imported</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Connect MetaMask as signer</strong><span>Settings → Signers → Connect → WalletConnect → approve in MetaMask</span></div></li>
+    <li><div class="step-num">5</div><div class="body"><strong>Allow push notifications</strong><span>This is how you get alerted when there's a transaction to approve</span></div></li>
   </ul>
 
-  <div class="alert success">
-    <span class="alert-icon">✅</span>
-    <span>Once set up, you'll get a push notification every time the bot proposes a yield transaction. Lido and Aave are 1-tap approvals. Curve requires 2 taps, Convex requires 3 — the bot handles all the routing logic, you just confirm.</span>
+  <!-- Autopilot note -->
+  <div class="tier-section" id="mobile-autopilot-note">
+    <div class="alert autopilot-info">
+      <span class="alert-icon">🚀</span>
+      <span><strong>Autopilot users:</strong> Once Zodiac is set up (next step), you won't need Safe Mobile for daily yield transactions — the bot executes them automatically. Safe Mobile is still useful for manual actions and monitoring.</span>
+    </div>
   </div>
 
   <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c7-1')" id="c7-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Safe imported into Safe Mobile</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c7-2')" id="c7-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">MetaMask connected as signer</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c7-3')" id="c7-3">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Push notifications enabled</span>
-    </div>
+    <div class="check-item" onclick="toggleCheck(this,'mobile-1')" id="mobile-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Safe imported into Safe Mobile</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'mobile-2')" id="mobile-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">MetaMask connected as signer</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'mobile-3')" id="mobile-3"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Push notifications enabled</span></div>
   </div>
 
   <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(5)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(7)">Next: Get Chat ID →</button>
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()" id="mobile-next-btn">Next: Register →</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 8: Telegram Chat ID -->
+<!-- STEP: Zodiac (Autopilot only) -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-7">
+<div class="step-section" id="step-zodiac">
   <div class="step-header">
-    <div class="step-eyebrow">Step 8 of 10</div>
-    <h2 class="step-title">Get your Telegram chat ID</h2>
-    <p class="step-desc">The bot needs your unique Telegram ID to send you alerts. It's a number that identifies your account.</p>
+    <div class="step-eyebrow">Step 7 — Autopilot Only</div>
+    <h2 class="step-title">Enable Zodiac auto-execution</h2>
+    <p class="step-desc">Zodiac is a smart contract module that lets the bot execute whitelisted yield transactions automatically — without Safe Mobile approval. You stay in full control: the bot can only call exact yield protocol functions you whitelist.</p>
   </div>
 
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">@userinfobot reply</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 130" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="130" fill="#1a1a24"/>
-        <!-- Chat bubble you -->
-        <rect x="180" y="18" width="120" height="28" rx="12" rx="12" fill="#7c5cfc"/>
-        <text x="240" y="36" text-anchor="middle" fill="#fff" font-size="11" font-family="Inter,sans-serif">/start</text>
-        <!-- Chat bubble bot -->
-        <rect x="20" y="56" width="200" height="56" rx="12" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="36" y="73" fill="#2ca5e0" font-size="9" font-family="Inter,sans-serif" font-weight="600">@userinfobot</text>
-        <text x="36" y="88" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">Id:</text>
-        <text x="55" y="88" fill="#4fc3f7" font-size="9" font-family="mono">1234567890</text>
-        <text x="36" y="102" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">First:</text>
-        <text x="62" y="102" fill="#e8e8f0" font-size="9" font-family="Inter,sans-serif">Your Name</text>
-        <!-- Arrow pointing to ID -->
-        <line x1="178" y1="88" x2="218" y2="88" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,2"/>
-        <rect x="218" y="78" width="82" height="20" rx="4" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
-        <text x="259" y="92" text-anchor="middle" fill="#f59e0b" font-size="9" font-family="Inter,sans-serif">Save this number</text>
-      </svg>
-    </div>
-  </div>
-
-  <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Open Telegram</strong><span>Use the search bar at the top</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Search for @userinfobot</strong><span>It's a free Telegram bot that shows your account info</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Send /start</strong><span>The bot replies immediately with your info</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Copy the number next to "Id:"</strong><span>It looks like 1234567890 — this is your chat ID. Save it.</span></div></li>
-  </ul>
-
-  <div class="alert info">
-    <span class="alert-icon">ℹ️</span>
-    <span>Your chat ID is not secret — it's just a number that identifies your Telegram account so the bot knows where to send messages.</span>
-  </div>
-
-  <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c8-1')" id="c8-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Messaged @userinfobot on Telegram</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c8-2')" id="c8-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Telegram chat ID saved (numeric, e.g. 1234567890)</span>
-    </div>
-  </div>
-
-  <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(6)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(8)">Next: Register →</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 9: Register with Bot -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-8">
-  <div class="step-header">
-    <div class="step-eyebrow">Step 9 of 10</div>
-    <h2 class="step-title">Register with the bot</h2>
-    <p class="step-desc">You need an invite code from the admin. Once you have it, registration takes under 2 minutes in Telegram.</p>
-  </div>
-
-  <div class="illustration">
-    <div class="illus-bar">
-      <div class="illus-dot" style="background:#ff5f57"></div>
-      <div class="illus-dot" style="background:#febc2e"></div>
-      <div class="illus-dot" style="background:#28c840"></div>
-      <span class="illus-title">Fenix Yield Bot — Registration flow</span>
-    </div>
-    <div class="illus-body">
-      <svg viewBox="0 0 320 170" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="170" fill="#1a1a24"/>
-        <!-- Bot message -->
-        <rect x="14" y="10" width="220" height="30" rx="10" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="24" y="28" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">👋 Welcome! Enter your invite code:</text>
-        <!-- User reply 1 -->
-        <rect x="180" y="48" width="126" height="22" rx="8" fill="#7c5cfc"/>
-        <text x="243" y="63" text-anchor="middle" fill="#fff" font-size="10" font-family="Inter,sans-serif">FENIX001</text>
-        <!-- Bot message 2 -->
-        <rect x="14" y="78" width="180" height="22" rx="8" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="24" y="93" fill="#4caf7d" font-size="9" font-family="Inter,sans-serif">✅ Accepted! What's your name?</text>
-        <!-- User reply 2 -->
-        <rect x="220" y="108" width="86" height="22" rx="8" fill="#7c5cfc"/>
-        <text x="263" y="123" text-anchor="middle" fill="#fff" font-size="10" font-family="Inter,sans-serif">Alex</text>
-        <!-- Bot message 3 -->
-        <rect x="14" y="138" width="260" height="22" rx="8" fill="#13131a" stroke="#2a2a3e" stroke-width="1"/>
-        <text x="24" y="153" fill="#6b6b8a" font-size="9" font-family="Inter,sans-serif">Enter your Safe wallet address (0x...)</text>
-      </svg>
-    </div>
-  </div>
-
-  <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Get your invite code from admin</strong><span>Contact the admin who runs this bot — they'll give you a code like FENIX001</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Find the bot on Telegram</strong><span>Search for the bot username provided by your admin</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Send /start</strong><span>The bot asks for your invite code — enter it</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Follow the prompts</strong><span>Bot asks for: your name → Safe address → stake amount per day (min 0.01 ETH)</span></div></li>
-    <li><div class="step-num">5</div><div class="body"><strong>You're registered!</strong><span>The bot sends a welcome message and starts including you in the daily yield cycle</span></div></li>
-  </ul>
-
-  <div class="alert info">
-    <span class="alert-icon">ℹ️</span>
-    <span>The stake amount is how much ETH gets staked per daily cycle. Start with 0.05 ETH — you can change it later with /setstake.</span>
-  </div>
-
-  <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c9-1')" id="c9-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Invite code received from admin</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c9-2')" id="c9-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Registered with bot via /start</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c9-3')" id="c9-3">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Welcome message received from bot</span>
-    </div>
-  </div>
-
-  <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(7)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(9)">Next: Commands →</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 10: Commands Reference -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-9">
-  <div class="step-header">
-    <div class="step-eyebrow">Step 10 of 10</div>
-    <h2 class="step-title">Bot commands</h2>
-    <p class="step-desc">Send any of these to the bot in Telegram at any time. Your daily cycle runs automatically — these are just for monitoring and manual control. All settings save permanently to your account.</p>
-  </div>
-
-  <div class="commands">
-    <div class="cmd-item">
-      <span class="cmd-tag">/dashboard</span>
-      <div class="cmd-desc"><strong>Yield tracking & P&L</strong>Total deposited, yield earned in ETH and USD, annualized APY, price change P&L</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/positions</span>
-      <div class="cmd-desc"><strong>Full portfolio</strong>All your positions across Lido, Curve, Aave and Convex with current USD values</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/balance</span>
-      <div class="cmd-desc"><strong>Quick balance check</strong>Your Safe ETH balance and any LP tokens held directly</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/apy</span>
-      <div class="cmd-desc"><strong>Live APY rates</strong>Current yield rates across all 4 protocols with today's winner highlighted</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/stake</span>
-      <div class="cmd-desc"><strong>Run cycle now</strong>Manually trigger a yield cycle instead of waiting for the daily one. On Optimizer tier, bot proposes a Safe transaction for your approval. On Autopilot tier, bot executes directly — you'll be asked to confirm first.</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/status</span>
-      <div class="cmd-desc"><strong>Pending transactions</strong>Shows any transactions in your Safe queue waiting for your signature</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/history</span>
-      <div class="cmd-desc"><strong>Last transaction</strong>Protocol, amount, date and transaction hash of your most recent executed stake</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/setstake</span>
-      <div class="cmd-desc"><strong>Change stake amount</strong>Update how much ETH gets staked each daily cycle. Minimum 0.01 ETH.</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/setprotocol</span>
-      <div class="cmd-desc"><strong>Control which protocols are used</strong>Pin to a specific protocol, exclude ones you don't want, or return to automatic best-APY mode. Note: the bot routes new stake deposits to the best protocol — it does not withdraw and move existing positions. Examples: /setprotocol lido, /setprotocol auto, /setprotocol exclude convex</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/harvest</span>
-      <div class="cmd-desc"><strong>Claim Convex rewards</strong>Checks your claimable CRV and CVX rewards. If above $10 in value, proposes a claim transaction followed by automatic swaps back to ETH which gets restaked next cycle.</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/unstake</span>
-      <div class="cmd-desc"><strong>Withdraw your funds</strong>Shows your current positions and step-by-step instructions to unstake from each protocol. Includes direct links to Lido, Curve, Aave and Convex withdrawal pages.</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/whitelist</span>
-      <div class="cmd-desc"><strong>Auto-execute setup (optional)</strong>Enables Zodiac Roles Module so the bot executes yield transactions automatically — no Safe Mobile approval needed. You stay in full control: bot can only call whitelisted yield protocol functions. Use /whitelist setup to begin, /whitelist disable to turn off anytime.</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/pause</span>
-      <div class="cmd-desc"><strong>Pause the bot</strong>Stops the daily yield cycle for your account. Existing pending transactions in Safe are unaffected. Queue will not pile up.</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/resume</span>
-      <div class="cmd-desc"><strong>Resume the bot</strong>Restarts the daily yield cycle. The bot will propose a new transaction at the next cycle, or run /stake to trigger one immediately.</div>
-    </div>
-    <div class="cmd-item">
-      <span class="cmd-tag">/winner</span>
-      <div class="cmd-desc"><strong>Current protocol</strong>Which protocol the bot is currently routing new stakes to</div>
-    </div>
-    
-    </div>
-    
-    </div>
-    
-    </div>
-  </div>
-
-  <div class="alert info" style="margin-top:20px">
-    <span class="alert-icon">⏸️</span>
-    <span>Don't want to stake right now? Use <strong>/pause</strong> to stop the daily cycle. The bot will go quiet until you send <strong>/resume</strong>. No transactions pile up, no gas wasted.</span>
-  </div>
-  <div class="alert info" style="margin-top:8px">
-    <span class="alert-icon">📤</span>
-    <span>Need to withdraw? Send <strong>/unstake</strong> to the bot — it checks your positions and gives you step-by-step instructions with direct links to each protocol's withdrawal page.</span>
-  </div>
-  <div class="alert info" style="margin-top:8px">
-    <span class="alert-icon">⚙️</span>
-    <span>Want to control which protocols are used? Send <strong>/setprotocol</strong> to pin to a specific protocol, exclude ones you don't want, or switch back to automatic best-APY mode.</span>
-  </div>
-  <div class="alert info" style="margin-top:8px">
-    <span class="alert-icon">🌾</span>
-    <span>If you have a Convex position, send <strong>/harvest</strong> to check your CRV and CVX rewards. Once above $10 the bot automatically claims, swaps to ETH, and restakes — boosting your effective APY.</span>
-  </div>
-  <div class="alert info" style="margin-top:8px">
-    <span class="alert-icon">📱</span>
-    <span>To monitor your full portfolio including staked positions visit <strong>zapper.xyz/account/YOUR_SAFE_ADDRESS</strong> — it shows everything in one place.</span>
-  </div>
-
-  <div class="final-card">
-    <div class="final-emoji">🎉</div>
-    <h2>You're all set!</h2>
-    <p>The bot runs every 24 hours automatically. On Optimizer tier, when it proposes a transaction you'll get a push notification in Safe Mobile — open it and approve. On Autopilot tier with Zodiac enabled, it executes automatically with no approval needed. Your ETH earns yield while you sleep.</p>
-    <br/>
-    <p style="font-size:13px;color:var(--muted)">🔍 <strong style="color:var(--text)">Scout (free)</strong> — APY tracking, risk alerts, portfolio view — manual execution only<br/>⚡ <strong style="color:var(--text)">Optimizer ($19/mo)</strong> — automated Safe tx proposals, 1–3 tap approval in Safe Mobile<br/>🚀 <strong style="color:var(--text)">Autopilot ($59/mo)</strong> — full Zodiac auto-execution, auto-harvest every 6h, no approvals needed</p>
-  </div>
-
-  <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c10-0')" id="c10-0">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Know how to use /pause and /resume to control the daily cycle</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c10-1')" id="c10-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Tested /balance command in Telegram</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c10-4')" id="c10-4">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Reviewed /setprotocol options and set your preference</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c10-5')" id="c10-5">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Know how to use /harvest to claim Convex rewards</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c10-2')" id="c10-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Ran /stake and approved first transaction in Safe Mobile</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c10-3')" id="c10-3">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Checked /dashboard to see yield tracking</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c10-6')" id="c10-6">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Know my tier (Scout / Optimizer / Autopilot) and what features I have access to</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c10-7')" id="c10-7">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Weekly reports enabled — I'll receive a yield summary every Monday</span>
-    </div>
-  </div>
-
-  <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(8)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(0)" style="background:linear-gradient(135deg,var(--success),#2e7d52)">↩ Back to Start</button>
-  </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════════════════════ -->
-<!-- STEP 11: Autopilot / Zodiac Setup -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="step-section" id="step-10">
-  <div class="step-header">
-    <div class="step-eyebrow">Step 11 — Autopilot tier only</div>
-    <h2 class="step-title">Enable Autopilot (Zodiac Roles Module)</h2>
-    <p class="step-desc">Autopilot tier enables fully automatic execution — no Safe Mobile approvals needed. The bot executes yield transactions directly via a Zodiac Roles Module you deploy and control.</p>
-  </div>
-
-  <div class="alert success">
-    <span class="alert-icon">🔒</span>
-    <span>You remain in full control. The bot can <strong>only</strong> call whitelisted yield functions: Lido stake, Curve LP, Aave deposit, Convex deposit/harvest, token approvals, and Uniswap swap. It <strong>cannot</strong> send ETH to unknown addresses or change your Safe owners.</span>
+  <div class="alert autopilot-info">
+    <span class="alert-icon">🚀</span>
+    <span>This is what makes Autopilot fully hands-free. Once enabled, the bot executes yield transactions, Convex harvests, and compound cycles automatically at any time — no phone needed.</span>
   </div>
 
   <div class="alert warn">
     <span class="alert-icon">⚠️</span>
-    <span><strong>Known issue:</strong> The Zodiac app inside Safe no longer shows a "Deploy" button on the Roles page. You must deploy from the <strong>original Zodiac app</strong>, not "Zodiac Roles". See instructions below.</span>
+    <span>This step is done <strong>inside the Telegram bot</strong> after you register. Complete registration first (next step), then send <strong>/whitelist</strong> to the bot to begin Zodiac setup.</span>
   </div>
 
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Send /whitelist to the bot</strong><span>The bot explains the setup and asks you to reply "yes" to begin.</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Open app.safe.global on desktop</strong><span>Go to Apps in the left sidebar and search "Zodiac". Open the first result — <strong>Zodiac</strong> (The expansion pack for DAOs), not "Zodiac Roles".</span></div></li>
-    <li><div class="step-num">3</div><div class="body"><strong>Deploy the Roles Modifier</strong><span>Inside the Zodiac app, find Roles Modifier and click Deploy. Confirm the transaction in Safe Mobile. This costs ~$5–15 in gas. <strong>Important:</strong> if you have a transaction pending in your Safe queue, it must be resolved first — Safe executes transactions in nonce order.</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Copy the deployed module address</strong><span>After deployment the Zodiac app shows your new Roles Modifier contract address (starts with 0x, 42 characters). Copy it.</span></div></li>
-    <li><div class="step-num">5</div><div class="body"><strong>Paste the address into the bot</strong><span>Send the address in Telegram. The bot verifies it on-chain, grants the role, and whitelists all yield functions automatically.</span></div></li>
-    <li><div class="step-num">6</div><div class="body"><strong>Done — Autopilot is live</strong><span>The bot sends a confirmation message. From now on the daily yield cycle executes automatically. Use /whitelist to check status, /whitelist disable to turn it off anytime.</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Register with the bot first</strong><span>Complete the /start flow in Telegram (next step)</span></div></li>
+    <li><div class="step-num">2</div><div class="body"><strong>Send /whitelist to the bot</strong><span>It guides you through deploying the Zodiac Roles Module to your Safe</span></div></li>
+    <li><div class="step-num">3</div><div class="body"><strong>Deploy the module (~$2 gas)</strong><span>One-time transaction that installs the smart contract on your Safe</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Grant the bot its role</strong><span>One transaction gives the bot permission to call whitelisted functions only</span></div></li>
+    <li><div class="step-num">5</div><div class="body"><strong>Whitelist the yield functions</strong><span>Bot walks you through approving each protocol function (Lido, Curve, Aave, Convex)</span></div></li>
+    <li><div class="step-num">6</div><div class="body"><strong>Confirm with /whitelist status</strong><span>Bot confirms "Zodiac: ON" and auto-execution begins immediately</span></div></li>
   </ul>
 
-  <div class="alert info">
-    <span class="alert-icon">💡</span>
-    <span><strong>Transaction queue tip:</strong> If you have a pending transaction in your Safe queue when deploying, approve or reject it first. The Zodiac deployment will sit behind it and won't execute until the queue clears. Use /status in the bot to check for pending transactions.</span>
-  </div>
-
-  <div class="alert info">
-    <span class="alert-icon">💰</span>
-    <span><strong>Minimum ETH for Autopilot:</strong> Make sure your Safe has at least your stake amount plus ~0.005 ETH for gas. If your balance is too low the bot sends an insufficient ETH warning and skips the cycle gracefully — no errors. Use /setstake to lower the stake amount if needed (minimum 0.01 ETH).</span>
+  <div class="alert success">
+    <span class="alert-icon">✅</span>
+    <span>After Zodiac setup the bot will show <strong>Zodiac: ON</strong> in its logs and execute transactions directly. You can disable anytime with <strong>/whitelist disable</strong>.</span>
   </div>
 
   <div class="checklist">
-    <div class="check-item" onclick="toggleCheck(this,'c11-1')" id="c11-1">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Sent /whitelist to bot and replied "yes"</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c11-2')" id="c11-2">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Deployed Zodiac Roles Modifier via Safe Apps → Zodiac (not Zodiac Roles)</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c11-3')" id="c11-3">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Pasted module address into bot and received verification confirmation</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c11-4')" id="c11-4">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Received "Whitelist fully configured!" message from bot</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this,'c11-5')" id="c11-5">
-      <div class="check-box"><span class="check-mark">✓</span></div>
-      <span class="check-label">Sent /whitelist to confirm status shows ACTIVE</span>
-    </div>
+    <div class="check-item" onclick="toggleCheck(this,'zodiac-1')" id="zodiac-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Registered with the bot first (/start)</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'zodiac-2')" id="zodiac-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Zodiac module deployed via /whitelist</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'zodiac-3')" id="zodiac-3"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Bot confirmed Zodiac: ON</span></div>
   </div>
 
   <div class="nav-btns">
-    <button class="btn btn-secondary" onclick="goToStep(9)">← Back</button>
-    <button class="btn btn-primary" onclick="goToStep(0)" style="background:linear-gradient(135deg,var(--success),#2e7d52)">↩ Back to Start</button>
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()">Next: Register →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STEP: Register -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="step-section" id="step-register">
+  <div class="step-header">
+    <div class="step-eyebrow" id="register-eyebrow">Step 7</div>
+    <h2 class="step-title">Register with the bot</h2>
+    <p class="step-desc">You'll get an invite code when you purchase. Registration takes under 2 minutes in Telegram.</p>
+  </div>
+
+  <!-- Scout variant -->
+  <div class="tier-section" id="register-scout">
+    <div class="alert scout-info">
+      <span class="alert-icon">🔍</span>
+      <span><strong>Scout users:</strong> You don't need a Safe wallet to register. Just open the bot and send /start — no invite code required for the free tier.</span>
+    </div>
+  </div>
+
+  <!-- Optimizer + Autopilot variant -->
+  <div class="tier-section" id="register-paid">
+    <div class="alert info">
+      <span class="alert-icon">📧</span>
+      <span>Your invite code was emailed to you after purchase. It looks like <strong>OPT-XXXX</strong> (Optimizer) or <strong>APX-XXXX</strong> (Autopilot). Check your inbox including spam.</span>
+    </div>
+  </div>
+
+  <ul class="instructions">
+    <li><div class="step-num">1</div><div class="body"><strong>Search for @seojin77_bot on Telegram</strong><span>Or click the link in your welcome email</span></div></li>
+    <li><div class="step-num">2</div><div class="body"><strong>Send /start</strong><span>The bot walks you through setup</span></div></li>
+    <li><div class="step-num">3</div><div class="body"><strong>Enter your invite code</strong><span>Type it exactly as shown in your email</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Verify your purchase email</strong><span>Enter the email you used on Stripe — this confirms the code is yours</span></div></li>
+    <li><div class="step-num">5</div><div class="body"><strong>Enter your name, Safe address, and stake amount</strong><span>Minimum 0.05 ETH per cycle. You can change this later with /setstake.</span></div></li>
+  </ul>
+
+  <div class="checklist">
+    <div class="check-item" onclick="toggleCheck(this,'reg-1')" id="reg-1"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Found @seojin77_bot on Telegram</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'reg-2')" id="reg-2"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Registered with /start and invite code</span></div>
+    <div class="check-item" onclick="toggleCheck(this,'reg-3')" id="reg-3"><div class="check-box"><span class="check-mark">✓</span></div><span class="check-label">Welcome message received from bot</span></div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()">Next: Commands →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STEP: Commands Reference -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="step-section" id="step-commands">
+  <div class="step-header">
+    <div class="step-eyebrow" id="commands-eyebrow">Final Step</div>
+    <h2 class="step-title">Bot commands</h2>
+    <p class="step-desc">Send any of these in Telegram at any time. Commands marked 🚀 require Autopilot.</p>
+  </div>
+
+  <!-- Scout banner -->
+  <div class="tier-section" id="commands-scout-banner">
+    <div class="alert scout-info" style="margin-bottom:16px">
+      <span class="alert-icon">🔍</span>
+      <span><strong>Scout tier:</strong> You have access to monitoring commands only. Staking commands require Optimizer or Autopilot.</span>
+    </div>
+  </div>
+
+  <div class="commands">
+    <div class="cmd-item"><span class="cmd-tag">/apy</span><div class="cmd-desc"><strong>Live APY rates</strong>Current yield rates across Lido, Curve, Aave and Convex — available to all tiers</div></div>
+    <div class="cmd-item"><span class="cmd-tag">/balance</span><div class="cmd-desc"><strong>Quick balance check</strong>Your Safe ETH balance and any LP tokens — available to all tiers</div></div>
+    <div class="cmd-item"><span class="cmd-tag">/positions</span><div class="cmd-desc"><strong>Full portfolio</strong>All positions across all 4 protocols with current USD values — available to all tiers</div></div>
+    <div class="cmd-item"><span class="cmd-tag">/dashboard</span><div class="cmd-desc"><strong>Yield tracking & P&L</strong>Total deposited, yield earned, annualized APY — available to all tiers</div></div>
+    <div class="cmd-item"><span class="cmd-tag">/status</span><div class="cmd-desc"><strong>Pending transactions</strong>Any Safe transactions waiting for your signature — available to all tiers</div></div>
+    <div class="cmd-item" id="cmd-stake"><span class="cmd-tag">/stake</span><div class="cmd-desc"><strong>Run yield cycle now ⚡🚀</strong>Manually trigger a stake instead of waiting for the daily cycle. Optimizer: proposes to Safe. Autopilot: executes directly.</div></div>
+    <div class="cmd-item" id="cmd-harvest"><span class="cmd-tag">/harvest</span><div class="cmd-desc"><strong>Claim Convex rewards ⚡🚀</strong>Checks claimable CRV + CVX. If above $10, proposes (or executes) claim and swap back to ETH.</div></div>
+    <div class="cmd-item" id="cmd-setstake"><span class="cmd-tag">/setstake</span><div class="cmd-desc"><strong>Change stake amount ⚡🚀</strong>Update how much ETH gets staked each daily cycle. Minimum 0.05 ETH.</div></div>
+    <div class="cmd-item" id="cmd-setprotocol"><span class="cmd-tag">/setprotocol</span><div class="cmd-desc"><strong>Control protocols ⚡🚀</strong>Pin to a specific protocol, exclude ones you don't want, or return to auto best-APY mode.</div></div>
+    <div class="cmd-item" id="cmd-pause"><span class="cmd-tag">/pause / /resume</span><div class="cmd-desc"><strong>Pause the bot ⚡🚀</strong>Stops the daily cycle for your account. Existing pending transactions are unaffected.</div></div>
+    <div class="cmd-item" id="cmd-unstake"><span class="cmd-tag">/unstake</span><div class="cmd-desc"><strong>Withdraw funds ⚡🚀</strong>Step-by-step instructions to exit each protocol with direct links to withdrawal pages.</div></div>
+    <div class="cmd-item" id="cmd-whitelist"><span class="cmd-tag">/whitelist</span><div class="cmd-desc"><strong>Zodiac auto-execution 🚀</strong>Deploy and manage the Zodiac Roles Module. /whitelist setup to enable, /whitelist status to check, /whitelist disable to turn off.</div></div>
+    <div class="cmd-item"><span class="cmd-tag">/history</span><div class="cmd-desc"><strong>Last transaction</strong>Protocol, amount, date and tx hash of your most recent stake — available to all tiers</div></div>
+    <div class="cmd-item"><span class="cmd-tag">/winner</span><div class="cmd-desc"><strong>Current protocol</strong>Which protocol the bot is currently routing stakes to — available to all tiers</div></div>
+  </div>
+
+  <div class="final-card" id="final-card">
+    <div class="final-emoji" id="final-emoji">🎉</div>
+    <h2 id="final-title">You're all set!</h2>
+    <p id="final-desc">The bot runs automatically every 24 hours. Your ETH earns yield while you sleep.</p>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goToLanding()" style="background:linear-gradient(135deg,var(--success),#2e7d52)">↩ Start Over</button>
   </div>
 </div>
 
 </div><!-- /content -->
 
 <script>
-// ── State ──────────────────────────────────────────────────────────────────
-var TOTAL_CHECKS = 33; // total checkboxes across all steps
-var currentStep  = 0;
+// ── Tier config ────────────────────────────────────────────────────────────────
+var currentTier = null;
+var currentStepIdx = 0;
 
-// ── Load saved checks from localStorage ───────────────────────────────────
-function loadChecks() {
-  var saved = {};
-  try { saved = JSON.parse(localStorage.getItem('yb_checks') || '{}'); } catch(e) {}
-  Object.keys(saved).forEach(function(id) {
+var FLOWS = {
+  scout:     ['landing','register','commands'],
+  optimizer: ['landing','apps','eth','safe','signer','fund','mobile','register','commands'],
+  autopilot: ['landing','apps','eth','safe','signer','fund','mobile','zodiac','register','commands'],
+};
+
+var TIER_DESCS = {
+  scout:     'Free tier — monitor APYs, portfolio and risk alerts. No Safe wallet needed.',
+  optimizer: '$19/mo — daily yield automation. Bot proposes transactions, you approve in Safe Mobile.',
+  autopilot: '$59/mo — fully hands-free. Bot executes automatically via Zodiac. No approvals needed.',
+};
+
+var TIER_LABELS = {
+  scout:     '🔍 Scout',
+  optimizer: '⚡ Optimizer',
+  autopilot: '🚀 Autopilot',
+};
+
+// Step eyebrow numbering per flow
+function getStepLabel(tier, stepId) {
+  var flow = FLOWS[tier];
+  var idx  = flow.indexOf(stepId);
+  if (idx <= 0) return '';
+  var stepNum  = idx;
+  var total    = flow.length - 1;
+  return 'Step ' + stepNum + ' of ' + total;
+}
+
+function selectTier(tier) {
+  currentTier = tier;
+  currentStepIdx = 0;
+
+  // Update tier picker buttons
+  document.querySelectorAll('.tier-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelector('.tier-btn.' + tier).classList.add('active');
+  document.getElementById('tierDesc').textContent = TIER_DESCS[tier];
+
+  // Update tier-specific sections
+  updateTierSections(tier);
+
+  // Update final card
+  updateFinalCard(tier);
+
+  // Build nav pills
+  buildNavPills(tier);
+
+  // Go to first real step
+  goToStep(1);
+}
+
+function updateTierSections(tier) {
+  // Safe Mobile: show/hide autopilot note
+  var apNote = document.getElementById('mobile-autopilot-note');
+  if (apNote) apNote.classList.toggle('visible', tier === 'autopilot');
+
+  // Register: show correct variant
+  var scoutReg = document.getElementById('register-scout');
+  var paidReg  = document.getElementById('register-paid');
+  if (scoutReg) scoutReg.classList.toggle('visible', tier === 'scout');
+  if (paidReg)  paidReg.classList.toggle('visible', tier !== 'scout');
+
+  // Commands: show scout banner
+  var scoutBanner = document.getElementById('commands-scout-banner');
+  if (scoutBanner) scoutBanner.classList.toggle('visible', tier === 'scout');
+
+  // Dim autopilot-only commands for non-autopilot
+  var apCmds = ['cmd-whitelist'];
+  apCmds.forEach(function(id) {
     var el = document.getElementById(id);
-    if (el && saved[id]) {
-      el.classList.add('checked');
-    }
-  });
-  updateProgress();
-}
-
-function saveChecks() {
-  var all  = document.querySelectorAll('.check-item');
-  var data = {};
-  all.forEach(function(el) { if (el.id) data[el.id] = el.classList.contains('checked'); });
-  localStorage.setItem('yb_checks', JSON.stringify(data));
-}
-
-// ── Toggle checkbox ────────────────────────────────────────────────────────
-window.toggleCheck = function(el, id) {
-  el.classList.toggle('checked');
-  saveChecks();
-  updateProgress();
-  updateNavPills();
-};
-
-// ── Progress ring ──────────────────────────────────────────────────────────
-function updateProgress() {
-  var total   = document.querySelectorAll('.check-item').length;
-  var checked = document.querySelectorAll('.check-item.checked').length;
-  var pct     = total > 0 ? Math.round(checked / total * 100) : 0;
-  var offset  = 188 - (188 * pct / 100);
-
-  document.getElementById('ringFill').style.strokeDashoffset = offset;
-  document.getElementById('ringPct').textContent = pct + '%';
-  document.getElementById('progressSub').textContent = checked + ' of ' + total + ' steps complete';
-
-  var labels = ['Let\'s get started','Installing apps','Setting up MetaMask',
-    'Getting ETH','Creating Safe','Adding bot signer','Funding Safe',
-    'Setting up Safe Mobile','Getting chat ID','Registering','Exploring commands','Autopilot enabled! 🚀'];
-  var labelIdx = Math.min(Math.floor(checked / total * 10), 10);
-  document.getElementById('progressLabel').textContent = labels[labelIdx];
-}
-
-// ── Step navigation ────────────────────────────────────────────────────────
-window.goToStep = function(idx) {
-  // Hide all sections
-  document.querySelectorAll('.step-section').forEach(function(s) { s.classList.remove('active'); });
-  document.getElementById('step-' + idx).classList.add('active');
-
-  // Update pills
-  currentStep = idx;
-  updateNavPills();
-
-  // Scroll to top of content
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-function updateNavPills() {
-  var pills = document.querySelectorAll('.step-pill');
-  pills.forEach(function(pill, i) {
-    pill.classList.remove('active','done');
-    // Check if all checks in this step are done
-    var stepChecks  = document.querySelectorAll('#step-' + i + ' .check-item');
-    var stepDone    = document.querySelectorAll('#step-' + i + ' .check-item.checked');
-    if (i === currentStep) {
-      pill.classList.add('active');
-    } else if (stepChecks.length > 0 && stepChecks.length === stepDone.length) {
-      pill.classList.add('done');
+    if (el) {
+      el.style.opacity = (tier === 'autopilot') ? '1' : '0.4';
     }
   });
 
-  // Scroll active pill into view
-  var activePill = document.querySelector('.step-pill.active');
-  if (activePill) {
-    activePill.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+  // Update step eyebrows
+  var flow = FLOWS[tier];
+  flow.forEach(function(stepId) {
+    var el = document.getElementById(stepId + '-eyebrow');
+    if (el) el.textContent = getStepLabel(tier, stepId);
+  });
+
+  // Mobile next button label
+  var mobileNext = document.getElementById('mobile-next-btn');
+  if (mobileNext) {
+    mobileNext.textContent = (tier === 'autopilot') ? 'Next: Zodiac Setup →' : 'Next: Register →';
+  }
+
+  // Register eyebrow
+  var regEyebrow = document.getElementById('register-eyebrow');
+  if (regEyebrow) {
+    var flow = FLOWS[tier];
+    var idx = flow.indexOf('register');
+    regEyebrow.textContent = idx > 0 ? 'Step ' + idx + ' of ' + (flow.length - 1) : '';
+  }
+
+  // Commands eyebrow
+  var cmdEyebrow = document.getElementById('commands-eyebrow');
+  if (cmdEyebrow) {
+    var flow = FLOWS[tier];
+    var idx = flow.indexOf('commands');
+    cmdEyebrow.textContent = idx > 0 ? 'Final Step' : '';
   }
 }
 
-// ── Copy helper ────────────────────────────────────────────────────────────
+function updateFinalCard(tier) {
+  var msgs = {
+    scout:     { emoji:'🔍', title:'You\'re ready to monitor!', desc:'Send /apy, /balance, /positions or /dashboard to the bot anytime. No daily automation — upgrade to Optimizer or Autopilot to start earning.' },
+    optimizer: { emoji:'⚡', title:'You\'re all set!', desc:'The bot runs every 24 hours. When it proposes a transaction you\'ll get a push notification in Safe Mobile — just open and approve. Your ETH earns yield while you sleep.' },
+    autopilot: { emoji:'🚀', title:'Fully automated!', desc:'After Zodiac setup the bot executes transactions directly — no approvals needed. Yield cycles run daily, harvests every 6 hours. Pure set-and-forget.' },
+  };
+  var m = msgs[tier] || msgs.optimizer;
+  document.getElementById('final-emoji').textContent = m.emoji;
+  document.getElementById('final-title').textContent = m.title;
+  document.getElementById('final-desc').textContent  = m.desc;
+}
+
+function buildNavPills(tier) {
+  var flow   = FLOWS[tier];
+  var labels = { landing:'Tier', apps:'1·Apps', eth:'2·ETH', safe:'3·Safe', signer:'4·Signer', fund:'5·Fund', mobile:'6·Mobile', zodiac:'7·Zodiac', register:'Register', commands:'Commands' };
+  var nav    = document.getElementById('stepsNav');
+  nav.innerHTML = '';
+  flow.forEach(function(stepId, i) {
+    var btn = document.createElement('button');
+    btn.className = 'step-pill' + (i === 0 ? ' active' : '');
+    btn.textContent = labels[stepId] || stepId;
+    btn.onclick = (function(idx){ return function(){ goToStep(idx); }; })(i);
+    nav.appendChild(btn);
+  });
+}
+
+function goToStep(idx) {
+  if (!currentTier) return;
+  var flow = FLOWS[currentTier];
+  if (idx < 0 || idx >= flow.length) return;
+  currentStepIdx = idx;
+
+  // Hide all sections
+  document.querySelectorAll('.step-section').forEach(function(s){ s.classList.remove('active'); });
+  var stepId = flow[idx];
+  var el = document.getElementById('step-' + stepId);
+  if (el) el.classList.add('active');
+
+  // Update pills
+  var pills = document.querySelectorAll('#stepsNav .step-pill');
+  pills.forEach(function(p, i){ p.classList.toggle('active', i === idx); });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToLanding() {
+  currentTier = null;
+  currentStepIdx = 0;
+  document.querySelectorAll('.step-section').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('step-landing').classList.add('active');
+  document.getElementById('stepsNav').innerHTML = '';
+  document.querySelectorAll('.tier-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tierDesc').textContent = 'Choose your tier to get started';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext() {
+  goToStep(currentStepIdx + 1);
+}
+
+function goBack() {
+  if (currentStepIdx <= 1) { goToLanding(); return; }
+  goToStep(currentStepIdx - 1);
+}
+
+// ── Checklist ──────────────────────────────────────────────────────────────────
+function loadChecks() {
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem('fy_checks') || '{}'); } catch(e) {}
+  Object.keys(saved).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && saved[id]) el.classList.add('checked');
+  });
+}
+
+function saveChecks() {
+  var data = {};
+  document.querySelectorAll('.check-item').forEach(function(el) {
+    if (el.id) data[el.id] = el.classList.contains('checked');
+  });
+  localStorage.setItem('fy_checks', JSON.stringify(data));
+}
+
+window.toggleCheck = function(el) {
+  el.classList.toggle('checked');
+  saveChecks();
+};
+
+// ── Copy ────────────────────────────────────────────────────────────────────────
 window.copyText = function(elemId, btn) {
   var text = document.getElementById(elemId).textContent;
   navigator.clipboard.writeText(text).then(function() {
@@ -1278,17 +791,12 @@ window.copyText = function(elemId, btn) {
     btn.textContent = 'Copied!';
     btn.style.background = 'var(--success)';
     btn.style.color = '#fff';
-    setTimeout(function() {
-      btn.textContent = orig;
-      btn.style.background = '';
-      btn.style.color = '';
-    }, 2000);
+    setTimeout(function() { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
   });
 };
 
-// ── Init ───────────────────────────────────────────────────────────────────
+// ── Init ────────────────────────────────────────────────────────────────────────
 loadChecks();
-updateNavPills();
 </script>
 </body>
 </html>
