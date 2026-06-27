@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Policy — Fenix Yield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="https://framerusercontent.com/images/KLMRfNA8Rc9lC9ziU967jpCMaZM.jpg?width=1008&height=1024&kb=143" type="image/jpeg">
+<style>
+:root {
+  --navy: #0d1117;
+  --navy2: #161b22;
+  --purple: #6B3FA0;
+  --teal: #4EC8C4;
+  --white: #f0f4f8;
+  --muted: #8b949e;
+  --border: #21262d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 16px 40px;
+  background: rgba(13,17,23,0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(78,200,196,0.12);
+}
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+.nav-logo .fenix { color: var(--teal); }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 8px;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+.page-header {
+  padding: 140px 24px 60px;
+  text-align: center;
+  background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%);
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: "";
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%);
+}
+.page-header-inner { position: relative; z-index: 1; }
+.page-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+.page-title { font-size: clamp(36px, 6vw, 56px); font-weight: 800; letter-spacing: -0.03em; color: #1a1f3a; margin-bottom: 12px; }
+.page-meta { font-size: 14px; color: #6a7282; }
+
+main { max-width: 760px; margin: 0 auto; padding: 72px 24px 80px; }
+
+.doc-section { margin-bottom: 48px; }
+.doc-section h2 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.doc-section p { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 12px; }
+.doc-section ul { color: var(--muted); font-size: 15px; line-height: 1.8; padding-left: 20px; margin-bottom: 12px; }
+.doc-section ul li { margin-bottom: 6px; }
+.doc-section strong { color: var(--white); }
+
+.highlight-box {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--teal);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+.highlight-box p { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+
+.data-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 14px; }
+.data-table th { text-align: left; color: var(--teal); font-weight: 700; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.data-table td { color: var(--muted); padding: 10px 12px; border-bottom: 1px solid rgba(33,38,45,0.6); vertical-align: top; }
+
+footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-align: center; }
+.footer-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
+.footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; list-style: none; margin-bottom: 20px; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
+.footer-links a:hover { color: var(--white); }
+.footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
+.footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
+
+@media (max-width: 600px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  main { padding: 60px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img class="logo-img" src="fenix-logo.jpg" alt="Fenix Yield">
+    <span><span class="fenix">Fenix</span> Yield</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how">How it works</a></li>
+    <li><a href="index.html#protocols">Protocols</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="setup.html">Setup</a></li>
+    <li><a href="security.html">Security</a></li>
+  </ul>
+  <a class="nav-cta" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow">Legal</p>
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="page-meta">Effective date: June 27, 2026 &nbsp;·&nbsp; Last updated: June 27, 2026</p>
+  </div>
+</div>
+
+<main>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--white)">Summary:</strong> We collect only what we need to run the Service — your Telegram ID, Safe wallet address, email (for paid tiers), and subscription status. We do not sell your data. We never have access to your private keys or funds.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>1. Who We Are</h2>
+    <p>Fenix Yield is a software automation service operated by its sole owner based in Texas, United States. This Privacy Policy explains how we collect, use, and protect information when you use our Telegram bot (@fenix_yield_bot), website (fenix-yield.com), and related services.</p>
+    <p>For privacy-related questions, contact us at <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>2. Information We Collect</h2>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Source</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--white)">Telegram user ID &amp; username</strong></td>
+          <td>Telegram API when you start the bot</td>
+          <td>Account identification, sending notifications</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Your name</strong></td>
+          <td>You provide during onboarding</td>
+          <td>Personalizing bot messages</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Gnosis Safe wallet address</strong></td>
+          <td>You provide during onboarding</td>
+          <td>Querying on-chain balances, proposing transactions</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Email address</strong></td>
+          <td>You provide (paid tiers only)</td>
+          <td>Subscription verification, transactional emails</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Subscription tier &amp; status</strong></td>
+          <td>Payment processor webhook</td>
+          <td>Determining feature access</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Stake amount preference</strong></td>
+          <td>You provide during onboarding</td>
+          <td>Configuring automation parameters</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Transaction history</strong></td>
+          <td>Public blockchain data</td>
+          <td>P&amp;L reporting, harvest tracking</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Website analytics</strong></td>
+          <td>Cloudflare (aggregated)</td>
+          <td>Understanding site traffic</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>We do not collect:</strong> private keys, seed phrases, passwords, payment card details, government ID, or any information about your other wallets or holdings outside your registered Safe address.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>3. How We Use Your Information</h2>
+    <p>We use the information we collect to:</p>
+    <ul>
+      <li>Operate and deliver the Service (APY tracking, transaction proposals, alerts)</li>
+      <li>Verify subscription status and enforce tier-based access controls</li>
+      <li>Send transactional notifications via Telegram (yield reports, risk alerts, harvest confirmations)</li>
+      <li>Send transactional emails via Resend (subscription confirmation, invite codes)</li>
+      <li>Provide customer support</li>
+      <li>Detect and prevent abuse or fraudulent use</li>
+      <li>Improve the Service</li>
+    </ul>
+    <p>We do not use your data for advertising, profiling, or any purpose unrelated to operating the Service.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>4. Data Storage &amp; Security</h2>
+    <p>Your data is stored in a SQLite database on a private VPS server. We implement reasonable technical safeguards including encrypted connections, access controls, and regular backups.</p>
+    <p>Your Safe wallet address is a public blockchain address. On-chain data (balances, transactions) is public by nature and not subject to our control.</p>
+    <p>We retain your data for as long as your account is active. If you request deletion, we will remove your personal data within 30 days, subject to any legal retention obligations.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>5. Third-Party Services</h2>
+    <p>We use the following third-party services to operate Fenix Yield:</p>
+    <ul>
+      <li><strong>Telegram</strong> — bot infrastructure and message delivery. Subject to <a href="https://telegram.org/privacy" target="_blank" rel="noreferrer">Telegram's Privacy Policy</a>.</li>
+      <li><strong>Stripe</strong> — payment processing. We do not store card details. Subject to <a href="https://stripe.com/privacy" target="_blank" rel="noreferrer">Stripe's Privacy Policy</a>.</li>
+      <li><strong>Resend</strong> — transactional email delivery.</li>
+      <li><strong>Cloudflare</strong> — DNS, CDN, and tunnel infrastructure.</li>
+      <li><strong>Alchemy / public RPC</strong> — Ethereum node access for reading on-chain data.</li>
+      <li><strong>Gnosis Safe</strong> — transaction proposal API.</li>
+    </ul>
+    <p>We do not sell, rent, or share your personal data with any third party for marketing purposes.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>6. Blockchain Data</h2>
+    <p>Transactions proposed or executed by Fenix Yield are recorded on the Ethereum blockchain, which is public and permanent. This includes your Safe wallet address and transaction details. We have no ability to delete or modify blockchain records.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>7. Your Rights</h2>
+    <p>You have the right to:</p>
+    <ul>
+      <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+      <li><strong>Correction</strong> — request correction of inaccurate data</li>
+      <li><strong>Deletion</strong> — request deletion of your account and personal data</li>
+      <li><strong>Portability</strong> — request your data in a machine-readable format</li>
+    </ul>
+    <p>To exercise any of these rights, contact us at <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>. We will respond within 30 days.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>8. Cookies</h2>
+    <p>Our website uses minimal cookies. We use <strong>sessionStorage</strong> (not persistent cookies) to track referral parameters within a single browsing session. No tracking cookies or third-party advertising cookies are used.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>9. Children's Privacy</h2>
+    <p>The Service is not directed at individuals under 18 years of age. We do not knowingly collect personal information from minors. If you believe a minor has provided us with personal data, contact us and we will delete it promptly.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>10. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Material changes will be communicated via the Telegram bot or email. Continued use of the Service after changes take effect constitutes acceptance of the revised policy.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>11. Contact</h2>
+    <p>For privacy questions or requests, contact us at <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>.</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-logo">
+    <img src="fenix-logo.jpg" alt="Fenix Yield logo">
+    <span>Fenix Yield</span>
+  </div>
+  <p class="footer-tagline">Put your crypto to work.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="terms.html">Terms of Service</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="refund-policy.html">Refund Policy</a></li>
+  </ul>
+  <a class="footer-email" href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+  <p class="footer-copy">© 2026 Fenix Yield. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

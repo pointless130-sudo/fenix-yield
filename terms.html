@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Terms of Service — Fenix Yield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="https://framerusercontent.com/images/KLMRfNA8Rc9lC9ziU967jpCMaZM.jpg?width=1008&height=1024&kb=143" type="image/jpeg">
+<style>
+:root {
+  --navy: #0d1117;
+  --navy2: #161b22;
+  --purple: #6B3FA0;
+  --teal: #4EC8C4;
+  --white: #f0f4f8;
+  --muted: #8b949e;
+  --border: #21262d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 16px 40px;
+  background: rgba(13,17,23,0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(78,200,196,0.12);
+}
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+.nav-logo .fenix { color: var(--teal); }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 8px;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+.page-header {
+  padding: 140px 24px 60px;
+  text-align: center;
+  background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%);
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: "";
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%);
+}
+.page-header-inner { position: relative; z-index: 1; }
+.page-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+.page-title { font-size: clamp(36px, 6vw, 56px); font-weight: 800; letter-spacing: -0.03em; color: #1a1f3a; margin-bottom: 12px; }
+.page-meta { font-size: 14px; color: #6a7282; }
+
+main { max-width: 760px; margin: 0 auto; padding: 72px 24px 80px; }
+
+.doc-section { margin-bottom: 48px; }
+.doc-section h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.doc-section p { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 12px; }
+.doc-section ul { color: var(--muted); font-size: 15px; line-height: 1.8; padding-left: 20px; margin-bottom: 12px; }
+.doc-section ul li { margin-bottom: 6px; }
+.doc-section strong { color: var(--white); }
+
+.highlight-box {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--teal);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+.highlight-box p { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 40px 32px;
+  text-align: center;
+}
+.footer-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
+.footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; list-style: none; margin-bottom: 20px; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
+.footer-links a:hover { color: var(--white); }
+.footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
+.footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
+
+@media (max-width: 600px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  main { padding: 60px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img class="logo-img" src="fenix-logo.jpg" alt="Fenix Yield">
+    <span><span class="fenix">Fenix</span> Yield</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how">How it works</a></li>
+    <li><a href="index.html#protocols">Protocols</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="setup.html">Setup</a></li>
+    <li><a href="security.html">Security</a></li>
+  </ul>
+  <a class="nav-cta" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow">Legal</p>
+    <h1 class="page-title">Terms of Service</h1>
+    <p class="page-meta">Effective date: June 27, 2026 &nbsp;·&nbsp; Last updated: June 27, 2026</p>
+  </div>
+</div>
+
+<main>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--white)">Summary:</strong> Fenix Yield is a software automation tool. We do not hold, manage, or have custody of your funds at any time. You are solely responsible for your wallet, your keys, and your investment decisions. By using Fenix Yield you agree to these terms.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>1. Acceptance of Terms</h2>
+    <p>By accessing or using Fenix Yield (the "Service"), including the Telegram bot (@fenix_yield_bot), website (fenix-yield.com), and any related software, you agree to be bound by these Terms of Service ("Terms"). If you do not agree, do not use the Service.</p>
+    <p>These Terms constitute a legally binding agreement between you and Fenix Yield ("we," "us," or "our"), operated by its sole owner based in Texas, United States.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>2. Description of Service</h2>
+    <p>Fenix Yield is a non-custodial software automation tool that:</p>
+    <ul>
+      <li>Monitors publicly available DeFi protocol APIs to identify yield opportunities</li>
+      <li>Proposes transactions to your self-custodial Gnosis Safe wallet</li>
+      <li>On the Autopilot tier, executes pre-approved transactions via the Zodiac Roles Module within strict permission boundaries you configure</li>
+      <li>Provides portfolio tracking, alerts, and reporting</li>
+    </ul>
+    <p><strong>Fenix Yield is not a financial institution, investment advisor, broker, exchange, or custodian.</strong> We do not hold, transmit, control, or have access to your funds at any time. All assets remain in your self-custodial wallet.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>3. Eligibility</h2>
+    <p>You must be at least 18 years of age to use the Service. By using the Service you represent that you are of legal age in your jurisdiction and have the legal capacity to enter into this agreement.</p>
+    <p>The Service is not available to residents of jurisdictions where use of DeFi automation software is prohibited by law. You are responsible for determining whether use of the Service is lawful in your jurisdiction.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>4. Subscriptions and Billing</h2>
+    <p>Fenix Yield offers the following subscription tiers:</p>
+    <ul>
+      <li><strong>Scout</strong> — Free, no credit card required</li>
+      <li><strong>Optimizer</strong> — $19 per month</li>
+      <li><strong>Autopilot</strong> — $59 per month</li>
+    </ul>
+    <p>Paid subscriptions are billed monthly in advance. Your subscription renews automatically on the same date each month unless cancelled. You may cancel at any time; access continues until the end of the current billing period. We do not offer prorated refunds for partial months except as described in our <a href="refund-policy.html">Refund Policy</a>.</p>
+    <p>We reserve the right to change subscription prices with 30 days' notice. Price changes take effect at your next renewal date.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>5. Non-Custodial Nature &amp; No Financial Advice</h2>
+    <p><strong>We are not a financial advisor.</strong> Nothing provided by Fenix Yield — including APY data, protocol recommendations, transaction proposals, alerts, or any other output — constitutes financial, investment, legal, or tax advice.</p>
+    <p>You are solely responsible for:</p>
+    <ul>
+      <li>All investment and financial decisions you make</li>
+      <li>Reviewing and approving or rejecting any transaction the Service proposes</li>
+      <li>The security of your wallet, private keys, and seed phrase</li>
+      <li>Understanding the risks of DeFi protocols, including smart contract vulnerabilities, impermanent loss, and liquidation risk</li>
+      <li>Compliance with tax obligations in your jurisdiction</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2>6. Risks</h2>
+    <p>By using the Service you acknowledge and accept the following risks:</p>
+    <ul>
+      <li><strong>Smart contract risk:</strong> DeFi protocols may contain bugs or be exploited, resulting in loss of funds</li>
+      <li><strong>Market risk:</strong> Cryptocurrency values are highly volatile. Yield percentages are variable and not guaranteed</li>
+      <li><strong>Protocol risk:</strong> Third-party protocols (Lido, Curve, Aave, Convex) may change, pause, or fail independently of Fenix Yield</li>
+      <li><strong>Software risk:</strong> The Service is provided "as is." Bugs, network outages, or errors may cause missed transactions or incorrect behavior</li>
+      <li><strong>Gas risk:</strong> Blockchain transactions require gas fees which fluctuate and may exceed yield earned</li>
+    </ul>
+    <p>Past yield performance is not indicative of future results.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>7. Acceptable Use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use the Service for any unlawful purpose or in violation of any applicable law or regulation</li>
+      <li>Attempt to reverse-engineer, decompile, or tamper with the Service</li>
+      <li>Share your account credentials or invite codes with unauthorized third parties</li>
+      <li>Use the Service to launder money or engage in any fraudulent activity</li>
+      <li>Attempt to circumvent any access controls, tier restrictions, or rate limits</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2>8. Intellectual Property</h2>
+    <p>All software, content, designs, and materials comprising the Service are owned by Fenix Yield and protected by applicable intellectual property laws. You are granted a limited, non-exclusive, non-transferable license to use the Service for personal, non-commercial purposes in accordance with these Terms.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>9. Disclaimer of Warranties</h2>
+    <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
+    <p>We do not warrant that the Service will be uninterrupted, error-free, or free of harmful components. We do not warrant the accuracy of any APY data or protocol information provided by the Service.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>10. Limitation of Liability</h2>
+    <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, FENIX YIELD AND ITS OPERATORS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF FUNDS, LOSS OF PROFITS, OR LOSS OF DATA, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF THE SERVICE.</p>
+    <p>Our total liability to you for any claim arising out of these Terms or your use of the Service shall not exceed the total subscription fees you paid to us in the three months preceding the claim.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>11. Termination</h2>
+    <p>We reserve the right to suspend or terminate your access to the Service at any time for violation of these Terms, fraudulent activity, or for any other reason at our discretion, with or without notice. Upon termination, your right to use the Service ceases immediately.</p>
+    <p>You may terminate your account at any time by cancelling your subscription and ceasing use of the Service.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>12. Changes to Terms</h2>
+    <p>We may update these Terms from time to time. Material changes will be communicated via the Telegram bot or by email. Continued use of the Service after changes take effect constitutes acceptance of the revised Terms.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>13. Governing Law</h2>
+    <p>These Terms are governed by the laws of the State of Texas, United States, without regard to conflict of law principles. Any disputes shall be resolved in the courts of Collin County, Texas.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>14. Contact</h2>
+    <p>For questions about these Terms, contact us at <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>.</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-logo">
+    <img src="fenix-logo.jpg" alt="Fenix Yield logo">
+    <span>Fenix Yield</span>
+  </div>
+  <p class="footer-tagline">Put your crypto to work.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="terms.html">Terms of Service</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="refund-policy.html">Refund Policy</a></li>
+  </ul>
+  <a class="footer-email" href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+  <p class="footer-copy">© 2026 Fenix Yield. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

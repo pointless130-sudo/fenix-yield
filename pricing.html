@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing — Fenix Yield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="https://framerusercontent.com/images/KLMRfNA8Rc9lC9ziU967jpCMaZM.jpg?width=1008&height=1024&kb=143" type="image/jpeg">
+<style>
+:root {
+  --navy: #0d1117;
+  --navy2: #161b22;
+  --purple: #6B3FA0;
+  --purple2: #8B5FC0;
+  --teal: #4EC8C4;
+  --white: #f0f4f8;
+  --muted: #8b949e;
+  --border: #21262d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+a { color: inherit; }
+
+/* Nav */
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 16px 40px;
+  background: rgba(13,17,23,0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(78,200,196,0.12);
+}
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+.nav-logo .fenix { color: var(--teal); }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  font-weight: 700 !important;
+}
+
+/* Page header */
+.page-header {
+  padding: 140px 24px 60px;
+  text-align: center;
+  background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%);
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: "";
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%);
+}
+.page-header-inner { position: relative; z-index: 1; }
+.page-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 12px;
+}
+.page-title {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1a1f3a;
+  margin-bottom: 16px;
+}
+.page-desc {
+  font-size: 17px;
+  color: #4a5568;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Main content */
+main { max-width: 1000px; margin: 0 auto; padding: 80px 24px 80px; }
+
+/* Pricing grid */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 60px;
+}
+.pricing-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.pricing-card.featured {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 1px var(--teal), 0 8px 40px rgba(78,200,196,0.12);
+}
+.ribbon {
+  position: absolute;
+  top: -1px; right: 24px;
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 4px 12px;
+  border-radius: 0 0 8px 8px;
+}
+.pricing-tier {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.price { margin-bottom: 12px; }
+.price strong { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; }
+.price span { font-size: 16px; color: var(--muted); }
+.pricing-desc { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+.pricing-features { list-style: none; margin-bottom: 28px; flex: 1; }
+.pricing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--white);
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.pricing-features li.dim { color: var(--muted); }
+.check { color: var(--teal); font-weight: 700; flex-shrink: 0; }
+.btn-pricing {
+  display: block;
+  text-align: center;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn-pricing:hover { opacity: 0.85; transform: translateY(-1px); }
+.btn-outline {
+  border: 1.5px solid var(--teal);
+  color: var(--teal);
+}
+.btn-filled {
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  color: #fff;
+  border: none;
+}
+
+/* FAQ / comparison */
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+}
+.section-heading {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 40px;
+}
+
+/* FAQ */
+.faq { max-width: 680px; margin: 0 auto 60px; }
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0;
+}
+.faq-item:first-child { border-top: 1px solid var(--border); }
+.faq-q { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.faq-a { color: var(--muted); font-size: 14px; line-height: 1.7; }
+.faq-a a { color: var(--teal); text-decoration: none; }
+
+/* Security box */
+.security-box {
+  max-width: 720px;
+  margin: 0 auto 40px;
+  padding: 28px 32px;
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.security-box .label {
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.security-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.security-box p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 40px 32px;
+  text-align: center;
+}
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
+.footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 28px;
+  list-style: none;
+  margin-bottom: 20px;
+}
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
+.footer-links a:hover { color: var(--white); }
+.footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
+.footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
+
+@media (max-width: 600px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  main { padding: 60px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img class="logo-img" src="fenix-logo.jpg" alt="Fenix Yield">
+    <span><span class="fenix">Fenix</span> Yield</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how">How it works</a></li>
+    <li><a href="index.html#protocols">Protocols</a></li>
+    <li><a href="pricing.html" style="color:var(--white)">Pricing</a></li>
+    <li><a href="setup.html">Setup</a></li>
+    <li><a href="security.html">Security</a></li>
+  </ul>
+  <a class="nav-cta" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow">Simple, transparent pricing</p>
+    <h1 class="page-title">Start free. Automate when ready.</h1>
+    <p class="page-desc">No lock-in. Cancel anytime. Upgrade or downgrade at the end of any billing cycle.</p>
+  </div>
+</div>
+
+<main>
+
+  <div class="pricing-grid">
+
+    <!-- Scout -->
+    <article class="pricing-card">
+      <p class="pricing-tier">Scout</p>
+      <div class="price"><strong>$0</strong><span>/mo</span></div>
+      <p class="pricing-desc">Track your portfolio and learn the system. No credit card required.</p>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span>Real-time APY tracking across 4 protocols</li>
+        <li><span class="check">✓</span>Daily P&amp;L reports</li>
+        <li><span class="check">✓</span>Risk alerts (ETH price + APY drops)</li>
+        <li><span class="check">✓</span>Manual execution — we alert you, you execute</li>
+        <li><span class="check">✓</span>Safe wallet balance view</li>
+        <li class="dim">— Automated Safe tx proposals</li>
+        <li class="dim">— Auto-harvest &amp; compound</li>
+      </ul>
+      <a class="btn-pricing btn-outline" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free on Telegram</a>
+    </article>
+
+    <!-- Optimizer -->
+    <article class="pricing-card">
+      <p class="pricing-tier">Optimizer</p>
+      <div class="price"><strong>$19</strong><span>/mo</span></div>
+      <p class="pricing-desc">Automation with full control — approve every transaction yourself.</p>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span>Everything in Scout</li>
+        <li><span class="check">✓</span>Automated Safe transaction proposals</li>
+        <li><span class="check">✓</span>Bot finds best yield &amp; sends 1–3 tap approval to Safe Mobile</li>
+        <li><span class="check">✓</span>Custom protocol blacklists</li>
+        <li><span class="check">✓</span>Daily stake proposals to highest-APY protocol</li>
+        <li><span class="check">✓</span>Slippage protection on all routes</li>
+        <li class="dim">— Auto-execution (Zodiac)</li>
+      </ul>
+      <a class="btn-pricing btn-outline" href="https://buy.stripe.com/test_dRm5kvfEI81deCja7R9ws01" target="_blank" rel="noreferrer">Start Optimizer →</a>
+    </article>
+
+    <!-- Autopilot -->
+    <article class="pricing-card featured">
+      <div class="ribbon">MOST POPULAR</div>
+      <p class="pricing-tier">Autopilot</p>
+      <div class="price"><strong>$59</strong><span>/mo</span></div>
+      <p class="pricing-desc">True set-and-forget. The bot executes — you watch your yield grow.</p>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span>Everything in Optimizer</li>
+        <li><span class="check">✓</span>Full Zodiac Roles Module automation</li>
+        <li><span class="check">✓</span>Auto-harvest CRV + CVX rewards every 6h</li>
+        <li><span class="check">✓</span>Auto-compound — rewards restaked automatically</li>
+        <li><span class="check">✓</span>Gas-protection — no rebalance if fees eat yield</li>
+        <li><span class="check">✓</span>Priority support</li>
+      </ul>
+      <a class="btn-pricing btn-filled" href="https://buy.stripe.com/test_9B67sD648epBam3a7R9ws02" target="_blank" rel="noreferrer">Start Autopilot →</a>
+    </article>
+
+  </div>
+
+  <div class="security-box">
+    <p class="label">🔐 Non-Custodial Security</p>
+    <h3>We never hold your funds — your Safe Wallet does.</h3>
+    <p>Fenix Yield proposes transactions to your Safe wallet. On Autopilot, our bot signer operates under Zodiac Roles — a strict permission layer limiting it to pre-approved routes only. It cannot move funds to arbitrary addresses or approve unlimited spend. <a href="security.html" style="color:var(--teal);text-decoration:none;">Learn how it works →</a></p>
+  </div>
+
+  <div style="text-align:center;margin-bottom:60px;">
+    <p style="color:var(--muted);font-size:14px;">Cancel anytime — no lock-in. Questions? <a href="mailto:support@fenix-yield.com" style="color:var(--teal);text-decoration:none;">support@fenix-yield.com</a></p>
+  </div>
+
+  <div style="text-align:center;margin-bottom:24px;">
+    <p class="section-label">Common questions</p>
+    <h2 class="section-heading">Pricing FAQ</h2>
+  </div>
+
+  <div class="faq">
+    <div class="faq-item">
+      <p class="faq-q">When am I billed?</p>
+      <p class="faq-a">Subscriptions are billed monthly on the date you sign up. Your first billing cycle begins immediately upon purchase.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Can I cancel anytime?</p>
+      <p class="faq-a">Yes. Cancel at any time and you retain access until the end of your current billing period. No cancellation fees.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Can I switch tiers?</p>
+      <p class="faq-a">Yes. Upgrades take effect immediately (prorated). Downgrades take effect at the start of the next billing cycle.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Do you offer refunds?</p>
+      <p class="faq-a">We offer a 7-day refund on your first payment if the software does not function as described. See our <a href="refund-policy.html">Refund Policy</a> for details.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">What payment methods do you accept?</p>
+      <p class="faq-a">We accept all major credit and debit cards via our payment processor. Payments are processed securely — we do not store card details.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Is there a free trial?</p>
+      <p class="faq-a">The Scout tier is permanently free with no time limit. It gives you full access to APY tracking, alerts, and reports before committing to a paid plan.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">What does Fenix Yield actually do?</p>
+      <p class="faq-a">Fenix Yield is a software automation tool. It monitors DeFi protocol APIs, identifies the highest available yield, and proposes or executes transactions to your self-custodial Safe wallet. It does not hold, manage, or have access to your funds at any time.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-logo">
+    <img src="fenix-logo.jpg" alt="Fenix Yield logo">
+    <span>Fenix Yield</span>
+  </div>
+  <p class="footer-tagline">Put your crypto to work.</p>
+  <ul class="footer-links">
+    <li><a href="setup.html">Setup Guide</a></li>
+    <li><a href="setup-chat.html">AI Assistant</a></li>
+    <li><a href="security.html">Security Guide</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="terms.html">Terms of Service</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="refund-policy.html">Refund Policy</a></li>
+  </ul>
+  <a class="footer-email" href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+  <p class="footer-copy">© 2026 Fenix Yield. All rights reserved.<br><br>
+    <strong>Risk Disclosure:</strong> Fenix Yield is a non-custodial automation tool. We do not hold, control, or have access to your funds at any time. DeFi protocols carry inherent risks including smart contract vulnerabilities, liquidity risk, and market volatility. Yield percentages are variable and not guaranteed. Past performance is not indicative of future results.<br><br>
+    <strong>Not Financial Advice:</strong> Nothing on this website constitutes financial, investment, legal, or tax advice. You are solely responsible for your investment decisions.
+  </p>
+</footer>
+
+</body>
+</html>

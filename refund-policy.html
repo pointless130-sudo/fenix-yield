@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Refund Policy — Fenix Yield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="https://framerusercontent.com/images/KLMRfNA8Rc9lC9ziU967jpCMaZM.jpg?width=1008&height=1024&kb=143" type="image/jpeg">
+<style>
+:root {
+  --navy: #0d1117;
+  --navy2: #161b22;
+  --purple: #6B3FA0;
+  --teal: #4EC8C4;
+  --white: #f0f4f8;
+  --muted: #8b949e;
+  --border: #21262d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 16px 40px;
+  background: rgba(13,17,23,0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(78,200,196,0.12);
+}
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+.nav-logo .fenix { color: var(--teal); }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 8px;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+.page-header {
+  padding: 140px 24px 60px;
+  text-align: center;
+  background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%);
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: "";
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%);
+}
+.page-header-inner { position: relative; z-index: 1; }
+.page-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+.page-title { font-size: clamp(36px, 6vw, 56px); font-weight: 800; letter-spacing: -0.03em; color: #1a1f3a; margin-bottom: 12px; }
+.page-meta { font-size: 14px; color: #6a7282; }
+
+main { max-width: 760px; margin: 0 auto; padding: 72px 24px 80px; }
+
+.doc-section { margin-bottom: 48px; }
+.doc-section h2 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.doc-section p { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 12px; }
+.doc-section ul { color: var(--muted); font-size: 15px; line-height: 1.8; padding-left: 20px; margin-bottom: 12px; }
+.doc-section ul li { margin-bottom: 6px; }
+.doc-section strong { color: var(--white); }
+
+.highlight-box {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--teal);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+.highlight-box p { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+
+.card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 16px;
+}
+.card-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.card p { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+.badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+.badge-green { background: rgba(78,200,196,0.15); color: var(--teal); }
+.badge-red { background: rgba(239,68,68,0.12); color: #f87171; }
+
+.cta-box {
+  background: linear-gradient(135deg, rgba(107,63,160,0.15), rgba(78,200,196,0.1));
+  border: 1px solid rgba(78,200,196,0.2);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  margin-top: 48px;
+}
+.cta-box h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.cta-box p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+.btn-teal {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--teal);
+  color: var(--navy) !important;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none !important;
+  font-size: 14px;
+}
+.btn-teal:hover { opacity: 0.9; }
+
+footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-align: center; }
+.footer-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
+.footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; list-style: none; margin-bottom: 20px; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
+.footer-links a:hover { color: var(--white); }
+.footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
+.footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
+
+@media (max-width: 600px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  main { padding: 60px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img class="logo-img" src="fenix-logo.jpg" alt="Fenix Yield">
+    <span><span class="fenix">Fenix</span> Yield</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how">How it works</a></li>
+    <li><a href="index.html#protocols">Protocols</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="setup.html">Setup</a></li>
+    <li><a href="security.html">Security</a></li>
+  </ul>
+  <a class="nav-cta" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow">Legal</p>
+    <h1 class="page-title">Refund Policy</h1>
+    <p class="page-meta">Effective date: June 27, 2026 &nbsp;·&nbsp; Last updated: June 27, 2026</p>
+  </div>
+</div>
+
+<main>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--white)">Summary:</strong> We offer a 7-day money-back guarantee on your first payment if the software doesn't work as described. Renewal payments are non-refundable, but you can cancel anytime to stop future charges.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>Our Refund Policy</h2>
+
+    <div class="card">
+      <p class="card-title"><span class="badge badge-green">✓ Eligible</span> 7-Day Money-Back Guarantee</p>
+      <p>If you subscribe to Optimizer or Autopilot and the Service does not function as described on our website within the first 7 days of your initial purchase, you are entitled to a full refund of your first payment. Contact us at <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a> within 7 days of your purchase date with your Telegram username and a description of the issue.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-title"><span class="badge badge-red">✗ Not Eligible</span> Renewal Payments</p>
+      <p>Subscription renewal charges are non-refundable. Because you retain full access to the Service throughout each billing period, we do not issue refunds for unused portions of a billing cycle after renewal.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-title"><span class="badge badge-red">✗ Not Eligible</span> Investment Losses</p>
+      <p>Fenix Yield is a software automation tool. We are not responsible for and do not refund losses arising from DeFi protocol performance, market volatility, smart contract exploits, gas fees, or any other on-chain outcomes. These risks are disclosed in our <a href="terms.html">Terms of Service</a>.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-title"><span class="badge badge-red">✗ Not Eligible</span> Change of Mind After 7 Days</p>
+      <p>Refunds are not issued for change of mind, dissatisfaction with DeFi yields, or decisions to stop using the Service after the 7-day guarantee window. You may cancel at any time to prevent future charges.</p>
+    </div>
+
+  </div>
+
+  <div class="doc-section">
+    <h2>How to Cancel</h2>
+    <p>You can cancel your subscription at any time by:</p>
+    <ul>
+      <li>Emailing <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a> with your Telegram username and request to cancel</li>
+      <li>Managing your subscription directly through the payment link confirmation email you received</li>
+    </ul>
+    <p>Cancellation takes effect at the end of your current billing period. You will retain access to your paid tier features until then. No future charges will be made after cancellation.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>Refund Processing</h2>
+    <p>Approved refunds are processed within 5–10 business days and returned to the original payment method. Processing times may vary depending on your bank or card issuer.</p>
+    <p>We reserve the right to deny refund requests that show evidence of abuse (e.g., repeated refund requests across multiple accounts).</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>Scout Tier</h2>
+    <p>The Scout tier is permanently free. No payment is required and no refunds are applicable.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>Questions</h2>
+    <p>If you have any questions about this Refund Policy or wish to request a refund, please contact us at <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>. We aim to respond to all support requests within 1 business day.</p>
+  </div>
+
+  <div class="cta-box">
+    <h3>Need help before cancelling?</h3>
+    <p>Most issues can be resolved quickly. Reach out and we'll do our best to get you set up correctly.</p>
+    <a class="btn-teal" href="mailto:support@fenix-yield.com">Contact Support</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-logo">
+    <img src="fenix-logo.jpg" alt="Fenix Yield logo">
+    <span>Fenix Yield</span>
+  </div>
+  <p class="footer-tagline">Put your crypto to work.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="terms.html">Terms of Service</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="refund-policy.html">Refund Policy</a></li>
+  </ul>
+  <a class="footer-email" href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+  <p class="footer-copy">© 2026 Fenix Yield. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
