@@ -966,19 +966,24 @@ footer {
     By using Fenix Yield you agree to our <a href="terms.html" style="color:var(--teal)">Terms of Service</a>.
   </p>
 </footer>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+// Referral tracking
+const refParam = new URLSearchParams(window.location.search).get('ref');
+if (refParam) sessionStorage.setItem('fenix_ref', refParam);
+
+// Scroll reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
+      entry.target.classList.add('visible');
       observer.unobserve(entry.target);
     }
   });
 }, {
   threshold: 0.1,
-  rootMargin: "0px 0px -40px 0px"
+  rootMargin: '0px 0px -40px 0px'
 });
-document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 </script>
 </body>
 </html>
