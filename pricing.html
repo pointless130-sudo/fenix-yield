@@ -28,8 +28,6 @@ body {
   line-height: 1.6;
 }
 a { color: inherit; }
-
-/* Nav */
 nav {
   position: fixed;
   inset: 0 0 auto 0;
@@ -43,237 +41,108 @@ nav {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(78,200,196,0.12);
 }
-.nav-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
+.nav-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
 .logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
 .nav-logo .fenix { color: var(--teal); }
 .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
-.nav-links a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.2s;
-}
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
 .nav-links a:hover { color: var(--white); }
-.nav-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: 8px;
-  color: #fff !important;
-  background: linear-gradient(135deg, var(--purple), var(--teal));
-  font-weight: 700 !important;
-}
-
-/* Page header */
-.page-header {
-  padding: 140px 24px 60px;
-  text-align: center;
-  background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%);
-  position: relative;
-  overflow: hidden;
-}
-.page-header::before {
-  content: "";
-  position: absolute;
-  width: 500px; height: 500px;
-  border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%);
-}
+.nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 8px; color: #fff !important; background: linear-gradient(135deg, var(--purple), var(--teal)); font-weight: 700 !important; }
+.page-header { padding: 140px 24px 60px; text-align: center; background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%); position: relative; overflow: hidden; }
+.page-header::before { content: ""; position: absolute; width: 500px; height: 500px; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%); }
 .page-header-inner { position: relative; z-index: 1; }
-.page-eyebrow {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--purple);
-  margin-bottom: 12px;
-}
-.page-title {
-  font-size: clamp(36px, 6vw, 64px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: #1a1f3a;
-  margin-bottom: 16px;
-}
-.page-desc {
-  font-size: 17px;
-  color: #4a5568;
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-/* Main content */
+.page-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+.page-title { font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: -0.03em; color: #1a1f3a; margin-bottom: 16px; }
+.page-desc { font-size: 17px; color: #4a5568; max-width: 520px; margin: 0 auto; }
 main { max-width: 1000px; margin: 0 auto; padding: 80px 24px 80px; }
 
-/* Pricing grid */
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-bottom: 60px;
-}
-.pricing-card {
+/* Coupon box */
+.coupon-box {
+  max-width: 480px;
+  margin: 0 auto 48px;
   background: var(--navy2);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 32px 28px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  border-radius: 16px;
+  padding: 24px 28px;
 }
-.pricing-card.featured {
-  border-color: var(--teal);
-  box-shadow: 0 0 0 1px var(--teal), 0 8px 40px rgba(78,200,196,0.12);
-}
-.ribbon {
-  position: absolute;
-  top: -1px; right: 24px;
-  background: linear-gradient(135deg, var(--purple), var(--teal));
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  padding: 4px 12px;
-  border-radius: 0 0 8px 8px;
-}
-.pricing-tier {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 8px;
-}
-.price { margin-bottom: 12px; }
-.price strong { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; }
-.price span { font-size: 16px; color: var(--muted); }
-.pricing-desc { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-.pricing-features { list-style: none; margin-bottom: 28px; flex: 1; }
-.pricing-features li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 14px;
+.coupon-label { font-size: 11px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+.coupon-row { display: flex; gap: 10px; }
+.coupon-input {
+  flex: 1;
+  background: var(--navy);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
   color: var(--white);
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.pricing-features li.dim { color: var(--muted); }
-.check { color: var(--teal); font-weight: 700; flex-shrink: 0; }
-.btn-pricing {
-  display: block;
-  text-align: center;
-  padding: 12px 20px;
-  border-radius: 10px;
   font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: opacity 0.2s, transform 0.1s;
+  font-family: inherit;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.2s;
 }
-.btn-pricing:hover { opacity: 0.85; transform: translateY(-1px); }
-.btn-outline {
-  border: 1.5px solid var(--teal);
-  color: var(--teal);
-}
-.btn-filled {
+.coupon-input:focus { border-color: var(--teal); }
+.coupon-input::placeholder { text-transform: none; color: var(--muted); letter-spacing: 0; }
+.coupon-btn {
+  padding: 10px 18px;
   background: linear-gradient(135deg, var(--purple), var(--teal));
   color: #fff;
   border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  font-family: inherit;
 }
+.coupon-btn:hover { opacity: 0.85; }
+.coupon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.coupon-msg { margin-top: 10px; font-size: 13px; min-height: 20px; }
+.coupon-msg.success { color: var(--teal); }
+.coupon-msg.error { color: #f87171; }
 
-/* FAQ / comparison */
-.section-label {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 16px;
-}
-.section-heading {
-  font-size: clamp(24px, 4vw, 36px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 40px;
-}
-
-/* FAQ */
+/* Pricing grid */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 60px; }
+.pricing-card { background: var(--navy2); border: 1px solid var(--border); border-radius: 20px; padding: 32px 28px; position: relative; display: flex; flex-direction: column; }
+.pricing-card.featured { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal), 0 8px 40px rgba(78,200,196,0.12); }
+.ribbon { position: absolute; top: -1px; right: 24px; background: linear-gradient(135deg, var(--purple), var(--teal)); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; padding: 4px 12px; border-radius: 0 0 8px 8px; }
+.pricing-tier { font-size: 11px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+.price { margin-bottom: 4px; }
+.price strong { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; }
+.price span { font-size: 16px; color: var(--muted); }
+.price-original { font-size: 13px; color: var(--muted); text-decoration: line-through; margin-bottom: 4px; min-height: 20px; }
+.price-savings { font-size: 12px; color: var(--teal); font-weight: 700; margin-bottom: 8px; min-height: 18px; }
+.pricing-desc { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+.pricing-features { list-style: none; margin-bottom: 28px; flex: 1; }
+.pricing-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--white); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.pricing-features li.dim { color: var(--muted); }
+.check { color: var(--teal); font-weight: 700; flex-shrink: 0; }
+.btn-pricing { display: block; text-align: center; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; transition: opacity 0.2s, transform 0.1s; }
+.btn-pricing:hover { opacity: 0.85; transform: translateY(-1px); }
+.btn-outline { border: 1.5px solid var(--teal); color: var(--teal); }
+.btn-filled { background: linear-gradient(135deg, var(--purple), var(--teal)); color: #fff; border: none; }
+.section-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; }
+.section-heading { font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 40px; }
 .faq { max-width: 680px; margin: 0 auto 60px; }
-.faq-item {
-  border-bottom: 1px solid var(--border);
-  padding: 20px 0;
-}
+.faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
 .faq-item:first-child { border-top: 1px solid var(--border); }
 .faq-q { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
 .faq-a { color: var(--muted); font-size: 14px; line-height: 1.7; }
 .faq-a a { color: var(--teal); text-decoration: none; }
-
-/* Security box */
-.security-box {
-  max-width: 720px;
-  margin: 0 auto 40px;
-  padding: 28px 32px;
-  background: var(--navy2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
-.security-box .label {
-  color: var(--teal);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
+.security-box { max-width: 720px; margin: 0 auto 40px; padding: 28px 32px; background: var(--navy2); border: 1px solid var(--border); border-radius: 16px; }
+.security-box .label { color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
 .security-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
 .security-box p { color: var(--muted); font-size: 14px; line-height: 1.7; }
-
-/* Footer */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 48px 40px 32px;
-  text-align: center;
-}
-.footer-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-  font-weight: 800;
-  margin-bottom: 8px;
-}
+footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-align: center; }
+.footer-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; margin-bottom: 8px; }
 .footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
 .footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px 28px;
-  list-style: none;
-  margin-bottom: 20px;
-}
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; list-style: none; margin-bottom: 20px; }
 .footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
 .footer-links a:hover { color: var(--white); }
 .footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
 .footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
-
-@media (max-width: 600px) {
-  nav { padding: 14px 20px; }
-  .nav-links { display: none; }
-  main { padding: 60px 16px 60px; }
-}
+@media (max-width: 600px) { nav { padding: 14px 20px; } .nav-links { display: none; } main { padding: 60px 16px 60px; } }
 </style>
 </head>
 <body>
@@ -303,12 +172,24 @@ footer {
 
 <main>
 
+  <!-- Coupon code box -->
+  <div class="coupon-box">
+    <p class="coupon-label">🏷️ Have a coupon code?</p>
+    <div class="coupon-row">
+      <input class="coupon-input" id="couponInput" type="text" placeholder="Enter code e.g. LAUNCH10" maxlength="32" />
+      <button class="coupon-btn" id="couponBtn" onclick="applyCoupon()">Apply</button>
+    </div>
+    <p class="coupon-msg" id="couponMsg"></p>
+  </div>
+
   <div class="pricing-grid">
 
     <!-- Scout -->
     <article class="pricing-card">
       <p class="pricing-tier">Scout</p>
       <div class="price"><strong>$0</strong><span>/mo</span></div>
+      <p class="price-original"></p>
+      <p class="price-savings"></p>
       <p class="pricing-desc">Track your portfolio and learn the system. No credit card required.</p>
       <ul class="pricing-features">
         <li><span class="check">✓</span>Real-time APY tracking across 4 protocols</li>
@@ -325,7 +206,9 @@ footer {
     <!-- Optimizer -->
     <article class="pricing-card">
       <p class="pricing-tier">Optimizer</p>
-      <div class="price"><strong>$19</strong><span>/mo</span></div>
+      <div class="price"><strong id="opt-price">$19</strong><span>/mo</span></div>
+      <p class="price-original" id="opt-original"></p>
+      <p class="price-savings" id="opt-savings"></p>
       <p class="pricing-desc">Automation with full control — approve every transaction yourself.</p>
       <ul class="pricing-features">
         <li><span class="check">✓</span>Everything in Scout</li>
@@ -336,14 +219,16 @@ footer {
         <li><span class="check">✓</span>Slippage protection on all routes</li>
         <li class="dim">— Auto-execution (Zodiac)</li>
       </ul>
-      <a class="btn-pricing btn-outline" href="https://t.me/fenix_yield_bot?start=subscribe_optimizer" target="_blank" rel="noreferrer">Start Optimizer →</a>
+      <a class="btn-pricing btn-outline" id="opt-btn" href="https://t.me/fenix_yield_bot?start=subscribe_optimizer" target="_blank" rel="noreferrer">Start Optimizer →</a>
     </article>
 
     <!-- Autopilot -->
     <article class="pricing-card featured">
       <div class="ribbon">MOST POPULAR</div>
       <p class="pricing-tier">Autopilot</p>
-      <div class="price"><strong>$59</strong><span>/mo</span></div>
+      <div class="price"><strong id="apo-price">$59</strong><span>/mo</span></div>
+      <p class="price-original" id="apo-original"></p>
+      <p class="price-savings" id="apo-savings"></p>
       <p class="pricing-desc">True set-and-forget. The bot executes — you watch your yield grow.</p>
       <ul class="pricing-features">
         <li><span class="check">✓</span>Everything in Optimizer</li>
@@ -353,7 +238,7 @@ footer {
         <li><span class="check">✓</span>Gas-protection — no rebalance if fees eat yield</li>
         <li><span class="check">✓</span>Priority support</li>
       </ul>
-      <a class="btn-pricing btn-filled" href="https://t.me/fenix_yield_bot?start=subscribe_autopilot" target="_blank" rel="noreferrer">Start Autopilot →</a>
+      <a class="btn-pricing btn-filled" id="apo-btn" href="https://t.me/fenix_yield_bot?start=subscribe_autopilot" target="_blank" rel="noreferrer">Start Autopilot →</a>
     </article>
 
   </div>
@@ -384,19 +269,15 @@ footer {
     </div>
     <div class="faq-item">
       <p class="faq-q">Can I switch tiers?</p>
-      <p class="faq-a">Yes. Upgrades take effect immediately (prorated). Downgrades take effect at the start of the next billing cycle.</p>
+      <p class="faq-a">Yes. Upgrades take effect immediately. Downgrades take effect at the start of the next billing cycle.</p>
     </div>
     <div class="faq-item">
       <p class="faq-q">Do you offer refunds?</p>
       <p class="faq-a">We offer a 7-day refund on your first payment if the software does not function as described. See our <a href="refund-policy.html">Refund Policy</a> for details.</p>
     </div>
     <div class="faq-item">
-      <p class="faq-q">What payment methods do you accept?</p>
-      <p class="faq-a">We accept all major credit and debit cards via our payment processor. Payments are processed securely — we do not store card details.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">Is there a free trial?</p>
-      <p class="faq-a">The Scout tier is permanently free with no time limit. It gives you full access to APY tracking, alerts, and reports before committing to a paid plan.</p>
+      <p class="faq-q">Do coupon codes work on both tiers?</p>
+      <p class="faq-a">Yes — coupon codes apply a fixed discount to whichever tier you choose. The discounted price is shown before you proceed to payment.</p>
     </div>
     <div class="faq-item">
       <p class="faq-q">What does Fenix Yield actually do?</p>
@@ -427,6 +308,83 @@ footer {
     <strong>Not Financial Advice:</strong> Nothing on this website constitutes financial, investment, legal, or tax advice. You are solely responsible for your investment decisions.
   </p>
 </footer>
+
+<script>
+const BASE_PRICES = { optimizer: 19, autopilot: 59 };
+let activeCoupon = null;
+
+async function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const msg  = document.getElementById('couponMsg');
+  const btn  = document.getElementById('couponBtn');
+
+  if (!code) { msg.textContent = 'Please enter a coupon code.'; msg.className = 'coupon-msg error'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Checking...';
+  msg.textContent = '';
+  msg.className = 'coupon-msg';
+
+  try {
+    const res  = await fetch('https://webhook.fenix-yield.com/validate-coupon?code=' + encodeURIComponent(code));
+    const data = await res.json();
+
+    if (!data.valid) {
+      msg.textContent = data.error || 'Invalid or expired coupon code.';
+      msg.className = 'coupon-msg error';
+      resetPrices();
+    } else {
+      activeCoupon = { code, discount: data.discount };
+      msg.textContent = 'Coupon applied — $' + data.discount + ' off!';
+      msg.className = 'coupon-msg success';
+      updatePrices(data.discount, code);
+    }
+  } catch (e) {
+    msg.textContent = 'Could not validate coupon. Please try again.';
+    msg.className = 'coupon-msg error';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Apply';
+}
+
+function updatePrices(discount, code) {
+  ['optimizer', 'autopilot'].forEach(tier => {
+    const original   = BASE_PRICES[tier];
+    const discounted = Math.max(1, original - discount);
+    const prefix     = tier === 'optimizer' ? 'opt' : 'apo';
+
+    document.getElementById(prefix + '-price').textContent = '$' + discounted;
+    document.getElementById(prefix + '-original').textContent = 'Was $' + original + '/mo';
+    document.getElementById(prefix + '-savings').textContent = 'You save $' + discount + '!';
+
+    const btn = document.getElementById(prefix + '-btn');
+    const param = 'subscribe_' + tier + '_coupon_' + encodeURIComponent(code);
+    btn.href = 'https://t.me/fenix_yield_bot?start=' + param;
+  });
+}
+
+function resetPrices() {
+  activeCoupon = null;
+  ['optimizer', 'autopilot'].forEach(tier => {
+    const prefix = tier === 'optimizer' ? 'opt' : 'apo';
+    document.getElementById(prefix + '-price').textContent = '$' + BASE_PRICES[tier];
+    document.getElementById(prefix + '-original').textContent = '';
+    document.getElementById(prefix + '-savings').textContent = '';
+    const btn = document.getElementById(prefix + '-btn');
+    btn.href = 'https://t.me/fenix_yield_bot?start=subscribe_' + tier;
+  });
+}
+
+// Allow Enter key to apply coupon
+document.getElementById('couponInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') applyCoupon();
+});
+
+// Referral tracking
+const refParam = new URLSearchParams(window.location.search).get('ref');
+if (refParam) sessionStorage.setItem('fenix_ref', refParam);
+</script>
 
 </body>
 </html>
