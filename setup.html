@@ -168,7 +168,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div class="tier-picker">
     <button class="tier-btn scout" onclick="selectTier('scout')">🔍 Scout — Free</button>
     <button class="tier-btn optimizer" onclick="selectTier('optimizer')">⚡ Optimizer — $19/mo</button>
-    <button class="tier-btn autopilot" onclick="selectTier('autopilot')">🚀 Autopilot — $59/mo</button>
+    <button class="tier-btn autopilot" onclick="selectTier('autopilot')">🚀 Autopilot — $29/mo</button>
   </div>
   <div class="tier-desc" id="tierDesc">Choose your tier to get started</div>
 </div>
@@ -217,7 +217,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;">
     <button class="btn btn-secondary" style="background:rgba(107,107,138,0.1);border-color:var(--scout);color:var(--scout)" onclick="selectTier('scout')">🔍 I'm on Scout (free) →</button>
     <button class="btn btn-secondary" style="background:rgba(79,195,247,0.1);border-color:var(--optimizer);color:var(--optimizer)" onclick="selectTier('optimizer')">⚡ I'm on Optimizer ($19/mo) →</button>
-    <button class="btn btn-secondary" style="background:rgba(124,92,252,0.1);border-color:var(--autopilot);color:var(--autopilot)" onclick="selectTier('autopilot')">🚀 I'm on Autopilot ($59/mo) →</button>
+    <button class="btn btn-secondary" style="background:rgba(124,92,252,0.1);border-color:var(--autopilot);color:var(--autopilot)" onclick="selectTier('autopilot')">🚀 I'm on Autopilot ($29/mo) →</button>
   </div>
 </div>
 
@@ -512,8 +512,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <!-- Optimizer + Autopilot variant -->
   <div class="tier-section" id="register-paid">
     <div class="alert info">
+      <span class="alert-icon">💳</span>
+      <span><strong>Pay with card:</strong> Send <strong>/subscribe</strong> in the bot → choose your plan → enter your email → complete checkout via the link sent. Your invite code is emailed automatically.</span>
+    </div>
+    <div class="alert info" style="margin-top:8px;">
+      <span class="alert-icon">⛓️</span>
+      <span><strong>Pay with crypto (ETH/USDC/USDT):</strong> Send <strong>/paycrypto optimizer</strong> or <strong>/paycrypto autopilot</strong> in the bot → send the exact amount to the address shown → subscription activates within 30 seconds automatically. Use <strong>/checkpayment</strong> to verify status.</span>
+    </div>
+    <div class="alert info" style="margin-top:8px;">
       <span class="alert-icon">📧</span>
-      <span>Your invite code was emailed to you after payment. It looks like <strong>OPT-XXXX</strong> (Optimizer) or <strong>APX-XXXX</strong> (Autopilot). Check your inbox including spam.</span>
+      <span>Your invite code looks like <strong>OPT-XXXX</strong> (Optimizer) or <strong>APX-XXXX</strong> (Autopilot). For card payments it's emailed to you. For crypto payments it's sent directly in Telegram.</span>
     </div>
   </div>
 
@@ -600,7 +608,7 @@ var FLOWS = {
 var TIER_DESCS = {
   scout:     'Free tier — monitor APYs, portfolio and risk alerts. No Safe wallet needed.',
   optimizer: '$19/mo — daily yield automation. Bot proposes transactions, you approve in Safe Mobile.',
-  autopilot: '$59/mo — fully hands-free. Bot executes automatically via Zodiac. No approvals needed.',
+  autopilot: '$29/mo — fully hands-free. Bot executes automatically via Zodiac. No approvals needed.',
 };
 
 var TIER_LABELS = {
