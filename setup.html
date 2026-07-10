@@ -800,5 +800,47 @@ window.copyText = function(elemId, btn) {
 // ── Init ────────────────────────────────────────────────────────────────────────
 loadChecks();
 </script>
+
+<!-- ── App download confirmation (auto-attaches to every "Get the App" link) ── -->
+<div id="dlcModal" class="dlc-overlay" role="dialog" aria-modal="true" aria-labelledby="dlcTitle">
+  <div class="dlc-box">
+    <div class="dlc-emoji">📱</div>
+    <h3 class="dlc-title" id="dlcTitle">Install the Fenix Yield app?</h3>
+    <p class="dlc-text">You're about to download the Android app (~92&nbsp;MB) directly from fenix-yield.com. Your phone may ask you to allow installs from your browser — that's normal for apps not yet on the app store.</p>
+    <div class="dlc-actions">
+      <button type="button" class="dlc-btn dlc-cancel" id="dlcCancel">Not now</button>
+      <a class="dlc-btn dlc-go" id="dlcGo" href="#">Download</a>
+    </div>
+    <p class="dlc-note">Non-custodial · your keys stay on your device</p>
+  </div>
+</div>
+<style>
+  .dlc-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(6,8,15,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:20px;}
+  .dlc-overlay.open{display:flex;}
+  .dlc-box{max-width:400px;width:100%;background:#161b22;border:1px solid #21262d;border-radius:18px;padding:28px 26px;text-align:center;font-family:Inter,system-ui,-apple-system,sans-serif;box-shadow:0 20px 70px rgba(0,0,0,.5);}
+  .dlc-emoji{font-size:44px;margin-bottom:8px;}
+  .dlc-title{color:#f0f4f8;font-size:20px;font-weight:800;margin-bottom:10px;}
+  .dlc-text{color:#8b949e;font-size:14px;line-height:1.6;margin-bottom:22px;}
+  .dlc-actions{display:flex;gap:10px;}
+  .dlc-btn{flex:1;padding:12px 0;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;border:none;font-family:inherit;}
+  .dlc-cancel{background:transparent;border:1px solid #21262d;color:#8b949e;}
+  .dlc-go{background:linear-gradient(135deg,#6B3FA0,#4EC8C4);color:#fff;}
+  .dlc-note{color:#4EC8C4;font-size:12px;margin-top:16px;}
+</style>
+<script>
+(function(){
+  var overlay=document.getElementById('dlcModal'), go=document.getElementById('dlcGo'), cancel=document.getElementById('dlcCancel');
+  if(!overlay) return;
+  function openDlc(url){ go.setAttribute('href',url); overlay.classList.add('open'); }
+  function closeDlc(){ overlay.classList.remove('open'); }
+  document.querySelectorAll('a[href*="mobile-api.fenix-yield.com/download"]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); openDlc(a.href); });
+  });
+  cancel.addEventListener('click', closeDlc);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) closeDlc(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDlc(); });
+  go.addEventListener('click', function(){ setTimeout(closeDlc, 500); });
+})();
+</script>
 </body>
 </html>
