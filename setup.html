@@ -167,8 +167,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
   <div class="tier-picker">
     <button class="tier-btn scout" onclick="selectTier('scout')">🔍 Scout — Free</button>
-    <button class="tier-btn optimizer" onclick="selectTier('optimizer')">⚡ Optimizer — $19/mo</button>
-    <button class="tier-btn autopilot" onclick="selectTier('autopilot')">🚀 Autopilot — $29/mo</button>
+    <button class="tier-btn autopilot" onclick="selectTier('autopilot')">🚀 Autopilot — $19/mo</button>
+    <a class="tier-btn" href="https://mobile-api.fenix-yield.com/download" style="text-decoration:none;">📱 Mobile App — $39/mo</a>
   </div>
   <div class="tier-desc" id="tierDesc">Choose your tier to get started</div>
 </div>
@@ -190,34 +190,32 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
       <tr>
         <th>Feature</th>
         <th class="tier-col scout">🔍 Scout</th>
-        <th class="tier-col optimizer">⚡ Optimizer</th>
         <th class="tier-col autopilot">🚀 Autopilot</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td>Live APY rates</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Portfolio monitoring</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Risk alerts</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Weekly yield reports</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Safe wallet required</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Daily yield proposals</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>1-tap Safe approval</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Convex harvest (6h)</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Zodiac auto-execution</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
-      <tr><td>No Safe approval needed</td><td class="cross">—</td><td class="cross">—</td><td class="check">✓</td></tr>
-      <tr><td>Setup time</td><td>2 min</td><td>~20 min</td><td>~30 min</td></tr>
+      <tr><td>Live APY rates</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Portfolio monitoring</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Risk alerts</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Weekly yield reports</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>Safe wallet required</td><td class="cross">—</td><td class="check">✓</td></tr>
+      <tr><td>Daily yield proposals</td><td class="cross">—</td><td class="check">✓</td></tr>
+      <tr><td>1-tap Safe approval</td><td class="cross">—</td><td class="check">✓</td></tr>
+      <tr><td>Convex harvest (6h)</td><td class="cross">—</td><td class="check">✓</td></tr>
+      <tr><td>Hands-free Zodiac auto-execution</td><td class="cross">—</td><td class="check">✓ optional</td></tr>
+      <tr><td>Setup time</td><td>2 min</td><td>~20–30 min</td></tr>
     </tbody>
   </table>
 
   <div class="alert info">
     <span class="alert-icon">💡</span>
-    <span>Not sure? Start with <strong>Optimizer</strong> — you get daily yield automation with simple one-tap approvals. Upgrade to Autopilot anytime for full hands-free mode.</span>
+    <span>Not sure? Start free with <strong>Scout</strong>, then move to <strong>Autopilot</strong> for daily automation — approve each transaction, or go fully hands-free. New to crypto entirely? The <strong>Mobile App</strong> needs no wallet setup at all.</span>
   </div>
 
   <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;">
     <button class="btn btn-secondary" style="background:rgba(107,107,138,0.1);border-color:var(--scout);color:var(--scout)" onclick="selectTier('scout')">🔍 I'm on Scout (free) →</button>
-    <button class="btn btn-secondary" style="background:rgba(79,195,247,0.1);border-color:var(--optimizer);color:var(--optimizer)" onclick="selectTier('optimizer')">⚡ I'm on Optimizer ($19/mo) →</button>
-    <button class="btn btn-secondary" style="background:rgba(124,92,252,0.1);border-color:var(--autopilot);color:var(--autopilot)" onclick="selectTier('autopilot')">🚀 I'm on Autopilot ($29/mo) →</button>
+    <button class="btn btn-secondary" style="background:rgba(124,92,252,0.1);border-color:var(--autopilot);color:var(--autopilot)" onclick="selectTier('autopilot')">🚀 I'm on Autopilot ($19/mo) →</button>
+    <a class="btn btn-secondary" href="https://mobile-api.fenix-yield.com/download" style="background:rgba(78,200,196,0.1);border-color:var(--optimizer);color:var(--optimizer);text-decoration:none;">📱 I want the Mobile App ($39/mo) →</a>
   </div>
 </div>
 
@@ -517,11 +515,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     </div>
     <div class="alert info" style="margin-top:8px;">
       <span class="alert-icon">⛓️</span>
-      <span><strong>Pay with crypto (ETH/USDC/USDT):</strong> Send <strong>/paycrypto optimizer</strong> or <strong>/paycrypto autopilot</strong> in the bot → send the exact amount to the address shown → subscription activates within 30 seconds automatically. Use <strong>/checkpayment</strong> to verify status.</span>
+      <span><strong>Pay with crypto (ETH/USDC/USDT):</strong> Send <strong>/paycrypto autopilot</strong> in the bot → send the exact amount to the address shown → subscription activates within 30 seconds automatically. Use <strong>/checkpayment</strong> to verify status.</span>
     </div>
     <div class="alert info" style="margin-top:8px;">
       <span class="alert-icon">📧</span>
-      <span>Your invite code looks like <strong>OPT-XXXX</strong> (Optimizer) or <strong>APX-XXXX</strong> (Autopilot). For card payments it's emailed to you. For crypto payments it's sent directly in Telegram.</span>
+      <span>Your invite code looks like <strong>APX-XXXX</strong> (Autopilot). For card payments it's emailed to you. For crypto payments it's sent directly in Telegram.</span>
     </div>
   </div>
 
@@ -559,7 +557,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div class="tier-section" id="commands-scout-banner">
     <div class="alert scout-info" style="margin-bottom:16px">
       <span class="alert-icon">🔍</span>
-      <span><strong>Scout tier:</strong> You have access to monitoring commands only. Staking commands require Optimizer or Autopilot.</span>
+      <span><strong>Scout tier:</strong> You have access to monitoring commands only. Staking commands require Autopilot.</span>
     </div>
   </div>
 
@@ -569,7 +567,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <div class="cmd-item"><span class="cmd-tag">/positions</span><div class="cmd-desc"><strong>Full portfolio</strong>All positions across all 4 protocols with current USD values — available to all tiers</div></div>
     <div class="cmd-item"><span class="cmd-tag">/dashboard</span><div class="cmd-desc"><strong>Yield tracking & P&L</strong>Total deposited, yield earned, annualized APY — available to all tiers</div></div>
     <div class="cmd-item"><span class="cmd-tag">/status</span><div class="cmd-desc"><strong>Pending transactions</strong>Any Safe transactions waiting for your signature — available to all tiers</div></div>
-    <div class="cmd-item" id="cmd-stake"><span class="cmd-tag">/stake</span><div class="cmd-desc"><strong>Run yield cycle now ⚡🚀</strong>Manually trigger a stake instead of waiting for the daily cycle. Optimizer: proposes to Safe. Autopilot: executes directly.</div></div>
+    <div class="cmd-item" id="cmd-stake"><span class="cmd-tag">/stake</span><div class="cmd-desc"><strong>Run yield cycle now ⚡</strong>Manually trigger a stake instead of waiting for the daily cycle. Approve mode: proposes to your Safe. Hands-free mode: executes directly.</div></div>
     <div class="cmd-item" id="cmd-harvest"><span class="cmd-tag">/harvest</span><div class="cmd-desc"><strong>Claim Convex rewards ⚡🚀</strong>Checks claimable CRV + CVX. If above $10, proposes (or executes) claim and swap back to ETH.</div></div>
     <div class="cmd-item" id="cmd-setstake"><span class="cmd-tag">/setstake</span><div class="cmd-desc"><strong>Change stake amount ⚡🚀</strong>Update how much ETH gets staked each daily cycle. Minimum 0.05 ETH.</div></div>
     <div class="cmd-item" id="cmd-setprotocol"><span class="cmd-tag">/setprotocol</span><div class="cmd-desc"><strong>Control protocols ⚡🚀</strong>Pin to a specific protocol, exclude ones you don't want, or return to auto best-APY mode.</div></div>
@@ -601,19 +599,16 @@ var currentStepIdx = 0;
 
 var FLOWS = {
   scout:     ['landing','register','commands'],
-  optimizer: ['landing','apps','eth','safe','signer','fund','mobile','register','commands'],
   autopilot: ['landing','apps','eth','safe','signer','fund','mobile','zodiac','register','commands'],
 };
 
 var TIER_DESCS = {
   scout:     'Free tier — monitor APYs, portfolio and risk alerts. No Safe wallet needed.',
-  optimizer: '$19/mo — daily yield automation. Bot proposes transactions, you approve in Safe Mobile.',
-  autopilot: '$29/mo — fully hands-free. Bot executes automatically via Zodiac. No approvals needed.',
+  autopilot: '$19/mo — daily yield automation. Approve each transaction in Safe Mobile, or enable hands-free Zodiac auto-execution.',
 };
 
 var TIER_LABELS = {
   scout:     '🔍 Scout',
-  optimizer: '⚡ Optimizer',
   autopilot: '🚀 Autopilot',
 };
 
@@ -705,11 +700,10 @@ function updateTierSections(tier) {
 
 function updateFinalCard(tier) {
   var msgs = {
-    scout:     { emoji:'🔍', title:'You\'re ready to monitor!', desc:'Send /apy, /balance, /positions or /dashboard to the bot anytime. No daily automation — upgrade to Optimizer or Autopilot to start earning.' },
-    optimizer: { emoji:'⚡', title:'You\'re all set!', desc:'The bot runs every 24 hours. When it proposes a transaction you\'ll get a push notification in Safe Mobile — just open and approve. Your ETH earns yield while you sleep.' },
-    autopilot: { emoji:'🚀', title:'Fully automated!', desc:'After Zodiac setup the bot executes transactions directly — no approvals needed. Yield cycles run daily, harvests every 6 hours. Pure set-and-forget.' },
+    scout:     { emoji:'🔍', title:'You\'re ready to monitor!', desc:'Send /apy, /balance, /positions or /dashboard to the bot anytime. No daily automation — upgrade to Autopilot to start earning.' },
+    autopilot: { emoji:'🚀', title:'You\'re all set!', desc:'The bot runs every 24 hours. By default you approve each transaction in Safe Mobile with a tap. Turn on hands-free mode with /whitelist and it executes automatically — harvests every 6 hours, compounds daily. Your ETH earns yield while you sleep.' },
   };
-  var m = msgs[tier] || msgs.optimizer;
+  var m = msgs[tier] || msgs.autopilot;
   document.getElementById('final-emoji').textContent = m.emoji;
   document.getElementById('final-title').textContent = m.title;
   document.getElementById('final-desc').textContent  = m.desc;
