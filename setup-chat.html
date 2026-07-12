@@ -517,16 +517,19 @@ function applyModeChrome() {
 
 const MOBILE_DEFAULT = ['How do I install the app?', 'How do I deposit ETH?', 'How do I withdraw?', 'How much does it cost?'];
 
-function pickQuickReplies(botText, stepComplete) {
+function pickQuickReplies(userText, stepComplete) {
   if (stepComplete) return ['Continue to next step', 'I have a question first'];
   if (mode === 'mobile') {
-    const t = (botText || '').toLowerCase();
-    if (/install|download|allow install/.test(t))               return ['I installed the app ✓', 'How do I create my wallet?', 'Is it safe?'];
-    if (/create vault|recovery phrase|passkey|face id/.test(t)) return ['My wallet is ready ✓', 'How do I deposit ETH?', 'What if I lose my phrase?'];
-    if (/deposit|vault address|send eth to/.test(t))            return ['I deposited ETH ✓', 'How do I start earning?', 'How long until it arrives?'];
-    if (/stake|auto-stake|earning|pool|lido|curve|aave|convex/.test(t)) return ['How do I withdraw?', 'How do I pick a pool?', 'How do I send ETH out?'];
-    if (/withdraw/.test(t))                                     return ['How do I send ETH out?', 'How do I stake again?', 'Are there any fees?'];
-    if (/send|external wallet/.test(t))                         return ['How do I withdraw from a pool?', 'How much does it cost?', 'Is my money safe?'];
+    // Match on the user's own question (their intent) — the bot reply mentions
+    // "Face ID" almost everywhere, which made reply-matching cross-fire.
+    const t = (userText || '').toLowerCase();
+    if (/withdraw|unstake|take.*out|cash out/.test(t))          return ['How do I send ETH out?', 'How do I stake again?', 'Are there any fees?'];
+    if (/\bsend\b|transfer|move.*(out|wallet)|external/.test(t)) return ['How do I withdraw from a pool?', 'How much does it cost?', 'Is my money safe?'];
+    if (/install|download/.test(t))                             return ['I installed the app ✓', 'How do I create my wallet?', 'Is it safe?'];
+    if (/create|wallet|vault|recovery|phrase|passkey|backup/.test(t)) return ['My wallet is ready ✓', 'How do I deposit ETH?', 'What if I lose my phrase?'];
+    if (/deposit|fund|add (eth|money|funds)/.test(t))           return ['I deposited ETH ✓', 'How do I start earning?', 'How long until it arrives?'];
+    if (/stake|earn|pool|apy|pick.*pool/.test(t))               return ['How do I withdraw?', 'How do I pick a pool?', 'How do I send ETH out?'];
+    if (/cost|price|pay|subscri|how much/.test(t))              return ['How do I install the app?', 'How do I withdraw?', 'Is it safe?'];
     return MOBILE_DEFAULT;
   }
   if (mode === 'telegram') {
@@ -631,7 +634,7 @@ window.sendMessage = async function() {
         lastBubble.appendChild(badge);
       }
     }
-    setQuickReplies(pickQuickReplies(reply, stepComplete));
+    setQuickReplies(pickQuickReplies(text, stepComplete));
 
   } catch (err) {
     hideTyping();
