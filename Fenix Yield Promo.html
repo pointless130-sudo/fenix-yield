@@ -16,7 +16,8 @@
   html,body{height:100%;background:#000;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
   /* Stage keeps a fixed 16:9 canvas, scaled to fit */
   #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 0%,#12102a,#050509 70%)}
-  #stage{position:relative;width:1280px;height:720px;background:var(--bg2);overflow:hidden;border-radius:14px;box-shadow:0 30px 120px rgba(0,0,0,.6)}
+  #stage{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center center;
+    width:1280px;height:720px;background:var(--bg2);overflow:hidden;border-radius:14px;box-shadow:0 30px 120px rgba(0,0,0,.6)}
   /* ambient glow */
   #stage::before{content:"";position:absolute;width:900px;height:900px;left:50%;top:-30%;transform:translateX(-50%);
     background:radial-gradient(ellipse,rgba(78,200,196,.14),rgba(139,95,192,.10) 45%,transparent 70%);pointer-events:none;z-index:0;animation:breathe 8s ease-in-out infinite}
@@ -131,14 +132,19 @@
   .brandmark{position:absolute;top:20px;left:24px;display:flex;gap:9px;align-items:center;z-index:12;opacity:.9}
   .brandmark img{width:26px;height:26px;border-radius:7px}
   .brandmark span{font-size:14px;font-weight:800;color:#fff}.brandmark b{color:var(--teal)}
-  /* Stage is scaled to fit the viewport by JS (fitStage) — a "contain" fit so the
-     whole 16:9 canvas is always fully visible: fills the width on a phone in
-     portrait, and fills the screen when rotated to landscape. The CSS fallback
-     below only applies for the brief moment before the script runs (or if JS is off). */
-  #stage{transform-origin:center center}
-  @media (max-width:1300px){ #stage{transform:scale(.72)} }
-  @media (max-width:940px){ #stage{transform:scale(.5)} }
-  @media (max-width:560px){ #stage{transform:scale(.28)} }
+  /* Stage is centered + scaled to fit the viewport by JS (fitStage) — a "contain" fit so
+     the whole 16:9 canvas is always fully visible. The CSS fallbacks below only apply for
+     the brief moment before the script runs (or if JS is disabled); they keep the same
+     translate(-50%,-50%) centering the JS uses so nothing gets clipped. */
+  @media (max-width:1300px){ #stage{transform:translate(-50%,-50%) scale(.7)} }
+  @media (max-width:940px){ #stage{transform:translate(-50%,-50%) scale(.5)} }
+  @media (max-width:560px){ #stage{transform:translate(-50%,-50%) scale(.29)} }
+  /* "rotate your phone" hint — shown by JS only on a narrow portrait screen */
+  #rotateHint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:40;display:none;
+    align-items:center;gap:8px;background:rgba(20,20,42,.92);border:1px solid #26264A;color:#EDEDF5;
+    font:600 13px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:11px 16px;
+    border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  #rotateHint b{color:var(--teal)}
 </style>
 </head>
 <body>
@@ -315,15 +321,31 @@
   </div>
 </div>
 
+<div id="rotateHint"><span>↻</span><span><b>Rotate your phone</b> for fullscreen</span></div>
+
 <script>
   // ── Fit the fixed 1280×720 stage to any viewport (phones included) ──
+  // Uses the VISUAL viewport (accounts for the mobile address bar, which is what made
+  // the canvas overshoot and clip), centers with translate(-50%,-50%), and re-fits on
+  // every event that can change the visible area. A 16:9 canvas is a small strip in
+  // portrait no matter what, so we prompt to rotate — landscape fills the screen.
   const stage = document.getElementById('stage');
+  const rotateHint = document.getElementById('rotateHint');
   function fitStage(){
-    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
-    stage.style.transform = 'scale(' + s + ')';
+    const vp = window.visualViewport;
+    const vw = (vp && vp.width)  ? vp.width  : window.innerWidth;
+    const vh = (vp && vp.height) ? vp.height : window.innerHeight;
+    const s = Math.min(vw / 1280, vh / 720);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+    if (rotateHint) rotateHint.style.display = (vh > vw && vw < 700) ? 'flex' : 'none';
   }
-  window.addEventListener('resize', fitStage);
-  window.addEventListener('orientationchange', () => setTimeout(fitStage, 120));
+  ['resize','orientationchange','load'].forEach(e => window.addEventListener(e, fitStage));
+  window.addEventListener('orientationchange', () => setTimeout(fitStage, 250));
+  if (window.visualViewport){
+    window.visualViewport.addEventListener('resize', fitStage);
+    window.visualViewport.addEventListener('scroll', fitStage);
+  }
+  setTimeout(fitStage, 300);
   fitStage();
 
   const scenes = [...document.querySelectorAll('.scene')].map(el=>({el, t:parseFloat(el.dataset.t)}));
