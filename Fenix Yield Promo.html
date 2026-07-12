@@ -87,6 +87,13 @@
   .btn{flex:1;border-radius:11px;padding:13px 0;text-align:center;font-size:14px;font-weight:800}
   .btn.o{border:1px solid var(--purple);color:var(--purple)}
   .btn.f{background:linear-gradient(135deg,var(--purple2),var(--teal));color:#fff}
+  /* network-fee line (pass-through gas, shown before confirm) */
+  .feeline{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--muted);margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}
+  .feeline b{color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
+  /* automation-rules row */
+  .autorow{display:flex;justify-content:space-between;align-items:center;margin-top:11px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:12px;color:var(--text);font-weight:600}
+  .autorow s{color:var(--muted);font-weight:500;text-decoration:none;font-size:10.5px;display:block;margin-top:2px}
+  .autorow em{color:var(--purple);font-style:normal;font-weight:800}
   .segrow{display:flex;gap:8px;margin-top:10px}
   .seg{flex:1;text-align:center;border:1px solid var(--line);border-radius:9px;padding:9px 0;font-size:12px;color:var(--muted);font-weight:700}
   .seg.on{border-color:var(--purple);background:rgba(139,95,192,.16);color:var(--text)}
@@ -124,8 +131,14 @@
   .brandmark{position:absolute;top:20px;left:24px;display:flex;gap:9px;align-items:center;z-index:12;opacity:.9}
   .brandmark img{width:26px;height:26px;border-radius:7px}
   .brandmark span{font-size:14px;font-weight:800;color:#fff}.brandmark b{color:var(--teal)}
+  /* Stage is scaled to fit the viewport by JS (fitStage) — a "contain" fit so the
+     whole 16:9 canvas is always fully visible: fills the width on a phone in
+     portrait, and fills the screen when rotated to landscape. The CSS fallback
+     below only applies for the brief moment before the script runs (or if JS is off). */
+  #stage{transform-origin:center center}
   @media (max-width:1300px){ #stage{transform:scale(.72)} }
   @media (max-width:940px){ #stage{transform:scale(.5)} }
+  @media (max-width:560px){ #stage{transform:scale(.28)} }
 </style>
 </head>
 <body>
@@ -172,7 +185,7 @@
         <div class="screen" id="scr-dash">
           <div class="sbar"><span>9:41</span><span>📶 🔋 100%</span></div>
           <div class="scr-body">
-            <div class="d-top"><span class="d-brand">Fenix Yield</span><span class="d-pill"><span class="d-dot"></span>Auto-staking</span></div>
+            <div class="d-top"><span class="d-brand">Fenix Yield</span><span style="display:flex;gap:6px"><span class="d-pill"><span class="d-dot"></span>Auto-stake</span><span class="d-pill" style="color:var(--purple);background:rgba(139,95,192,.16)">🔔 Alerts</span></span></div>
             <div class="hero"><div class="lab">Total value</div><div class="eth" id="heroEth">0.0847 ETH</div><div class="usd">≈ $2,412</div><div class="chg">▲ +$48 this week</div></div>
             <div class="card">
               <div class="card-t">In your vault</div>
@@ -196,7 +209,7 @@
       <div class="col fadeup">
         <p class="eyebrow">Tap to earn</p>
         <h2>Pick a pool,<br>or let it choose</h2>
-        <p class="sub">Auto-routes to the highest yield — or pin Lido, Curve, Aave or Convex yourself. Set it once; it stakes daily while you sleep.</p>
+        <p class="sub">Auto-routes to the highest yield — or pin Lido, Curve, Aave or Convex yourself. Set your own rules, get smart alerts, and it stakes daily while you sleep.</p>
       </div>
       <div class="phone fadeup"><div class="notch"></div>
         <div class="screen" style="background:#0b0b16">
@@ -220,6 +233,8 @@
             </div>
             <div class="lbl">Auto-stake</div>
             <div class="segrow"><span class="seg on">Daily</span><span class="seg">Weekly</span><span class="seg">Off</span></div>
+            <div class="autorow"><span>Automation rules<s>Your guardrails — switch gap, min invest, weekly cap</s></span><em>Set ›</em></div>
+            <div class="feeline"><span>Network fee</span><b>≈ $0.03</b></div>
             <div class="btns"><span class="btn o">Save Settings</span><span class="btn f">Stake Now</span></div>
           </div>
         </div>
@@ -242,8 +257,9 @@
             <div class="sh-t"><span class="pdot" style="background:var(--lido);display:inline-block;margin-right:7px"></span>Withdraw from Lido</div>
             <div class="sh-note">In this pool: 0.0300 ETH (≈ $85)</div>
             <div class="segrow"><span class="seg on">Withdraw all</span><span class="seg">Enter amount</span></div>
-            <div class="sh-note" style="margin:14px 0 8px;text-align:center">Converts back to ETH in your vault · gas covered · confirm with Face ID</div>
-            <div class="faceid"><div class="fid">🔒</div></div>
+            <div class="sh-note" style="margin:14px 0 8px;text-align:center">Converts back to ETH in your vault · confirm with Face ID</div>
+            <div class="feeline"><span>Network fee <s style="color:var(--muted);font-size:10px;text-decoration:none">shown before you confirm</s></span><b>≈ $0.04</b></div>
+            <div class="faceid" style="margin-top:12px"><div class="fid">🔒</div></div>
             <div class="btns"><span class="btn f" style="flex:1">Withdraw to vault</span></div>
           </div>
         </div>
@@ -300,6 +316,16 @@
 </div>
 
 <script>
+  // ── Fit the fixed 1280×720 stage to any viewport (phones included) ──
+  const stage = document.getElementById('stage');
+  function fitStage(){
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fitStage);
+  window.addEventListener('orientationchange', () => setTimeout(fitStage, 120));
+  fitStage();
+
   const scenes = [...document.querySelectorAll('.scene')].map(el=>({el, t:parseFloat(el.dataset.t)}));
   const track = document.getElementById('track');
   const ov = document.getElementById('ov');
