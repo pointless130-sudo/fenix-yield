@@ -528,7 +528,10 @@ async function callClaude(userMessage) {
   }
 
   const data  = await response.json();
-  const reply = data.content?.[0]?.text || 'Sorry, something went wrong. Please try again.';
+  // claude-sonnet-5 can return an extended-thinking block first, so content[0] may be
+  // {type:'thinking'} — pick the text block from the array rather than assuming [0].
+  const reply = (data.content || []).find(b => b.type === 'text')?.text
+    || 'Sorry, something went wrong. Please try again.';
 
   conversation.push({ role: 'assistant', content: reply });
 
