@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Network Cheatsheet — Fenix Yield</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0D0D1A; --card: #111122; --card2: #14142A;
+            --line: #2A2A3A; --muted: #8888AA; --text: #E0E0F0; --white: #fff;
+            --purple: #6B3FA0; --purple2: #8B5FC0; --teal: #4EC8C4;
+            --red: #E24B4A; --amber: #E8C34A; --green: #3FBF7F;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text);
+            padding: 32px 16px 60px; max-width: 1100px; margin: 0 auto;
+        }
+        .brand { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 22px; }
+        .logo {
+            width: 54px; height: 54px; border-radius: 14px; flex: 0 0 auto;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            display: flex; align-items: center; justify-content: center; font-size: 26px;
+            box-shadow: 0 8px 30px rgba(107,63,160,.35);
+        }
+        .brand-name { font-size: 22px; font-weight: 800; color: var(--white); letter-spacing: -0.3px; }
+        .brand-name span { color: var(--teal); }
+        h1 { text-align: center; font-size: 30px; font-weight: 800; color: var(--white); letter-spacing: -0.5px; margin-bottom: 8px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 14.5px; margin-bottom: 28px; }
+
+        .danger {
+            background: rgba(226,75,74,.10); border: 1px solid rgba(226,75,74,.45);
+            border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; line-height: 1.65; font-size: 14.5px;
+        }
+        .danger .dt { color: var(--red); font-weight: 800; font-size: 15.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .danger strong { color: var(--white); }
+        .steps {
+            background: var(--card); border: 1px solid var(--line);
+            border-radius: 14px; padding: 18px 20px; margin-bottom: 28px; line-height: 1.7; font-size: 14.5px;
+        }
+        .steps .st { color: var(--teal); font-weight: 800; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .steps strong { color: var(--white); }
+
+        .table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--line); }
+        table { width: 100%; border-collapse: collapse; background: var(--card); min-width: 760px; }
+        th {
+            background: var(--card2); color: var(--teal); padding: 13px 12px; text-align: left;
+            font-weight: 700; font-size: 12px; letter-spacing: .6px; text-transform: uppercase;
+            border-bottom: 1px solid var(--line); white-space: nowrap;
+        }
+        td { padding: 13px 12px; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--text); }
+        tr:last-child td { border-bottom: 0; }
+        tr:hover td { background: rgba(139,95,192,.06); }
+        .wallet { font-weight: 700; color: var(--white); }
+        .net-main { color: var(--teal); font-weight: 600; }
+        .net-l2 { color: var(--amber); font-weight: 600; }
+        .pill { padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+        .custodial { background: rgba(232,195,74,.14); color: var(--amber); border: 1px solid rgba(232,195,74,.35); }
+        .non-custodial { background: rgba(63,191,127,.14); color: var(--green); border: 1px solid rgba(63,191,127,.35); }
+
+        .note {
+            margin-top: 24px; padding: 18px 20px; background: var(--card);
+            border-left: 4px solid var(--purple2); border-radius: 10px;
+            font-size: 14px; color: var(--muted); line-height: 1.75;
+        }
+        .note strong { color: var(--white); }
+        .footer { text-align: center; margin-top: 30px; color: #555577; font-size: 12.5px; }
+        .footer a { color: var(--teal); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="brand">
+        <div class="logo">⚡</div>
+        <div class="brand-name">Fenix <span>Yield</span></div>
+    </div>
+    <h1>Where Are You Sending Your ETH?</h1>
+    <p class="subtitle">Wallet &amp; app network cheatsheet · Updated July 2026 · Check this <em>before</em> you withdraw</p>
+
+    <div class="danger">
+        <div class="dt">⚠️ Sending to the wrong network can mean permanent loss of funds</div>
+        Your Fenix vault lives on <strong>Ethereum Mainnet</strong>, and every withdrawal it sends is a
+        <strong>Mainnet transaction</strong>. Many popular wallets and exchange deposit addresses now default to a
+        <strong>Layer&nbsp;2 network</strong> (Base, Arbitrum, Optimism, Polygon…). An address on the wrong network can
+        look identical — but ETH sent to an address that only exists on a different network <strong>may be unrecoverable</strong>.
+        No one — not Fenix, not the wallet company — can reverse a blockchain transaction.
+    </div>
+
+    <div class="steps">
+        <div class="st">Before you hit Send — 3 checks</div>
+        1. Find your destination wallet/app in the table below and check its <strong>Primary Network</strong>.<br>
+        2. In the destination app, make sure the receive address you copied is for <strong>Ethereum Mainnet</strong> (often shown as "Ethereum", "ETH network", or "ERC-20" — <em>not</em> Base, Arbitrum, Optimism or Polygon).<br>
+        3. First time sending to a new address? Send a <strong>small test amount</strong> first, confirm it arrives, then send the rest.
+    </div>
+
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Wallet / App</th>
+                <th>Type</th>
+                <th>Primary Network</th>
+                <th>Strong L2 Support</th>
+                <th>Best For</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Non-custodial Wallets -->
+            <tr>
+                <td>1</td>
+                <td class="wallet">MetaMask</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Base, Arbitrum, Optimism, Polygon</td>
+                <td>DeFi, dApps, All-rounder</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td class="wallet">Coinbase Wallet</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-l2">Base</td>
+                <td>Ethereum, Arbitrum, Optimism</td>
+                <td>Beginners, Easy on-ramp</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td class="wallet">Rainbow</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-l2">Base</td>
+                <td>Ethereum, Arbitrum, Optimism</td>
+                <td>NFTs, Mobile users</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td class="wallet">Rabby Wallet</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>All major L2s</td>
+                <td>Power users, DeFi traders</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td class="wallet">Argent</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-l2">Base</td>
+                <td>Ethereum, Arbitrum, Optimism</td>
+                <td>Social recovery, Beginners</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td class="wallet">Trust Wallet</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Base, Arbitrum, BNB Chain</td>
+                <td>Mobile, Multi-chain</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td class="wallet">Zerion</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Base, Arbitrum, Optimism</td>
+                <td>Portfolio tracking + DeFi</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td class="wallet">Phantom</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Base, Arbitrum</td>
+                <td>Solana users moving to ETH</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td class="wallet">Frame</td>
+                <td><span class="pill non-custodial">Non-custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>All major L2s</td>
+                <td>Advanced desktop users</td>
+            </tr>
+
+            <!-- Custodial / Retail Apps -->
+            <tr>
+                <td>10</td>
+                <td class="wallet">Venmo</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-l2">Multi-network ⚠️</td>
+                <td>Ethereum + Layer 2 transfers (Arbitrum, Base)</td>
+                <td>Everyday payments (PayPal) — pick "Ethereum" network when depositing</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td class="wallet">Robinhood</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-l2">Multi-network ⚠️</td>
+                <td>Robinhood Chain, Arbitrum, Base, Optimism, Polygon</td>
+                <td>Beginners, Stock + Crypto — pick "Ethereum" network when depositing</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td class="wallet">Coinbase (App)</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-l2">Base</td>
+                <td>Ethereum, Arbitrum, Optimism</td>
+                <td>Beginners, Easy buying</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td class="wallet">Fidelity Crypto</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Limited L2 support</td>
+                <td>Traditional investors</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td class="wallet">E*TRADE (Morgan Stanley)</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Limited L2 support</td>
+                <td>Traditional investors</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td class="wallet">SoFi</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Limited L2 support</td>
+                <td>Banking + Crypto users</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td class="wallet">Gemini</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-l2">Multi-network ⚠️</td>
+                <td>Ethereum, Optimism, Arbitrum, Base</td>
+                <td>Security-focused users — pick "Ethereum" network when depositing</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td class="wallet">Kraken</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-main">Ethereum Mainnet</td>
+                <td>Base, Arbitrum</td>
+                <td>Trading-focused users</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td class="wallet">Cash App</td>
+                <td><span class="pill custodial">Custodial</span></td>
+                <td class="net-main">Bitcoin (limited ETH)</td>
+                <td>Limited</td>
+                <td>Everyday users (Bitcoin focused)</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note">
+        <strong>Good to know:</strong><br>
+        • <strong>Custodial</strong> apps (Venmo, Robinhood, Fidelity…) hold your crypto for you — you don't control the private keys.<br>
+        • <strong>Non-custodial</strong> wallets (and your Fenix vault) give you full control of your funds.<br>
+        • <strong style="color:#E8C34A">Amber rows</strong> default to — or prominently offer — a Layer 2 network. In those apps, double-check you've selected an <strong>Ethereum Mainnet</strong> receive address before withdrawing from Fenix.<br>
+        • Robinhood launched its own Layer 2 (<strong>Robinhood Chain</strong>, built on Arbitrum) in July 2026 — when depositing to Robinhood, explicitly choose the <strong>Ethereum</strong> network, not Robinhood Chain or Arbitrum.<br>
+        • Exchange deposit addresses often support multiple networks — always pick <strong>Ethereum (ERC-20)</strong> when depositing from Fenix.<br>
+        • Apps add new networks frequently — when in doubt, check the network label on the deposit screen of the receiving app. It always says which network the address is for.
+    </div>
+
+    <div class="footer">
+        <a href="https://fenix-yield.com">fenix-yield.com</a> · Fenix Yield · July 2026 · Informational only — not financial advice
+    </div>
+</body>
+</html>
