@@ -567,18 +567,37 @@ function formatBotResponse(text) {
 async function callClaude(userMessage) {
   conversation.push({ role: 'user', content: userMessage });
 
-  const response = await fetch('https://api.fenix-yield.com/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model:      'claude-sonnet-5',
-      max_tokens: 1000,
-      system:     SYSTEM_PROMPT,
-      messages:   conversation,
-    })
-  });
+  // Hard timeout: without this, a stalled request (flaky mobile network, a proxy
+  // hiccup) never settles — the typing dots spin forever and isTyping stays true,
+  // silently blocking every later message until the page is reloaded. On ANY
+  // failure we also roll back the user turn just pushed, so a retry starts clean.
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 35000);
+
+  let response;
+  try {
+    response = await fetch('https://api.fenix-yield.com/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model:      'claude-sonnet-5',
+        max_tokens: 1000,
+        system:     SYSTEM_PROMPT,
+        messages:   conversation,
+      }),
+      signal: controller.signal,
+    });
+  } catch (e) {
+    conversation.pop();
+    throw (e && e.name === 'AbortError')
+      ? new Error('The assistant took too long to respond.')
+      : e;
+  } finally {
+    clearTimeout(timer);
+  }
 
   if (!response.ok) {
+    conversation.pop();
     const err = await response.json().catch(() => ({}));
     throw new Error(err?.error?.message || `HTTP ${response.status}`);
   }
@@ -615,8 +634,15 @@ window.sendMessage = async function() {
   isTyping = true;
   showTyping();
 
+  // Reassure on a normal-but-slow reply (~7s) so the wait never reads as frozen.
+  const slowHint = setTimeout(() => {
+    const dots = document.querySelector('#typingIndicator .typing-dots');
+    if (dots && !dots.dataset.hinted) { dots.dataset.hinted = '1'; dots.insertAdjacentHTML('afterend', '<span style="color:var(--muted);font-size:12px;margin-left:8px;">still thinking…</span>'); }
+  }, 6000);
+
   try {
     const reply = await callClaude(text);
+    clearTimeout(slowHint);
     hideTyping();
 
     const stepComplete = reply.includes('[STEP_COMPLETE]') && mode !== 'mobile';
@@ -637,8 +663,10 @@ window.sendMessage = async function() {
     setQuickReplies(pickQuickReplies(text, stepComplete));
 
   } catch (err) {
+    clearTimeout(slowHint);
     hideTyping();
     addMessage('bot', `<p>Sorry, I had trouble connecting. Please try again in a moment.</p>`);
+    setQuickReplies(pickQuickReplies(text, false));
     console.error(err);
   }
 
