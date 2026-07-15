@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Delete Your Account — Fenix Yield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="https://framerusercontent.com/images/KLMRfNA8Rc9lC9ziU967jpCMaZM.jpg?width=1008&height=1024&kb=143" type="image/jpeg">
+<style>
+:root {
+  --navy: #0d1117;
+  --navy2: #161b22;
+  --purple: #6B3FA0;
+  --teal: #4EC8C4;
+  --white: #f0f4f8;
+  --muted: #8b949e;
+  --border: #21262d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 16px 40px;
+  background: rgba(13,17,23,0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(78,200,196,0.12);
+}
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+.nav-logo .fenix { color: var(--teal); }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 8px;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+.page-header {
+  padding: 140px 24px 60px;
+  text-align: center;
+  background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%);
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: "";
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%);
+}
+.page-header-inner { position: relative; z-index: 1; }
+.page-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+.page-title { font-size: clamp(36px, 6vw, 56px); font-weight: 800; letter-spacing: -0.03em; color: #1a1f3a; margin-bottom: 12px; }
+.page-meta { font-size: 14px; color: #6a7282; }
+
+main { max-width: 760px; margin: 0 auto; padding: 72px 24px 80px; }
+
+.doc-section { margin-bottom: 48px; }
+.doc-section h2 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.doc-section p { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 12px; }
+.doc-section ul { color: var(--muted); font-size: 15px; line-height: 1.8; padding-left: 20px; margin-bottom: 12px; }
+.doc-section ul li { margin-bottom: 6px; }
+.doc-section strong { color: var(--white); }
+
+.highlight-box {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--teal);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+.highlight-box p { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+
+.steps { counter-reset: step; list-style: none; padding: 0; margin: 8px 0 12px; }
+.steps li { position: relative; padding: 14px 16px 14px 56px; margin-bottom: 12px; background: var(--navy2); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.steps li::before { counter-increment: step; content: counter(step); position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--teal)); color: #fff; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+.steps li strong { color: var(--white); }
+
+.cta-mail { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 12px 22px; border-radius: 10px; background: linear-gradient(135deg, var(--purple), var(--teal)); color: #fff !important; font-weight: 700; font-size: 15px; text-decoration: none !important; }
+
+.data-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 14px; }
+.data-table th { text-align: left; color: var(--teal); font-weight: 700; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.data-table td { color: var(--muted); padding: 10px 12px; border-bottom: 1px solid rgba(33,38,45,0.6); vertical-align: top; }
+.data-table td strong { color: var(--white); }
+
+footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-align: center; }
+.footer-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
+.footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; list-style: none; margin-bottom: 20px; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
+.footer-links a:hover { color: var(--white); }
+.footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
+.footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
+
+@media (max-width: 600px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  main { padding: 60px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img class="logo-img" src="fenix-logo.jpg" alt="Fenix Yield">
+    <span><span class="fenix">Fenix</span> Yield</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how-it-works">How it works</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="terms.html">Terms</a></li>
+  </ul>
+  <a class="nav-cta" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow">Account</p>
+    <h1 class="page-title">Delete Your Account</h1>
+    <p class="page-meta">Fenix Yield &nbsp;·&nbsp; Last updated: July 15, 2026</p>
+  </div>
+</div>
+
+<main>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--white)">In short:</strong> You can ask us to delete your <strong style="color:var(--white)">Fenix Yield</strong> account and the personal data we hold at any time by emailing <a href="mailto:support@fenix-yield.com?subject=Delete%20my%20account">support@fenix-yield.com</a>. Because Fenix Yield is a <strong style="color:var(--white)">self-custodial</strong> wallet, your funds and keys live only on your device — deleting your account never touches them, and they remain entirely yours.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>How to request deletion</h2>
+    <p>To request deletion of your Fenix Yield account and its associated personal data:</p>
+    <ol class="steps">
+      <li>Open the app and go to <strong>Settings</strong> to find your <strong>wallet address</strong> (tap to copy it). This is how we identify your account — we don't use email or usernames for the mobile app.</li>
+      <li>Email <strong>support@fenix-yield.com</strong> from any email address, with your <strong>wallet address</strong> in the message, and ask us to delete your account. Telegram users can instead include their Telegram username.</li>
+      <li>We'll confirm and complete the deletion within <strong>30 days</strong>, and email you when it's done.</li>
+    </ol>
+    <p style="margin-top:18px;">
+      <a class="cta-mail" href="mailto:support@fenix-yield.com?subject=Delete%20my%20account&amp;body=Please%20delete%20my%20Fenix%20Yield%20account.%20My%20wallet%20address%20is%3A%20">✉ Request account deletion</a>
+    </p>
+  </div>
+
+  <div class="doc-section">
+    <h2>What we delete</h2>
+    <p>On request, we delete the account record and the personal data we hold that is associated with your account, including:</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Deleted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Account record</strong> (wallet address, passkey public key)</td><td>Yes</td></tr>
+        <tr><td><strong>Subscription record</strong> &amp; entitlement status</td><td>Yes</td></tr>
+        <tr><td><strong>Referral data</strong> tied to your account</td><td>Yes</td></tr>
+        <tr><td><strong>Push notification token</strong> &amp; alert preferences</td><td>Yes</td></tr>
+        <tr><td><strong>Support / contact info</strong> and any email you shared with us</td><td>Yes</td></tr>
+        <tr><td><strong>Diagnostics / analytics</strong> associated with your account</td><td>Yes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-section">
+    <h2>What we cannot or do not delete</h2>
+    <ul>
+      <li><strong>Your wallet and funds.</strong> Fenix Yield is self-custodial — your private keys and recovery phrase live only on your device, never on our servers. We can't delete your wallet, and deleting your account does not affect your funds. To stop using Fenix, simply move your funds out and uninstall the app; your wallet remains yours and recoverable with your 12-word phrase.</li>
+      <li><strong>Public blockchain data.</strong> Transactions and balances recorded on the Ethereum blockchain are permanent, public, and outside our control. They cannot be deleted by anyone.</li>
+      <li><strong>Records we're legally required to keep.</strong> See retention below.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2>Data retention</h2>
+    <p>We delete the personal data listed above within <strong>30 days</strong> of a verified request. Some records are retained longer only where we are legally required to keep them:</p>
+    <ul>
+      <li><strong>Payment and transaction records</strong> may be retained for up to <strong>7 years</strong> where required for tax, accounting, and legal-compliance purposes. Where possible these are anonymized or disassociated from your identity.</li>
+      <li><strong>Backups.</strong> Residual copies may persist in encrypted backups for a short period until those backups rotate out (typically within 30 days), after which they are permanently overwritten.</li>
+    </ul>
+    <p>If you have any questions about deletion or retention, contact us at <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a> — see our <a href="privacy.html#data-deletion">Privacy Policy</a> for full details.</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-logo">
+    <img src="fenix-logo.jpg" alt="Fenix Yield logo">
+    <span>Fenix Yield</span>
+  </div>
+  <p class="footer-tagline">Put your crypto to work.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="terms.html">Terms of Service</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="refund-policy.html">Refund Policy</a></li>
+    <li><a href="delete-account.html">Delete Account</a></li>
+  </ul>
+  <a class="footer-email" href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+  <p class="footer-copy">© 2026 Fenix Yield. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
