@@ -251,7 +251,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
       <div class="app-info"><div class="app-name">Safe Mobile</div><div class="app-desc">Approve yield transactions with one tap on your phone</div></div>
       <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
         <a class="app-badge" href="https://play.google.com/store/apps/details?id=global.safe.mobileapp" target="_blank">🤖 Android</a>
-        <a class="app-badge" href="https://apps.apple.com/app/safe-multisig/id1515759131" target="_blank">🍎 iPhone</a>
+        <a class="app-badge" href="https://apps.apple.com/us/app/safe-mobile/id6748754793" target="_blank">🍎 iPhone</a>
       </div>
     </div>
   </div>
@@ -415,12 +415,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <p class="step-desc">Safe Mobile is how you approve yield transactions. Enable push notifications so you get alerted instantly when the bot proposes a transaction.</p>
   </div>
 
+  <div class="alert info">
+    <span class="alert-icon">ℹ️</span>
+    <span>You already <strong>created</strong> your Safe in Step 3 (at app.safe.global). The Safe app can't create a new Safe — it only <strong>adds</strong> an existing one. So there's no "create" button here: tap <strong>"Add existing Safe"</strong> and paste the Safe address you saved.</span>
+  </div>
+
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Open Safe Mobile</strong><span>Tap "Add existing Safe"</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Open Safe Mobile</strong><span>Tap "Add existing Safe" (or "Add account" → "Add existing Safe")</span></div></li>
     <li><div class="step-num">2</div><div class="body"><strong>Select Ethereum Mainnet</strong><span>Make sure the network is Ethereum, not a testnet</span></div></li>
     <li><div class="step-num">3</div><div class="body"><strong>Paste your Safe address</strong><span>Your Safe wallet is now imported</span></div></li>
-    <li><div class="step-num">4</div><div class="body"><strong>Connect MetaMask as signer</strong><span>Settings → Signers → Connect → WalletConnect → approve in MetaMask</span></div></li>
-    <li><div class="step-num">5</div><div class="body"><strong>Allow push notifications</strong><span>This is how you get alerted when there's a transaction to approve</span></div></li>
+    <li><div class="step-num">4</div><div class="body"><strong>Turn on external signers</strong><span>The wallet picker only shows a few "suggested" apps by default. First enable the full feature: <strong>Settings → Experimental → "Enable WalletConnect for keys"</strong> (toggle on).</span></div></li>
+    <li><div class="step-num">5</div><div class="body"><strong>Connect MetaMask as signer</strong><span><strong>Settings → Owner keys → "+"</strong> → pick MetaMask if it's listed, or choose <strong>"WalletConnect"</strong> and <strong>copy the link into MetaMask</strong> to approve. Same-phone connecting is finicky — if it won't catch, scan the QR with MetaMask on a second device or the MetaMask browser extension.</span></div></li>
+    <li><div class="step-num">6</div><div class="body"><strong>Allow push notifications</strong><span>This is how you get alerted when there's a transaction to approve</span></div></li>
   </ul>
 
   <!-- Autopilot note -->
