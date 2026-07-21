@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Get Autopilot — Fenix Yield</title>
+<meta name="description" content="Subscribe to Fenix Yield Autopilot — automated ETH yield on your own Gnosis Safe. Pay with crypto, get instant access to the Telegram bot." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="fenix-logo.jpg" type="image/jpeg">
+<style>
+:root {
+  --navy: #0d1117;
+  --navy2: #161b22;
+  --purple: #6B3FA0;
+  --purple2: #8B5FC0;
+  --teal: #4EC8C4;
+  --white: #f0f4f8;
+  --muted: #8b949e;
+  --border: #21262d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--navy); color: var(--white); font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  padding: 16px 40px; background: rgba(13,17,23,0.86);
+  backdrop-filter: blur(12px); border-bottom: 1px solid rgba(78,200,196,0.12);
+}
+.nav-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+.logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+.nav-logo .fenix { color: var(--teal); }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 8px; color: #fff !important; background: linear-gradient(135deg, var(--purple), var(--teal)); font-weight: 700 !important; }
+.page-header { padding: 140px 24px 50px; text-align: center; background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%); position: relative; overflow: hidden; }
+.page-header::before { content: ""; position: absolute; width: 500px; height: 500px; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%); }
+.page-header-inner { position: relative; z-index: 1; }
+.page-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+.page-title { font-size: clamp(32px, 6vw, 56px); font-weight: 800; letter-spacing: -0.03em; color: #1a1f3a; margin-bottom: 16px; }
+.page-desc { font-size: 17px; color: #4a5568; max-width: 520px; margin: 0 auto; }
+main { max-width: 520px; margin: 0 auto; padding: 56px 24px 80px; }
+
+/* Checkout card */
+.co-card { background: var(--navy2); border: 1px solid var(--border); border-radius: 20px; padding: 30px 28px; }
+.co-card.featured { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal), 0 8px 40px rgba(78,200,196,0.12); }
+.pricing-tier { font-size: 11px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+.pricing-platform { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+.total-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.total-row strong { font-size: 44px; font-weight: 800; letter-spacing: -0.03em; }
+.total-row span { font-size: 15px; color: var(--muted); }
+.total-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; min-height: 20px; }
+.total-sub b { color: var(--teal); }
+
+/* Term selector */
+.terms { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+.term { position: relative; background: var(--navy); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; cursor: pointer; text-align: left; color: var(--white); font-family: inherit; font-size: 14px; font-weight: 700; transition: border-color .15s, background .15s; }
+.term:hover { border-color: var(--purple2); }
+.term.active { border-color: var(--teal); background: rgba(78,200,196,0.08); }
+.term span { display: block; font-size: 18px; font-weight: 800; margin-top: 3px; }
+.term em { position: absolute; top: 10px; right: 12px; font-style: normal; font-size: 10px; font-weight: 800; color: var(--teal); }
+
+/* Feature list */
+.feats { list-style: none; margin: 0 0 22px; }
+.feats li { display: flex; gap: 9px; align-items: flex-start; font-size: 13.5px; color: var(--white); padding: 4px 0; }
+.feats .check { color: var(--teal); font-weight: 800; flex-shrink: 0; }
+
+/* Asset selector */
+.co-label { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+.assets { display: flex; gap: 8px; margin-bottom: 20px; }
+.asset { flex: 1; background: var(--navy); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px; cursor: pointer; color: var(--white); font-family: inherit; font-size: 14px; font-weight: 700; transition: border-color .15s, background .15s; }
+.asset.active { border-color: var(--teal); background: rgba(78,200,196,0.08); }
+
+.cta { display: block; width: 100%; text-align: center; padding: 15px 20px; border-radius: 12px; font-size: 15px; font-weight: 800; text-decoration: none; border: none; cursor: pointer; font-family: inherit; color: #fff; background: linear-gradient(135deg, var(--purple), var(--teal)); transition: opacity .2s, transform .1s; }
+.cta:hover { opacity: .9; transform: translateY(-1px); }
+.cta:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.co-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 12px; line-height: 1.5; }
+
+/* Invoice panel */
+#invoiceBox, #successBox { display: none; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--border); }
+.inv-line { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.inv-amount { font-size: 22px; font-weight: 800; margin-bottom: 14px; }
+.inv-addr { background: var(--navy); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; word-break: break-all; color: var(--teal); margin-bottom: 10px; }
+.copy-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.qr { display: block; margin: 14px auto; width: 172px; height: 172px; border-radius: 10px; background: #fff; padding: 8px; }
+.inv-status { text-align: center; font-size: 13px; color: var(--muted); margin-top: 12px; }
+.inv-status .spin { display: inline-block; width: 13px; height: 13px; border: 2px solid var(--border); border-top-color: var(--teal); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: middle; margin-right: 7px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.warn { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 11px 13px; font-size: 12px; color: #e0b24d; line-height: 1.5; margin-bottom: 14px; }
+
+/* Success */
+.succ-emoji { text-align: center; font-size: 40px; margin-bottom: 8px; }
+.succ-title { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.succ-desc { text-align: center; font-size: 13.5px; color: var(--muted); margin-bottom: 18px; line-height: 1.55; }
+.succ-code { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; letter-spacing: 2px; color: var(--teal); background: var(--navy); border: 1px dashed var(--teal); border-radius: 12px; padding: 16px; margin-bottom: 18px; }
+
+footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-align: center; }
+.footer-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
+.footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; list-style: none; margin-bottom: 20px; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
+.footer-links a:hover { color: var(--white); }
+.footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
+.footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
+@media (max-width: 600px) { nav { padding: 14px 20px; } .nav-links { display: none; } main { padding: 44px 16px 60px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img class="logo-img" src="fenix-logo.jpg" alt="Fenix Yield">
+    <span><span class="fenix">Fenix</span> Yield</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#how-it-works">How it works</a></li>
+    <li><a href="index.html#protocols">Protocols</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="setup.html">Setup</a></li>
+    <li><a href="security.html">Security</a></li>
+  </ul>
+  <a class="nav-cta" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free →</a>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow">Telegram Autopilot</p>
+    <h1 class="page-title">Get Autopilot</h1>
+    <p class="page-desc">Automated ETH yield on your own Gnosis Safe. Pick a term, pay with crypto, and get an instant code to unlock the bot.</p>
+  </div>
+</div>
+
+<main>
+  <div class="co-card featured">
+    <p class="pricing-tier">Autopilot · Telegram</p>
+    <p class="pricing-platform">✈️ Your own Gnosis Safe · you always hold the keys</p>
+
+    <div class="total-row"><strong id="totalPrice">$19</strong><span id="totalUnit">total · 1 month</span></div>
+    <p class="total-sub" id="totalSub">$19/mo</p>
+
+    <p class="co-label">Choose your term</p>
+    <div class="terms" id="terms">
+      <button class="term active" data-m="1"  data-usd="19">1 month<span>$19</span></button>
+      <button class="term"        data-m="3"  data-usd="51">3 months<span>$51</span><em>SAVE 10%</em></button>
+      <button class="term"        data-m="6"  data-usd="96">6 months<span>$96</span><em>SAVE 15%</em></button>
+      <button class="term"        data-m="12" data-usd="180">12 months<span>$180</span><em>SAVE 20%</em></button>
+    </div>
+
+    <ul class="feats">
+      <li><span class="check">✓</span>Everything in Scout, plus the bot finds the best yield and stakes daily</li>
+      <li><span class="check">✓</span>Approve in Safe Mobile (1–3 taps) <em>or</em> go fully hands-free with Zodiac</li>
+      <li><span class="check">✓</span>Auto-harvest &amp; compound · withdraw any position back to ETH with one command</li>
+      <li><span class="check">✓</span>Free Fenix Intel access while your membership is active</li>
+    </ul>
+
+    <p class="co-label">Pay with</p>
+    <div class="assets" id="assets">
+      <button class="asset active" data-a="ETH">ETH</button>
+      <button class="asset" data-a="USDC">USDC</button>
+      <button class="asset" data-a="USDT">USDT</button>
+    </div>
+
+    <button class="cta" id="payBtn">Pay with crypto — $19</button>
+    <p class="co-note">Billed once for the term — no auto-renewal. After payment you'll get a code and a button to open the bot, which unlocks Autopilot instantly.</p>
+
+    <!-- Invoice panel -->
+    <div id="invoiceBox">
+      <div class="warn">⚠️ Send on <b>Ethereum mainnet</b> only. Do not send directly from an exchange withdrawal that batches — send the exact amount from a normal wallet.</div>
+      <p class="inv-line">Send exactly</p>
+      <div class="inv-amount"><span id="invAmount"></span></div>
+      <p class="inv-line">To this address</p>
+      <div class="inv-addr" id="invAddr"></div>
+      <button class="copy-btn" id="copyBtn">Copy address</button>
+      <img class="qr" id="invQR" alt="Payment QR code">
+      <div class="inv-status" id="invStatus"><span class="spin"></span>Waiting for payment — checks automatically every few seconds…</div>
+    </div>
+
+    <!-- Success panel -->
+    <div id="successBox">
+      <div class="succ-emoji">🎉</div>
+      <div class="succ-title">Payment confirmed!</div>
+      <div class="succ-desc">Your Autopilot access code:</div>
+      <div class="succ-code" id="successCode"></div>
+      <a class="cta" id="openBotBtn" href="#" target="_blank" rel="noreferrer">Open the Fenix Yield bot →</a>
+      <p class="co-note">Tap the button — the bot applies your code automatically and unlocks Autopilot for your term. Save the code in case you need it again.</p>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:var(--muted);font-size:13px;margin-top:26px;">
+    Questions? <a href="mailto:support@fenix-yield.com" style="color:var(--teal);text-decoration:none;">support@fenix-yield.com</a> ·
+    <a href="refund-policy.html" style="color:var(--teal);text-decoration:none;">Refund policy</a>
+  </p>
+</main>
+
+<footer>
+  <div class="footer-logo">
+    <img src="fenix-logo.jpg" alt="Fenix Yield logo">
+    <span>Fenix Yield</span>
+  </div>
+  <p class="footer-tagline">Put your crypto to work.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setup Guide</a></li>
+    <li><a href="setup-chat.html">AI Assistant</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="terms.html">Terms of Service</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="refund-policy.html">Refund Policy</a></li>
+    <li><a href="delete-account.html">Delete Account</a></li>
+  </ul>
+  <a class="footer-email" href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+  <p class="footer-copy">© 2026 Fenix Yield. All rights reserved.<br><br>
+    <strong>Risk Disclosure:</strong> Fenix Yield is a non-custodial automation tool. We do not hold, control, or have access to your funds at any time. DeFi protocols carry inherent risks including smart contract vulnerabilities, liquidity risk, and market volatility. Yield percentages are variable and not guaranteed. Past performance is not indicative of future results.<br><br>
+    <strong>Not Financial Advice:</strong> Nothing on this website constitutes financial, investment, legal, or tax advice. You are solely responsible for your investment decisions.
+  </p>
+</footer>
+
+<script>
+(function () {
+  var API = 'https://mobile-api.fenix-yield.com';
+  var BOT = 'https://t.me/fenix_yield_bot';
+
+  var months = 1, usd = 19, asset = 'ETH';
+  var invoiceId = null, pollTimer = null;
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function syncPrice() {
+    $('totalPrice').textContent = '$' + usd;
+    $('totalUnit').textContent  = 'total · ' + months + (months === 1 ? ' month' : ' months');
+    $('totalSub').textContent   = '$' + (usd / months).toFixed(2).replace(/\.00$/, '') + '/mo' + (months > 1 ? ' equivalent' : '');
+    $('payBtn').textContent     = 'Pay with crypto — $' + usd;
+  }
+
+  // Term selector
+  $('terms').addEventListener('click', function (e) {
+    var b = e.target.closest('.term'); if (!b) return;
+    document.querySelectorAll('.term').forEach(function (t) { t.classList.remove('active'); });
+    b.classList.add('active');
+    months = parseInt(b.dataset.m, 10);
+    usd    = parseInt(b.dataset.usd, 10);
+    resetInvoice();
+    syncPrice();
+  });
+
+  // Asset selector
+  $('assets').addEventListener('click', function (e) {
+    var b = e.target.closest('.asset'); if (!b) return;
+    document.querySelectorAll('.asset').forEach(function (t) { t.classList.remove('active'); });
+    b.classList.add('active');
+    asset = b.dataset.a;
+    if ($('invoiceBox').style.display === 'block') createInvoice(); // re-issue for new asset
+  });
+
+  function resetInvoice() {
+    stopPolling();
+    invoiceId = null;
+    $('invoiceBox').style.display = 'none';
+    $('successBox').style.display = 'none';
+  }
+  function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+
+  async function createInvoice() {
+    $('payBtn').disabled = true;
+    $('payBtn').textContent = 'Creating invoice…';
+    try {
+      var r = await fetch(API + '/api/autopilot/crypto-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ months: months, asset: asset }),
+      });
+      var j = await r.json();
+      if (!r.ok || !j.address) throw new Error(j.error || 'invoice_failed');
+
+      invoiceId = j.invoiceId;
+      $('invAmount').textContent = j.amountCrypto + ' ' + (j.asset || asset);
+      $('invAddr').textContent   = j.address;
+      $('invQR').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(j.address);
+      $('successBox').style.display = 'none';
+      $('invoiceBox').style.display = 'block';
+      $('invStatus').innerHTML = '<span class="spin"></span>Waiting for payment — checks automatically every few seconds…';
+      startPolling();
+    } catch (err) {
+      alert('Could not create the payment invoice. Please try again in a moment.');
+    } finally {
+      $('payBtn').disabled = false;
+      $('payBtn').textContent = 'Pay with crypto — $' + usd;
+    }
+  }
+
+  function startPolling() { stopPolling(); pollTimer = setInterval(checkStatus, 6000); }
+
+  async function checkStatus() {
+    if (!invoiceId) return;
+    try {
+      var r = await fetch(API + '/api/autopilot/crypto-invoice/' + encodeURIComponent(invoiceId));
+      var j = await r.json();
+      if (j.status === 'paid' && j.code) { stopPolling(); showSuccess(j.code); }
+      else if (j.status === 'expired') {
+        stopPolling();
+        $('invStatus').innerHTML = 'This invoice expired. Tap "Pay with crypto" for a fresh one.';
+      }
+    } catch (e) { /* transient — keep polling */ }
+  }
+
+  function showSuccess(code) {
+    $('invoiceBox').style.display = 'none';
+    $('successCode').textContent  = code;
+    $('openBotBtn').href = BOT + '?start=' + encodeURIComponent(code);
+    $('successBox').style.display = 'block';
+    $('successBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  $('payBtn').addEventListener('click', createInvoice);
+  $('copyBtn').addEventListener('click', function () {
+    navigator.clipboard.writeText($('invAddr').textContent).then(function () {
+      $('copyBtn').textContent = 'Copied!';
+      setTimeout(function () { $('copyBtn').textContent = 'Copy address'; }, 1800);
+    });
+  });
+
+  syncPrice();
+})();
+</script>
+
+</body>
+</html>
