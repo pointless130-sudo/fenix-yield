@@ -170,7 +170,7 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
 
     <!-- Invoice panel -->
     <div id="invoiceBox">
-      <div class="warn">⚠️ Send on <b>Ethereum mainnet</b> only. Do not send directly from an exchange withdrawal that batches — send the exact amount from a normal wallet.</div>
+      <div class="warn" id="invWarn"></div>
       <p class="inv-line">Send exactly</p>
       <div class="inv-amount"><span id="invAmount"></span></div>
       <p class="inv-line">To this address</p>
@@ -282,6 +282,9 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
       $('invAmount').textContent = j.amountCrypto + ' ' + (j.asset || asset);
       $('invAddr').textContent   = j.address;
       $('invQR').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(j.address);
+      $('invWarn').innerHTML = (asset === 'ETH')
+        ? '⚠️ Send <b>ETH on the Ethereum mainnet</b> only. Send the exact amount from a normal wallet — not from an exchange that batches withdrawals.'
+        : '⚠️ Send <b>' + asset + ' on the Ethereum network (ERC-20) ONLY</b> — <b>not</b> Polygon, Arbitrum, Base, Optimism, Tron, or any other network. ' + asset + ' sent on the wrong network can\'t be detected and may be lost. Send the exact amount from a normal wallet.';
       $('successBox').style.display = 'none';
       $('invoiceBox').style.display = 'block';
       $('invStatus').innerHTML = '<span class="spin"></span>Waiting for payment — checks automatically every few seconds…';
