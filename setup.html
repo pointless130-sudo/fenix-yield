@@ -159,6 +159,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 </head>
 <body>
 
+<!-- Home brand bar -->
+<a href="index.html" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;padding:14px 20px;">
+  <span style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#6B3FA0,#4EC8C4);display:inline-flex;align-items:center;justify-content:center;font-size:15px;">⚡</span>
+  <span style="font-weight:700;font-size:16px;color:#e8e8f0;letter-spacing:-0.2px;">Fenix Yield</span>
+</a>
+
 <!-- Hero -->
 <div class="hero">
   <div class="hero-logo">⚡</div>
@@ -312,12 +318,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
 
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Go to app.safe.global</strong><span>Open in your phone's browser or on desktop</span></div></li>
-    <li><div class="step-num">2</div><div class="body"><strong>Click "Create new Safe"</strong><span>Connect your MetaMask when prompted</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Go to app.safe.global</strong><span>On iPhone, open it in <strong>Safari</strong> — not the MetaMask in-app browser or another browser. On Android or desktop, any browser works.</span></div></li>
+    <li><div class="step-num">2</div><div class="body"><strong>Click "Create new Safe" and connect your wallet</strong><span>When the wallet picker opens, tap <strong>"WalletConnect" first</strong> — MetaMask only appears <strong>after</strong> you choose WalletConnect. Then tap MetaMask to open the app and approve.</span></div></li>
     <li><div class="step-num">3</div><div class="body"><strong>Keep default settings</strong><span>Your MetaMask address is already the owner. Threshold stays at 1 of 1.</span></div></li>
     <li><div class="step-num">4</div><div class="body"><strong>Confirm in MetaMask</strong><span>A small gas fee applies (usually under $0.50). Wait ~30 seconds.</span></div></li>
     <li><div class="step-num">5</div><div class="body"><strong>Save your Safe address</strong><span>Starts with 0x and is different from your MetaMask address. Copy and save it.</span></div></li>
   </ul>
+
+  <div class="alert info">
+    <span class="alert-icon">🍎</span>
+    <span><strong>On iPhone:</strong> always start in <strong>Safari</strong>, and when connecting your wallet tap <strong>"WalletConnect" first</strong> — MetaMask won't appear in the list until you do. Then tap MetaMask to jump to the app and approve.</span>
+  </div>
 
   <div class="alert success">
     <span class="alert-icon">🛡️</span>
@@ -346,7 +357,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
 
   <ul class="instructions">
-    <li><div class="step-num">1</div><div class="body"><strong>Open your Safe at app.safe.global</strong><span>Connect MetaMask</span></div></li>
+    <li><div class="step-num">1</div><div class="body"><strong>Open your Safe at app.safe.global</strong><span>Connect MetaMask. On iPhone: open in <strong>Safari</strong>, tap <strong>"WalletConnect" first</strong>, then pick MetaMask.</span></div></li>
     <li><div class="step-num">2</div><div class="body"><strong>Go to Settings → Owners</strong><span>Click the settings icon in the sidebar</span></div></li>
     <li><div class="step-num">3</div><div class="body"><strong>Click "Add Owner" and paste this address:</strong></div></li>
   </ul>
@@ -597,6 +608,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 </div>
 
 </div><!-- /content -->
+
+<div style="text-align:center;padding:28px 20px 44px;">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#6B3FA0,#4EC8C4);color:#fff;text-decoration:none;font-weight:700;font-size:14px;">⚡ Back to Fenix Yield home</a>
+</div>
 
 <script>
 // ── Tier config ────────────────────────────────────────────────────────────────
