@@ -75,6 +75,17 @@ main { max-width: 520px; margin: 0 auto; padding: 56px 24px 80px; }
 .asset { flex: 1; background: var(--navy); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px; cursor: pointer; color: var(--white); font-family: inherit; font-size: 14px; font-weight: 700; transition: border-color .15s, background .15s; }
 .asset.active { border-color: var(--teal); background: rgba(78,200,196,0.08); }
 
+/* "Need ETH first?" on-ramp helper */
+.need-eth { margin-bottom: 20px; }
+.ramps { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.ramp { display: block; background: var(--navy); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; text-decoration: none; transition: border-color .15s; }
+.ramp:hover { border-color: var(--purple2); }
+.ramp-name { display: block; font-size: 13.5px; font-weight: 800; margin-bottom: 2px; }
+.ramp-how { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.45; }
+.ramp-note { font-size: 11px; color: var(--muted); line-height: 1.55; }
+.ramp-note b { color: var(--white); }
+@media (max-width: 420px) { .ramps { grid-template-columns: 1fr; } }
+
 .cta { display: block; width: 100%; text-align: center; padding: 15px 20px; border-radius: 12px; font-size: 15px; font-weight: 800; text-decoration: none; border: none; cursor: pointer; font-family: inherit; color: #fff; background: linear-gradient(135deg, var(--purple), var(--teal)); transition: opacity .2s, transform .1s; }
 .cta:hover { opacity: .9; transform: translateY(-1px); }
 .cta:disabled { opacity: .55; cursor: not-allowed; transform: none; }
@@ -153,7 +164,7 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
 
     <ul class="feats">
       <li><span class="check">✓</span>Everything in Scout, plus the bot finds the best yield and stakes daily</li>
-      <li><span class="check">✓</span>Approve in Safe Mobile (1–3 taps) <em>or</em> go fully hands-free with Zodiac</li>
+      <li><span class="check">✓</span><span>Approve in Safe Mobile (1–3 taps), <em>or</em> go fully hands-free with Zodiac</span></li>
       <li><span class="check">✓</span>Auto-harvest &amp; compound · withdraw any position back to ETH with one command</li>
       <li><span class="check">✓</span>Free Fenix Intel access while your membership is active</li>
     </ul>
@@ -163,6 +174,22 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
       <button class="asset active" data-a="ETH">ETH</button>
       <button class="asset" data-a="USDC">USDC</button>
       <button class="asset" data-a="USDT">USDT</button>
+    </div>
+
+    <!-- Need ETH first? Venmo / Robinhood on-ramps -->
+    <div class="need-eth">
+      <p class="co-label">Don't have ETH yet? Get it in ~5 minutes</p>
+      <div class="ramps">
+        <a class="ramp" href="https://account.venmo.com/crypto" target="_blank" rel="noreferrer">
+          <span class="ramp-name">💙 Venmo</span>
+          <span class="ramp-how">Crypto tab → Buy ETH → send to the address we show you</span>
+        </a>
+        <a class="ramp" href="https://robinhood.com/crypto/ETH" target="_blank" rel="noreferrer">
+          <span class="ramp-name">🟢 Robinhood</span>
+          <span class="ramp-how">Buy ETH → Transfer → Send crypto to the address we show you</span>
+        </a>
+      </div>
+      <p class="ramp-note">💡 Buy about <b>$5 extra</b> so app fees don't leave you short. Both send on <b>Ethereum mainnet</b> by default — don't change the network. First-time Venmo crypto transfers must be enabled in the app. Then tap "Pay with crypto" below and send to the address shown. <span style="opacity:.7">Third-party services, not affiliated · not financial advice.</span></p>
     </div>
 
     <button class="cta" id="payBtn">Pay with crypto — $19</button>
