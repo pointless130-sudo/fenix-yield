@@ -241,7 +241,7 @@
       <div class="col fadeup">
         <p class="eyebrow">New — the Mobile App</p>
         <h2>Your whole portfolio,<br><span class="grad">at a glance.</span></h2>
-        <p class="sub">One tap shows your total balance, your live rewards, and exactly where your ETH is working — across Lido, Curve, Aave and Convex. No wallet setup, unlocked with Face ID.</p>
+        <p class="sub">One tap shows your total balance, your live rewards, and exactly where your ETH is working — across Lido, Rocket Pool, Curve, Aave and Convex. No wallet setup, unlocked with Face ID.</p>
       </div>
       <div class="phone fadeup"><div class="notch"></div>
         <div class="screen" id="scr-dash">
@@ -325,7 +325,7 @@
       <div class="col fadeup">
         <p class="eyebrow">Tap to earn</p>
         <h2>Pick a pool,<br>or let it choose</h2>
-        <p class="sub">Auto-routes to the highest yield — or pin Lido, Curve, Aave or Convex yourself. Set your own rules, get smart alerts, and it stakes daily while you sleep.</p>
+        <p class="sub">Auto-routes to the highest yield — or pin Lido, Rocket Pool, Curve, Aave or Convex yourself. Set your own rules, get smart alerts, and it stakes daily while you sleep.</p>
       </div>
       <div class="phone fadeup"><div class="notch"></div>
         <div class="screen" style="background:#0b0b16">
@@ -346,6 +346,7 @@
               <span class="chip"><span class="pdot" style="background:var(--curve)"></span>Curve</span>
               <span class="chip"><span class="pdot" style="background:var(--aave)"></span>Aave</span>
               <span class="chip on"><span class="pdot" style="background:var(--convex)"></span>Convex</span>
+              <span class="chip"><span class="pdot" style="background:#2F5DA8"></span>Rocket Pool</span>
             </div>
             <div class="lbl">Auto-stake</div>
             <div class="segrow"><span class="seg on">Daily</span><span class="seg">Weekly</span><span class="seg">Off</span></div>
@@ -425,6 +426,7 @@
       <h1 style="text-align:center"><b style="color:var(--teal)">Fenix</b> Yield</h1>
       <div class="playbtn"></div>
       <div class="ovsub">Tap to play · sound on</div>
+      <a href="https://intel.fenix-yield.com/?about=1#newsletter" onclick="event.stopPropagation()" style="display:inline-block;margin-top:16px;color:#4EC8C4;font-size:13px;font-weight:700;border:1px solid #2C4A54;border-radius:20px;padding:8px 16px">📬 Get the free Weekly Read →</a>
     </div>
 
     <audio id="track" src="fenix-promo-music.mp3" preload="auto"></audio>
@@ -465,9 +467,23 @@
   const END = 95;            // seconds of runtime
   let started=false, raf=0;
 
+  // Resilience: the timeline prefers the audio clock (perfect music sync), but if
+  // audio can't start (silent mode, browser policy, load failure) a wall clock
+  // drives the scenes instead and a "tap for sound" button offers a retry.
+  let audioOk=false, clockT0=0;
+  const sndBtn = document.createElement('button');
+  sndBtn.textContent = '🔇 Tap for sound';
+  sndBtn.style.cssText = 'position:fixed;top:14px;right:14px;z-index:60;display:none;background:rgba(20,20,40,.85);color:#EDEDF5;border:1px solid #3A3A6A;border-radius:20px;padding:8px 14px;font:700 13px system-ui;cursor:pointer';
+  document.body.appendChild(sndBtn);
+  sndBtn.onclick = () => {
+    track.currentTime = now();
+    track.play().then(()=>{ audioOk=true; sndBtn.style.display='none'; }).catch(()=>{});
+  };
+  function now(){ return audioOk ? track.currentTime : (performance.now()-clockT0)/1000; }
+
   function show(i){ scenes.forEach((s,k)=>s.el.classList.toggle('on', k===i)); }
   function frame(){
-    const t = track.currentTime;
+    const t = now();
     let idx=0; for(let k=0;k<scenes.length;k++){ if(t>=scenes[k].t) idx=k; }
     show(idx);
     prog.style.width = Math.min(100, t/END*100) + '%';
@@ -479,15 +495,18 @@
   function start(){
     if(started) return; started=true;
     ov.classList.add('hide');
-    track.volume=1; track.currentTime=0;
-    track.play().catch(()=>{});
+    clockT0 = performance.now();
+    track.muted = false; track.volume=1; track.currentTime=0;
+    track.play().then(()=>{ audioOk=true; sndBtn.style.display='none'; })
+      .catch(()=>{ audioOk=false; sndBtn.style.display='block'; });
     raf=requestAnimationFrame(frame);
   }
+  track.addEventListener('error', ()=>{ if(started){ audioOk=false; sndBtn.style.display='block'; } });
   function showEnd(){
     cancelAnimationFrame(raf);
     ov.querySelector('.ovsub').textContent='Replay';
     ov.querySelector('h1').innerHTML='<b style="color:var(--teal)">Fenix</b> Yield';
-    ov.classList.remove('hide'); started=false;
+    ov.classList.remove('hide'); started=false; sndBtn.style.display='none';
   }
   ov.addEventListener('click', start);
   document.addEventListener('keydown',e=>{ if(e.key===' ')start(); });
