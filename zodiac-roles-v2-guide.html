@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔭</text></svg>">
+<title>Zodiac Roles Modifier v2: A Field Guide to the Failure Modes | Fenix Yield</title>
+<meta name="description" content="Six silent failure modes in the Zodiac Roles Modifier v2 for Gnosis Safe — allowTarget vs allowFunction, the Send bitmask, role key derivation, multi-step approvals, deployment friction — with a working ethers v6 implementation and a verification checklist."/>
+<link rel="canonical" href="https://fenix-yield.com/zodiac-roles-v2-guide.html"/>
+<meta property="og:title" content="Zodiac Roles Modifier v2: A Field Guide to the Failure Modes"/>
+<meta property="og:description" content="Everything the docs don't tell you about scoping a Gnosis Safe role: silent scoping failures, bitmask gotchas, role key derivation, and a working ethers v6 reference."/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="https://fenix-yield.com/zodiac-roles-v2-guide.html"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Zodiac Roles Modifier v2: A Field Guide to the Failure Modes",
+  "description": "Six silent failure modes when scoping a Gnosis Safe with the Zodiac Roles Modifier v2, with a working ethers v6 reference implementation and an on-chain verification checklist.",
+  "datePublished": "2026-08-11",
+  "author": { "@type": "Organization", "name": "Fenix Yield", "url": "https://fenix-yield.com" }
+}
+</script>
+<style>
+:root {
+  --bg:      #0a0a0f;
+  --surface: #13131a;
+  --surface2:#1a1a24;
+  --border:  #1e1e2e;
+  --accent:  #7c5cfc;
+  --accent2: #4fc3f7;
+  --success: #4caf7d;
+  --warn:    #f59e0b;
+  --danger:  #ef4444;
+  --text:    #e8e8f0;
+  --muted:   #6b6b8a;
+  --radius:  14px;
+  --font:    'Inter', system-ui, sans-serif;
+  --mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:0 0 80px;}
+
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(160deg,#0e0e1a 0%,#12102a 100%);
+  border-bottom:1px solid var(--border);
+  padding:56px 24px 44px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(124,92,252,0.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);margin-bottom:14px;}
+.hero h1{font-size:clamp(24px,5vw,38px);font-weight:700;letter-spacing:-0.6px;margin-bottom:14px;max-width:720px;margin-left:auto;margin-right:auto;line-height:1.2;}
+.hero p{color:var(--muted);font-size:15px;max-width:560px;margin:0 auto;line-height:1.7;}
+.hero-meta{margin-top:18px;font-size:12px;color:var(--muted);}
+.hero-meta code{font-family:var(--mono);color:var(--accent2);font-size:11px;}
+
+/* ── Nav tabs ── */
+.tabs{
+  display:flex;overflow-x:auto;gap:4px;padding:16px 24px;scrollbar-width:none;
+  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;background:var(--bg);
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;padding:6px 16px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;
+  border:1px solid var(--border);background:transparent;color:var(--muted);
+  transition:all 0.15s;white-space:nowrap;text-decoration:none;
+}
+.tab:hover{border-color:var(--accent);color:var(--text);}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* ── Content ── */
+.content{max-width:720px;margin:0 auto;padding:0 16px;}
+.section{padding-top:44px;}
+.section-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.section-title{font-size:24px;font-weight:700;letter-spacing:-0.3px;margin-bottom:10px;}
+.section-desc,.prose p{color:#b9b9cc;font-size:14.5px;line-height:1.8;margin-bottom:16px;}
+.prose strong{color:var(--text);}
+.prose a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(79,195,247,0.3);}
+.prose a:hover{border-bottom-color:var(--accent2);}
+
+/* ── Gotcha numbering ── */
+.gotcha-tag{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;
+  color:var(--danger);text-transform:uppercase;
+}
+.gotcha-tag::before{content:'';width:22px;height:2px;background:var(--danger);}
+
+/* ── Alerts ── */
+.alert{border-radius:10px;padding:14px 16px;margin:16px 0;font-size:13px;line-height:1.6;display:flex;gap:10px;}
+.alert.warn{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--warn);}
+.alert.info{background:rgba(124,92,252,0.1);border:1px solid rgba(124,92,252,0.3);color:#a78bfa;}
+.alert.success{background:rgba(76,175,125,0.1);border:1px solid rgba(76,175,125,0.3);color:var(--success);}
+.alert.danger{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* ── Code ── */
+pre{
+  background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:16px;margin:16px 0;overflow-x:auto;font-family:var(--mono);
+  font-size:12.5px;line-height:1.7;color:#c9d1e9;
+}
+code.inline{font-family:var(--mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--accent2);white-space:nowrap;}
+pre .c{color:#5d6b8f;} /* comment */
+pre .k{color:#c792ea;} /* keyword */
+pre .s{color:#a5d6a7;} /* string */
+pre .f{color:#82aaff;} /* fn */
+pre .bad{color:#f87171;}
+pre .good{color:#4caf7d;}
+
+/* ── Cards & tables ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:16px 0;}
+.card-title{font-size:15px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.card-body{color:var(--muted);font-size:13px;line-height:1.7;}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;}
+th{color:var(--muted);text-transform:uppercase;font-size:10.5px;letter-spacing:1px;text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:#b9b9cc;line-height:1.6;vertical-align:top;}
+td code{font-family:var(--mono);font-size:12px;color:var(--accent2);}
+
+/* ── Checklist ── */
+.check{list-style:none;display:flex;flex-direction:column;gap:10px;margin:16px 0;}
+.check li{
+  display:flex;gap:12px;align-items:flex-start;background:var(--surface);
+  border:1px solid var(--border);border-radius:10px;padding:13px 15px;
+  font-size:13.5px;line-height:1.65;color:#b9b9cc;
+}
+.check li::before{content:'☐';color:var(--success);font-size:15px;flex-shrink:0;margin-top:1px;}
+.check li strong{color:var(--text);}
+
+hr.divider{border:none;border-top:1px solid var(--border);margin:44px 0 0;}
+.footer-note{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);color:var(--muted);font-size:12.5px;line-height:1.8;text-align:center;}
+.footer-note a{color:var(--accent2);text-decoration:none;}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Gnosis Safe · Zodiac · Field Notes</div>
+  <h1>Zodiac Roles Modifier v2:<br>A Field Guide to the Failure Modes</h1>
+  <p>The official docs explain the API. This page explains the six ways your role scoping will silently fail anyway — learned by debugging a production Safe automation on Ethereum mainnet, so you don't have to.</p>
+  <div class="hero-meta">Last verified against mainnet · August 2026 · ethers v6 · <code>gnosisguild/zodiac-modifier-roles</code></div>
+</div>
+
+<nav class="tabs">
+  <a class="tab active" href="#model">Permission model</a>
+  <a class="tab" href="#g1">Silent scoping</a>
+  <a class="tab" href="#g2">The bitmask</a>
+  <a class="tab" href="#g3">Role keys</a>
+  <a class="tab" href="#g4">Multi-step calls</a>
+  <a class="tab" href="#g5">Deployment</a>
+  <a class="tab" href="#g6">Config drift</a>
+  <a class="tab" href="#impl">Reference impl</a>
+  <a class="tab" href="#verify">Verify</a>
+</nav>
+
+<div class="content prose">
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="model">
+  <div class="section-eyebrow">Background</div>
+  <h2 class="section-title">What the Roles Modifier does, in one minute</h2>
+  <p>The <a href="https://github.com/gnosisguild/zodiac-modifier-roles" rel="noopener">Zodiac Roles Modifier</a> is an audited module by Gnosis Guild that attaches to a Gnosis Safe and lets you grant a third-party address a <strong>role</strong>: a narrowly scoped permission to execute specific functions on specific contracts <em>through</em> the Safe, without being a Safe owner and without per-transaction approval.</p>
+  <p>It is the cleanest primitive that exists today for non-custodial automation. A bot can be allowed to call <code class="inline">submit()</code> on Lido and <code class="inline">add_liquidity()</code> on a Curve pool, while the same bot is cryptographically incapable of transferring funds out, changing Safe owners, or calling anything not on its list. Every boundary is enforced on-chain by the module itself — if the operator's server is fully compromised, the attacker inherits only the whitelist.</p>
+  <p>The permission model has <strong>two layers</strong>, and this is the root of most of the failures below:</p>
+  <table>
+    <tr><th>Layer</th><th>Call</th><th>Answers</th></tr>
+    <tr><td>Target</td><td><code>allowTarget / scopeTarget</code></td><td>"May this role interact with contract X at all, and may it send ETH there?"</td></tr>
+    <tr><td>Function</td><td><code>allowFunction / scopeFunction</code></td><td>"May this role call selector Y on contract X?"</td></tr>
+  </table>
+  <p>Execution then happens through a single entry point on the module:</p>
+  <pre><span class="c">// The role member calls the *module*, never the Safe directly</span>
+<span class="k">function</span> <span class="f">execTransactionWithRole</span>(
+  address to, uint256 value, bytes calldata data,
+  uint8 operation, uint16 role, bool shouldRevert
+) <span class="k">returns</span> (bool success);</pre>
+  <div class="alert info"><span class="alert-icon">💡</span><span>Set <strong>shouldRevert = true</strong> in production. With <code style="font-family:var(--mono)">false</code>, a rejected call returns <code style="font-family:var(--mono)">success = false</code> instead of reverting — and if you forget to check the return value, your automation will happily believe it staked funds that never moved.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="g1">
+  <div class="gotcha-tag">Gotcha 01</div>
+  <h2 class="section-title"><code class="inline">allowFunction</code> alone silently fails</h2>
+  <p>The most expensive mistake in the whole stack, because it looks like it worked. You scope the function selector, the permission transaction confirms, the explorer shows your config call succeeded — and then every <code class="inline">execTransactionWithRole</code> reverts (or worse, returns false) with an unhelpful error.</p>
+  <p>The module evaluates the <strong>target layer first</strong>. If the target contract was never allowed for the role, the function-level permission is unreachable dead configuration. Both calls are required, per protocol address, every time:</p>
+  <pre><span class="c">// ❌ WRONG — confirms on-chain, permission never takes effect</span>
+<span class="bad">await roles.allowFunction(ROLE, LIDO, SELECTOR_SUBMIT, options);</span>
+
+<span class="c">// ✅ RIGHT — target first, then function</span>
+<span class="good">await roles.allowTarget(ROLE, LIDO, targetOptions);</span>
+<span class="good">await roles.allowFunction(ROLE, LIDO, SELECTOR_SUBMIT, fnOptions);</span></pre>
+  <p>Nothing warns you about the missing half. The config transaction succeeding is <em>not</em> evidence the permission works — only an actual execution test is (see the <a href="#verify">verification checklist</a>).</p>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="g2">
+  <div class="gotcha-tag">Gotcha 02</div>
+  <h2 class="section-title">The ETH "Send" bitmask on <code class="inline">allowTarget</code></h2>
+  <p>The options argument on <code class="inline">allowTarget</code> is a bitmask controlling <strong>ETH value transfer</strong> and <strong>delegatecall</strong>. Get it wrong and calls revert with no error that mentions value at all.</p>
+  <p>The rule: any protocol whose entry function is <strong>payable</strong> — i.e. your transaction carries <code class="inline">msg.value</code> — needs the Send bit set (<code class="inline">1</code>). Protocols you interact with purely through calldata get <code class="inline">0</code>.</p>
+  <table>
+    <tr><th>Target type</th><th>Example</th><th>Options</th></tr>
+    <tr><td>Payable entry point (ETH goes in)</td><td>Lido <code>submit()</code>, Curve ETH-pool <code>add_liquidity()</code>, Aave <code>depositETH()</code></td><td><code>1</code> (Send)</td></tr>
+    <tr><td>Calldata-only interaction</td><td>Convex Booster <code>deposit()</code>, reward <code>getReward()</code>, ERC-20 <code>approve()</code></td><td><code>0</code></td></tr>
+  </table>
+  <p>The failure is asymmetric and that's what makes it nasty: with the bit missing, everything <em>configures</em> fine and only the first real staking attempt reverts — usually in production, usually at 3am. Setting Send where it isn't needed doesn't break anything, but it widens the permission beyond what the role requires, which defeats the point of scoping.</p>
+  <div class="alert warn"><span class="alert-icon">⚠️</span><span><strong>Debugging tell:</strong> a role call that reverts only when <code style="font-family:var(--mono)">value &gt; 0</code>, but succeeds as a dry run with <code style="font-family:var(--mono)">value = 0</code>, is almost always this bitmask — not your calldata.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="g3">
+  <div class="gotcha-tag">Gotcha 03</div>
+  <h2 class="section-title">Role key derivation: hash it, don't pad it</h2>
+  <p>Roles v2 identifies roles by a <code class="inline">bytes32</code> key. Two encodings of the same human-readable name produce different keys, and both look plausible in code review:</p>
+  <pre><span class="c">// ❌ WRONG — right-pads the ASCII bytes into bytes32</span>
+<span class="bad">const roleKey = ethers.zeroPadValue(ethers.toUtf8Bytes('MY_BOT_ROLE'), 32);</span>
+
+<span class="c">// ✅ RIGHT — keccak256 of the UTF-8 bytes</span>
+<span class="good">const roleKey = ethers.keccak256(ethers.toUtf8Bytes('MY_BOT_ROLE'));</span></pre>
+  <p>If your scoping script derives the key one way and your executor derives it the other, you get the perfect silent failure: <strong>a fully configured role that no one is a member of</strong>. The module doesn't reject an unknown key — it just finds no permissions under it.</p>
+  <p>Defense: derive the key in <strong>exactly one place</strong> — a shared constant module imported by both the setup script and the executor — and log the hex value at startup of each. If the two logs ever differ, you've found your bug before mainnet did.</p>
+  <div class="alert info"><span class="alert-icon">💡</span><span>Note the tooling-version trap: older Roles v1 material and some SDK examples use small integer role IDs (<code style="font-family:var(--mono)">uint16</code>), while v2 uses <code style="font-family:var(--mono)">bytes32</code> keys. Copy-pasting between generations of examples is how the zeroPad variant sneaks in.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="g4">
+  <div class="gotcha-tag">Gotcha 04</div>
+  <h2 class="section-title">Multi-step protocols need their intermediate tokens whitelisted</h2>
+  <p>You scope the protocol you <em>think</em> you're integrating, and forget the contract in the middle. The canonical example is depositing Curve LP tokens into Convex:</p>
+  <pre><span class="c">// The actual flow is TWO calls to TWO different contracts:</span>
+<span class="c">// Step 1 — approve the Booster to spend the LP token</span>
+curveLpToken.<span class="f">approve</span>(CONVEX_BOOSTER, amount)   <span class="c">// ← call target: the LP TOKEN</span>
+<span class="c">// Step 2 — deposit into Convex</span>
+convexBooster.<span class="f">deposit</span>(pid, amount, true)      <span class="c">// ← call target: the BOOSTER</span></pre>
+  <p>Scoping the Convex Booster covers step 2 only. Step 1's target is the <strong>Curve LP token contract itself</strong> (for steCRV that's <code class="inline">0x06325440D014e39736583c165C2963BA99fAf14E</code>), and it needs its own <code class="inline">allowTarget</code> (options <code class="inline">0</code>) plus <code class="inline">allowFunction</code> for the <code class="inline">approve</code> selector. Miss it and your automation completes step 1 of a two-step flow — pardon, <em>fails</em> step 1 — while all your Convex-side permissions sit correct and untouched.</p>
+  <p>The general rule: <strong>walk the full call trace of every flow and scope by transaction target, not by protocol brand.</strong> Any flow involving ERC-20 approvals, wrapping, or router hops has more targets than protocols.</p>
+  <div class="alert danger"><span class="alert-icon">🔒</span><span>When you do whitelist a token's <code style="font-family:var(--mono)">approve</code>, scope the selector on that token only — never blanket-allow the token contract. An unscoped ERC-20 target would also expose <code style="font-family:var(--mono)">transfer()</code>, which converts your "yield-only" role into an exfiltration path.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="g5">
+  <div class="gotcha-tag">Gotcha 05</div>
+  <h2 class="section-title">Deployment friction in the Safe UI</h2>
+  <p>Two non-obvious snags before your module even exists:</p>
+  <div class="card">
+    <div class="card-title">🧩 Use the "Zodiac" Safe app, not "Zodiac Roles"</div>
+    <div class="card-body">In the Safe Apps catalog there are two similarly named entries. The one labeled <strong>Zodiac — "The expansion pack for DAOs"</strong> is the one with the deploy flow for a fresh Roles Modifier attached to your Safe. The standalone <strong>Zodiac Roles</strong> app is a permissions <em>editor</em> for a module that already exists — it has no deploy button, and you can lose an hour hunting for one.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">🧾 Clear the transaction queue first</div>
+    <div class="card-body">Module deployment through the Safe app enters your Safe's transaction queue and is subject to nonce ordering. If unexecuted transactions are already queued, the deployment sits behind them and appears to hang. Execute or discard everything pending before you start.</div>
+  </div>
+  <div class="alert warn"><span class="alert-icon">⚠️</span><span><strong>And write the module address down immediately.</strong> If you re-run the deploy flow (say, because the queue issue above made the first attempt look dead), you get a second, empty Roles Modifier enabled on the same Safe. Now two modules exist, your scoping script may point at the wrong one, and every permission you apply lands in a module your executor never calls. Disable and remove the accidental module; keep exactly one.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="g6">
+  <div class="gotcha-tag">Gotcha 06</div>
+  <h2 class="section-title">Config drift: the off-chain fields that gate your on-chain calls</h2>
+  <p>This one isn't in the module at all — it's in <em>your</em> code, and it's the most instructive failure of the set. Your executor presumably has a check like:</p>
+  <pre><span class="k">if</span> (user.rolesModuleAddress &amp;&amp; user.whitelistEnabled) {
+  <span class="c">// execute directly via execTransactionWithRole</span>
+} <span class="k">else</span> {
+  <span class="c">// fall back to proposing to the Safe queue for manual signing</span>
+}</pre>
+  <p>Now migrate your storage — JSON to SQLite, one ORM to another, a column rename for clarity — and the fields become <code class="inline">zodiacModuleAddress</code> / <code class="inline">zodiacEnabled</code> while one consumer still reads the old names. The condition evaluates falsy, and the system <strong>degrades gracefully into the wrong behavior</strong>: no error, no crash, transactions still flow — they just silently route down the manual-approval fallback path. Perfect on-chain permissions, unused.</p>
+  <p>Fallback paths are what make this class of bug invisible. Three defenses:</p>
+  <table>
+    <tr><th>Defense</th><th>Why it works</th></tr>
+    <tr><td>Log <em>which path</em> executed, every cycle</td><td>"Executed via role" vs "proposed to queue" in your logs turns a silent downgrade into a visible anomaly on day one.</td></tr>
+    <tr><td>Grep every consumer on any field rename</td><td>The schema migration isn't done when the table is migrated; it's done when the last reader is.</td></tr>
+    <tr><td>Alert on fallback frequency</td><td>If the manual path fires for a user who has a module configured, that's a bug by definition — page yourself.</td></tr>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="impl">
+  <div class="section-eyebrow">Reference</div>
+  <h2 class="section-title">A minimal working executor (ethers v6)</h2>
+  <p>The smallest honest wrapper that respects everything above. The role member's EOA calls the module; the module forwards to the Safe.</p>
+  <pre><span class="k">const</span> { ethers } = <span class="f">require</span>(<span class="s">'ethers'</span>);
+
+<span class="k">const</span> ROLES_ABI = [
+  <span class="s">'function execTransactionWithRole(address to, uint256 value, bytes data, uint8 operation, bytes32 roleKey, bool shouldRevert) returns (bool)'</span>,
+];
+
+<span class="c">// ONE shared constant — imported by setup script AND executor (Gotcha 03)</span>
+<span class="k">const</span> ROLE_KEY = ethers.<span class="f">keccak256</span>(ethers.<span class="f">toUtf8Bytes</span>(<span class="s">'MY_BOT_ROLE'</span>));
+
+<span class="k">async function</span> <span class="f">executeViaRole</span>(moduleAddress, tx, signer) {
+  <span class="k">const</span> roles = <span class="k">new</span> ethers.<span class="f">Contract</span>(moduleAddress, ROLES_ABI, signer);
+
+  <span class="c">// Defense in depth: assert we are calling the expected module,</span>
+  <span class="c">// not an address that drifted in from stale config (Gotchas 05–06)</span>
+  <span class="k">if</span> (!moduleAddress) <span class="k">throw new</span> <span class="f">Error</span>(<span class="s">'No Roles module configured'</span>);
+
+  <span class="k">const</span> receipt = <span class="k">await</span> (<span class="k">await</span> roles.<span class="f">execTransactionWithRole</span>(
+    tx.to,
+    tx.value ?? 0n,
+    tx.data ?? <span class="s">'0x'</span>,
+    0,          <span class="c">// operation: CALL. Never grant DELEGATECALL to an automation role.</span>
+    ROLE_KEY,
+    <span class="k">true</span>        <span class="c">// shouldRevert — fail loudly, always</span>
+  )).<span class="f">wait</span>();
+
+  console.<span class="f">log</span>(<span class="s">`Executed via role: ${receipt.hash}`</span>);  <span class="c">// path logging (Gotcha 06)</span>
+  <span class="k">return</span> receipt;
+}</pre>
+  <p>And the corresponding scoping sequence for one payable protocol plus one two-step flow:</p>
+  <pre><span class="c">// Payable protocol (e.g. a staking submit) — Send bit required</span>
+<span class="k">await</span> roles.<span class="f">allowTarget</span>(ROLE_KEY, STAKING_CONTRACT, 1);
+<span class="k">await</span> roles.<span class="f">allowFunction</span>(ROLE_KEY, STAKING_CONTRACT, SEL_SUBMIT, 0);
+
+<span class="c">// Two-step flow: approve on the TOKEN, deposit on the VAULT (Gotcha 04)</span>
+<span class="k">await</span> roles.<span class="f">allowTarget</span>(ROLE_KEY, LP_TOKEN, 0);
+<span class="k">await</span> roles.<span class="f">allowFunction</span>(ROLE_KEY, LP_TOKEN, SEL_APPROVE, 0);
+<span class="k">await</span> roles.<span class="f">allowTarget</span>(ROLE_KEY, VAULT, 0);
+<span class="k">await</span> roles.<span class="f">allowFunction</span>(ROLE_KEY, VAULT, SEL_DEPOSIT, 0);</pre>
+  <div class="alert success"><span class="alert-icon">🔐</span><span><strong>Key hygiene:</strong> the role member should be a dedicated, freshly generated EOA used for nothing else. Never reuse a key that also proposes to the Safe queue or holds any other permission — one key, one role, one blast radius.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<div class="section" id="verify">
+  <div class="section-eyebrow">Before real funds</div>
+  <h2 class="section-title">Verification checklist</h2>
+  <p>Config transactions confirming is not verification. Run all of these against the live module before trusting it:</p>
+  <ul class="check">
+    <li><strong>Exactly one module.</strong> In app.safe.global → Settings → Modules, confirm precisely one Roles Modifier is enabled and its address matches your config everywhere.</li>
+    <li><strong>Role key parity.</strong> Log the derived <code class="inline">bytes32</code> key from the setup script and from the executor at startup; the hex must be identical.</li>
+    <li><strong>Positive test.</strong> Execute the smallest possible real transaction through each whitelisted function (dust amounts) and confirm on-chain state changed as expected.</li>
+    <li><strong>Negative test.</strong> Attempt a call the role should <em>not</em> be able to make — an unwhitelisted target, an unwhitelisted selector, a transfer out — and confirm it reverts. A scope you haven't watched reject something is a scope you haven't tested.</li>
+    <li><strong>Value test.</strong> For each payable target, execute once with <code class="inline">value &gt; 0</code>; for each non-payable target, confirm a value-carrying call is rejected.</li>
+    <li><strong>Full-flow test.</strong> Run every multi-step flow end to end (approve → deposit, claim → swap), not just its individual calls.</li>
+    <li><strong>Path logging live.</strong> Confirm your logs distinguish role execution from any fallback path, and that an alert fires if a configured user hits the fallback.</li>
+    <li><strong>Revocation drill.</strong> Disable the module (or revoke the role) and confirm the executor is immediately powerless. If you've never tested the off switch, you don't have one.</li>
+  </ul>
+</div>
+
+<hr class="divider">
+
+<div class="content">
+  <div class="footer-note">
+    Written and maintained by the builder of <a href="https://fenix-yield.com">Fenix Yield</a>, which runs this exact permission model in production for non-custodial ETH yield automation.<br>
+    Found an inaccuracy or a gotcha we missed? <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a> — corrections credited.
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+const sections = document.querySelectorAll('.section[id]');
+const tabs = document.querySelectorAll('.tab');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+  tabs.forEach(t => {
+    t.classList.remove('active');
+    if (t.getAttribute('href') === '#' + current) t.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
