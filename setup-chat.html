@@ -557,8 +557,9 @@ function pickQuickReplies(userText, stepComplete) {
 }
 
 function formatBotResponse(text) {
-  // Remove [STEP_COMPLETE] marker from display
-  text = text.replace('[STEP_COMPLETE]', '').trim();
+  // Remove [STEP_COMPLETE] marker from display, then escape the reply so it is shown as
+  // plain text; the only markup is what this function adds below (bold, copy button, breaks).
+  text = escapeHtml(text.replace('[STEP_COMPLETE]', '').trim());
 
   // Convert **bold** 
   text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -659,7 +660,7 @@ window.sendMessage = async function() {
   document.getElementById('quickReplies').innerHTML = '';
   document.getElementById('sendBtn').disabled = true;
 
-  addMessage('user', `<p>${text}</p>`);
+  addMessage('user', `<p>${escapeHtml(text)}</p>`);
   isTyping = true;
   showTyping();
 
