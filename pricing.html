@@ -188,15 +188,11 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
 
 <main>
 
-  <!-- Store waitlist -->
-  <div class="coupon-box" id="waitlist">
-    <p class="coupon-label">📲 Want it on Google Play?</p>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:14px;line-height:1.6;">The app is coming soon to Google Play. Leave your email and we'll notify you the moment it's live.</p>
-    <div class="coupon-row">
-      <input class="coupon-input" id="wlEmail" type="email" placeholder="you@email.com" style="text-transform:none;letter-spacing:0;" />
-      <button class="coupon-btn" id="wlBtn" onclick="joinWaitlist()">Notify me</button>
-    </div>
-    <p class="coupon-msg" id="wlMsg"></p>
+  <!-- Google Play -->
+  <div class="coupon-box" id="google-play">
+    <p class="coupon-label">📲 Now on Google Play</p>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:14px;line-height:1.6;">The Fenix Yield app is live on Google Play in the US. Install it, create your wallet, and subscribe in the app — the first-year launch price is applied automatically.</p>
+    <a class="coupon-btn" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;">Get it on Google Play →</a>
   </div>
 
   <div class="pricing-grid">
@@ -243,16 +239,16 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
 
     <!-- Mobile app -->
     <article class="pricing-card mobile">
-      <div class="ribbon new">NEW · COMING SOON</div>
+      <div class="ribbon new">NEW · ON GOOGLE PLAY</div>
       <p class="pricing-tier">Mobile App</p>
-      <p class="pricing-platform">📱 Coming to Google Play · iOS coming soon · No MetaMask needed</p>
+      <p class="pricing-platform">📱 Google Play (US) · iOS coming soon · No MetaMask needed</p>
       <div class="price"><strong id="mob-price">$39</strong><span>/mo</span></div>
       <p class="price-original" id="mob-original"></p>
       <p class="price-savings" id="mob-savings">🚀 First year $29/mo, then $39/mo — automatic launch pricing</p>
       <p class="pricing-desc">The easiest way in. We create a secure wallet for you — just deposit ETH and earn. Perfect if you're new to crypto.</p>
       <ul class="pricing-features">
         <li><span class="check">✓</span>No MetaMask or Safe setup — a secure passkey wallet is created for you</li>
-        <li><span class="check">✓</span>Unlock with Face ID — no seed phrase to lose</li>
+        <li><span class="check">✓</span>Unlock with your fingerprint or face — no password, and a 12-word backup phrase only you hold</li>
         <li><span class="check">✓</span>Tap to deposit, stake, and withdraw — all in-app</li>
         <li><span class="check">✓</span>Auto-finds the best yield across all 4 protocols</li>
         <li><span class="check">✓</span>Smart alerts — rate moves, better pools, depeg warnings &amp; instant security alerts</li>
@@ -261,8 +257,8 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
         <li><span class="check">✓</span>Network fees at cost — no markup; first stake &amp; a monthly withdrawal on us</li>
         <li><span class="check">✓</span>Non-custodial — keys stay on your device, we never hold funds</li>
       </ul>
-      <a class="btn-pricing btn-filled" id="mob-btn" href="#waitlist">Coming soon to Google Play →</a>
-      <span class="btn-sub">Coming soon to Google Play — subscribe through the store at launch. Launch pricing: first year $29/mo, then $39/mo — applied automatically at checkout.<br><a href="phone-setup.html" style="color:var(--teal);text-decoration:none;">Getting the app? Get your phone ready first (2 min) →</a></span>
+      <a class="btn-pricing btn-filled" id="mob-btn" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get it on Google Play →</a>
+      <span class="btn-sub">Subscribe in the app, billed through Google Play. Launch pricing: first year $29/mo, then $39/mo — applied automatically at checkout. Available in the US for now.<br><a href="phone-setup.html" style="color:var(--teal);text-decoration:none;">Getting the app? Get your phone ready first (2 min) →</a></span>
     </article>
 
   </div>
@@ -345,51 +341,6 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
 </footer>
 
 <script>
-// Store-launch waitlist — captures interest for the Google Play version.
-async function joinWaitlist() {
-  const email = document.getElementById('wlEmail').value.trim();
-  const msg   = document.getElementById('wlMsg');
-  const btn   = document.getElementById('wlBtn');
-
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    msg.textContent = 'Please enter a valid email address.';
-    msg.className = 'coupon-msg error';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Joining...';
-  msg.textContent = '';
-  msg.className = 'coupon-msg';
-
-  try {
-    const ref = sessionStorage.getItem('fenix_ref') || '';
-    const res = await fetch('https://mobile-api.fenix-yield.com/api/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, platform: 'any', ref }),
-    });
-    if (res.ok) {
-      msg.textContent = "🎉 You're on the list — we'll email you the moment it launches.";
-      msg.className = 'coupon-msg success';
-      document.getElementById('wlEmail').value = '';
-    } else {
-      msg.textContent = 'Something went wrong. Please try again.';
-      msg.className = 'coupon-msg error';
-    }
-  } catch (e) {
-    msg.textContent = 'Could not connect. Please try again.';
-    msg.className = 'coupon-msg error';
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'Notify me';
-}
-
-document.getElementById('wlEmail').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') joinWaitlist();
-});
-
 // Referral tracking
 const refParam = new URLSearchParams(window.location.search).get('ref');
 if (refParam) sessionStorage.setItem('fenix_ref', refParam);
