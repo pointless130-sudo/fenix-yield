@@ -1,0 +1,21 @@
+# Fenix Yield
+
+> Non-custodial Ethereum yield tools by Fenix Labs LLC (Texas, USA). The flagship product is the Fenix Yield mobile app for Android: a self-custody ETH staking app where funds live in the user's own on-chain smart vault (passkey sign-in, 12-word recovery phrase held only by the user) and can be staked across five protocols — Lido, Rocket Pool, Aave, Curve, and Convex. Automation is limited by on-chain permissions (Zodiac Roles) to the pools the user enables; it cannot send funds to any other address. Yields are variable (recently roughly 1.5–5% per year) and never guaranteed. Flat monthly subscription via Google Play; no percentage of yield taken. Not financial advice.
+
+## Mobile app (Android)
+
+- [Self-custody ETH staking app — canonical page](https://fenix-yield.com/staking-app.html): what the app does, how custody works, protocols, honest DIY-vs-Fenix comparison, FAQ
+- [Google Play listing](https://play.google.com/store/apps/details?id=com.fenixyield.app): install page (US)
+- [Phone setup guide](https://fenix-yield.com/phone-setup.html): 2-minute preparation guide
+
+## Company & policies
+
+- [Fenix Labs](https://fenix-labs.dev/): the company behind Fenix Yield and Fenix Intel
+- [Security guide](https://fenix-yield.com/security.html)
+- [Terms of Service](https://fenix-yield.com/terms.html)
+- [Privacy Policy](https://fenix-yield.com/privacy.html)
+
+## Other products
+
+- [Fenix Intel](https://intel.fenix-yield.com/): paid Ethereum research dashboard (separate product)
+- [Fenix Yield Telegram bot](https://fenix-yield.com/): the original Safe-wallet automation product (4 protocols; separate from the app)

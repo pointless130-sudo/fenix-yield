@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Self-Custody ETH Staking App — Fenix Yield for Android</title>
+<meta name="description" content="Fenix Yield is a non-custodial Ethereum staking app for Android. Stake ETH across Lido, Rocket Pool, Aave, Curve, and Convex from your own on-chain vault — your keys, your coins. Yields 1.5–5%, variable.">
+<link rel="canonical" href="https://fenix-yield.com/staking-app.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fenix Yield">
+<meta property="og:title" content="Self-Custody ETH Staking App — Fenix Yield">
+<meta property="og:description" content="Stake ETH across five protocols from a vault you own. Non-custodial, passkey-secured, on Google Play.">
+<meta property="og:url" content="https://fenix-yield.com/staking-app.html">
+<meta property="og:image" content="https://fenix-yield.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="fenix-logo.jpg" type="image/jpeg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Fenix Yield: ETH Staking",
+  "operatingSystem": "ANDROID",
+  "applicationCategory": "FinanceApplication",
+  "description": "Non-custodial Ethereum staking app. Stake ETH across Lido, Rocket Pool, Aave, Curve, and Convex from your own on-chain smart vault, secured by a passkey and a 12-word recovery phrase that only you hold. Yields are variable (roughly 1.5–5% per year) and not guaranteed.",
+  "installUrl": "https://play.google.com/store/apps/details?id=com.fenixyield.app",
+  "url": "https://fenix-yield.com/staking-app.html",
+  "author": { "@type": "Organization", "name": "Fenix Labs LLC", "url": "https://fenix-labs.dev/" },
+  "offers": { "@type": "Offer", "price": "28.99", "priceCurrency": "USD", "description": "Monthly subscription via Google Play. $28.99/month for the first 12 months, then $38.99/month. Exact price shown at checkout in Google Play." }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is a self-custody Ethereum staking app?", "acceptedAnswer": { "@type": "Answer", "text": "An app where the ETH you stake stays in a wallet or vault that you control, instead of being deposited into a company account. With Fenix Yield, your ETH sits in your own smart vault on Ethereum. Fenix is software that helps you put that ETH into staking and yield protocols — it is never the holder of your funds." } },
+    { "@type": "Question", "name": "Does Fenix Yield hold my keys?", "acceptedAnswer": { "@type": "Answer", "text": "No. You unlock the app with a passkey (Face ID or fingerprint), and your 12-word recovery phrase — which only you hold — is the on-chain recovery key for your vault. Fenix servers only ever see the vault's public address." } },
+    { "@type": "Question", "name": "What can Fenix's automation actually do with my ETH?", "acceptedAnswer": { "@type": "Answer", "text": "The automation runs under an on-chain permission system (Zodiac Roles) that limits it to moving funds between the staking pools you have enabled. It cannot send your ETH to any other address. Withdrawals are always open to you, and major actions are confirmed with your passkey." } },
+    { "@type": "Question", "name": "Which staking protocols does Fenix Yield support?", "acceptedAnswer": { "@type": "Answer", "text": "Five Ethereum protocols: Lido, Rocket Pool, Aave, Curve, and Convex. The app shows each pool's live rate so you can compare and choose." } },
+    { "@type": "Question", "name": "What yields should I expect from ETH staking?", "acceptedAnswer": { "@type": "Answer", "text": "Ethereum staking and ETH yield rates have recently ranged roughly 1.5–5% per year, and they change constantly with network conditions. Yields are variable and not guaranteed. Nothing in the app or on this page is financial advice." } },
+    { "@type": "Question", "name": "How is Fenix Yield different from staking on Lido or Rocket Pool directly?", "acceptedAnswer": { "@type": "Answer", "text": "Staking directly is free of subscription fees and a good option if you are comfortable managing a wallet, gas, and each protocol's interface yourself. Fenix puts five protocols behind one simple app with passkey security, live rate comparison, and automation — for a flat subscription. You trade a monthly fee for convenience; either way the ETH stays in a wallet you control." } },
+    { "@type": "Question", "name": "What does Fenix Yield cost?", "acceptedAnswer": { "@type": "Answer", "text": "A flat monthly subscription billed through Google Play — the exact price is shown at checkout. Fenix does not take a percentage of your yield. Ethereum network (gas) fees apply to on-chain actions." } },
+    { "@type": "Question", "name": "What do I need to get started?", "acceptedAnswer": { "@type": "Answer", "text": "An Android phone (the app is on Google Play in the US), a passkey set up in about a minute, and a deposit of at least 0.01 ETH to activate your vault." } },
+    { "@type": "Question", "name": "What happens to my ETH if I cancel my subscription?", "acceptedAnswer": { "@type": "Answer", "text": "It stays yours, in your vault, and withdrawals remain open. A subscription unlocks the app's full features; it never holds your funds hostage." } }
+  ]
+}
+</script>
+<style>
+:root { --navy:#0d1117; --navy2:#161b22; --purple:#6B3FA0; --teal:#4EC8C4; --white:#f0f4f8; --muted:#8b949e; --border:#21262d; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);color:var(--white);font-family:Inter,system-ui,sans-serif;line-height:1.65}
+a{color:inherit}
+nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 40px;background:rgba(13,17,23,.86);backdrop-filter:blur(12px);border-bottom:1px solid rgba(78,200,196,.12)}
+.nav-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:800}
+.nav-logo img{width:28px;height:28px;border-radius:8px;object-fit:cover}
+.nav-logo .fenix{color:var(--teal)}
+.nav-cta{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:8px;color:#fff;background:linear-gradient(135deg,var(--purple),var(--teal));font-weight:700;font-size:14px;text-decoration:none}
+main{max-width:860px;margin:0 auto;padding:120px 24px 60px}
+h1{font-size:clamp(28px,5vw,42px);font-weight:900;letter-spacing:-.02em;line-height:1.2;margin-bottom:16px}
+h2{font-size:24px;font-weight:800;margin:48px 0 14px;color:var(--white)}
+h3{font-size:17px;font-weight:700;margin:22px 0 6px}
+p{color:var(--muted);margin-bottom:12px}
+.lead{font-size:18px;color:var(--white)}
+.accent{color:var(--teal)}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin:24px 0 8px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none}
+.btn-fill{background:linear-gradient(135deg,var(--purple),var(--teal));color:#fff}
+.btn-line{border:1px solid rgba(78,200,196,.45);background:rgba(78,200,196,.08);color:var(--teal)}
+.card{background:var(--navy2);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin:16px 0}
+.card p:last-child{margin-bottom:0}
+ul.plain{list-style:none;margin:8px 0 12px}
+ul.plain li{padding:6px 0 6px 26px;position:relative;color:var(--muted)}
+ul.plain li::before{content:"✓";position:absolute;left:2px;color:var(--teal);font-weight:800}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{padding:12px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{color:var(--teal);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+td{color:var(--muted)}
+td strong{color:var(--white)}
+.tbl-wrap{overflow-x:auto}
+.faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+.faq-item h3{margin:0 0 8px;color:var(--white)}
+.faq-item p{margin:0}
+.fineprint{font-size:12.5px;color:var(--muted);line-height:1.7;margin-top:40px;border-top:1px solid var(--border);padding-top:24px}
+footer{text-align:center;padding:40px 24px;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
+footer a{color:var(--teal);text-decoration:none}
+@media (max-width:640px){nav{padding:12px 16px}main{padding-top:96px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html"><img src="fenix-logo.jpg" alt="Fenix Yield logo"><span>Fenix<span class="fenix">Yield</span></span></a>
+  <a class="nav-cta" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get it on Google Play</a>
+</nav>
+<main>
+  <p class="accent" style="font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px">The Fenix Yield App · Android</p>
+  <h1>Self-custody ETH staking, from one simple app</h1>
+  <p class="lead">Fenix Yield is a <strong>non-custodial Ethereum staking app</strong>: your ETH lives in your own on-chain smart vault — not in our account — and you stake it across <strong>Lido, Rocket Pool, Aave, Curve, and Convex</strong> with a passkey instead of a seed-phrase juggling act.</p>
+  <div class="cta-row">
+    <a class="btn btn-fill" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get it on Google Play →</a>
+    <a class="btn btn-line" href="phone-setup.html">2-minute phone setup guide</a>
+  </div>
+  <p style="font-size:13px">Available on Google Play in the US. Yields are variable and not guaranteed. Not financial advice.</p>
+
+  <h2>How custody actually works</h2>
+  <div class="card">
+    <p><strong style="color:var(--white)">Your vault is a smart account on Ethereum that you own.</strong> When you join, the app creates it for you — no MetaMask, no browser extensions. Day to day you approve actions with a <strong style="color:var(--white)">passkey</strong> (Face ID or fingerprint). Behind it sits a <strong style="color:var(--white)">12-word recovery phrase that only you hold</strong> — the on-chain recovery key. Fenix servers only ever see your vault's public address.</p>
+  </div>
+  <ul class="plain">
+    <li>Fenix's automation runs under an on-chain permission system (Zodiac Roles). It can move funds <strong style="color:var(--white)">between the staking pools you've enabled — and nowhere else</strong>. It cannot send your ETH to any other address.</li>
+    <li>Withdrawals are always open. Cancel your subscription and your ETH stays yours, fully withdrawable.</li>
+    <li>No copy-to-clipboard for your recovery phrase, and screenshots are blocked while it's on screen — small details, because the phrase is the whole ballgame.</li>
+  </ul>
+
+  <h2>Five protocols, one screen</h2>
+  <p>The app shows the live rate for each pool and lets you move with a tap: <strong style="color:var(--white)">Lido</strong> (liquid staking), <strong style="color:var(--white)">Rocket Pool</strong> (decentralized staking), <strong style="color:var(--white)">Aave</strong> (lending), and <strong style="color:var(--white)">Curve</strong> + <strong style="color:var(--white)">Convex</strong> (liquidity yield). Recent ETH yields across these have ranged roughly <strong style="color:var(--white)">1.5–5% per year</strong> — variable, never guaranteed.</p>
+
+  <h2>Staking ETH: doing it yourself vs. using Fenix</h2>
+  <p>Honest comparison — DIY is a real option, and for some people the better one.</p>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Approach</th><th>Custody</th><th>Effort &amp; trade-offs</th></tr>
+    <tr><td><strong>Solo staking (32 ETH)</strong></td><td>Fully yours</td><td>Maximum decentralization; needs 32 ETH, your own hardware, and real ops skill. Penalties if your validator misbehaves.</td></tr>
+    <tr><td><strong>Lido / Rocket Pool directly</strong></td><td>Yours (your wallet)</td><td>No subscription fee. You manage the wallet, gas, and each protocol's interface yourself — fine if you're already comfortable in DeFi.</td></tr>
+    <tr><td><strong>Exchange staking (CEX)</strong></td><td><strong>Theirs</strong></td><td>Easiest button to press, but the exchange holds your ETH. Custody risk is the whole reason "not your keys, not your coins" is a saying.</td></tr>
+    <tr><td><strong>Fenix Yield app</strong></td><td>Yours (your vault)</td><td>Five protocols behind one passkey-secured app, with automation fenced in by on-chain permissions. Flat subscription — we don't take a cut of yield. You pay for convenience, not custody.</td></tr>
+  </table>
+  </div>
+
+  <h2>What to expect</h2>
+  <ul class="plain">
+    <li>Yields roughly 1.5–5% per year, changing constantly. Variable, not guaranteed.</li>
+    <li>Flat monthly subscription via Google Play (exact price at checkout) — never a percentage of your yield.</li>
+    <li>Ethereum network (gas) fees apply to on-chain actions.</li>
+    <li>Starting a vault takes a deposit of at least 0.01 ETH.</li>
+  </ul>
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq-item"><h3>What is a self-custody Ethereum staking app?</h3><p>An app where the ETH you stake stays in a wallet or vault you control, instead of being deposited into a company account. With Fenix, your ETH sits in your own smart vault on Ethereum; Fenix is software that helps you put it to work — it is never the holder of your funds.</p></div>
+  <div class="faq-item"><h3>Does Fenix Yield hold my keys?</h3><p>No. You unlock the app with a passkey, and your 12-word recovery phrase — which only you hold — is the on-chain recovery key for your vault. Fenix servers only ever see the vault's public address.</p></div>
+  <div class="faq-item"><h3>What can Fenix's automation actually do with my ETH?</h3><p>It runs under an on-chain permission system (Zodiac Roles) limited to moving funds between the staking pools you've enabled. It cannot send your ETH to any other address, and withdrawals are always open to you.</p></div>
+  <div class="faq-item"><h3>Which staking protocols are supported?</h3><p>Five: Lido, Rocket Pool, Aave, Curve, and Convex — with each pool's live rate shown in the app.</p></div>
+  <div class="faq-item"><h3>What yields should I expect?</h3><p>Recent ETH staking and yield rates have ranged roughly 1.5–5% per year, and they move constantly. Yields are variable and not guaranteed. Not financial advice.</p></div>
+  <div class="faq-item"><h3>How is this different from staking on Lido directly?</h3><p>Direct staking has no subscription fee and is a fine choice if you're comfortable managing a wallet, gas, and protocol interfaces yourself. Fenix trades a flat monthly fee for one simple app across five protocols, passkey security, and fenced-in automation. Either way, the ETH stays in a wallet you control.</p></div>
+  <div class="faq-item"><h3>What does it cost?</h3><p>A flat monthly subscription billed through Google Play — the exact price is shown at checkout. No percentage of your yield. Gas fees apply to on-chain actions.</p></div>
+  <div class="faq-item"><h3>What do I need to start?</h3><p>An Android phone (Google Play, US), a passkey — set up in about a minute — and at least 0.01 ETH to activate your vault.</p></div>
+  <div class="faq-item"><h3>What happens to my ETH if I cancel?</h3><p>It stays yours, in your vault, and withdrawals remain open. The subscription unlocks the app's features; it never holds your funds.</p></div>
+
+  <div class="cta-row" style="margin-top:36px">
+    <a class="btn btn-fill" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get Fenix Yield on Google Play →</a>
+  </div>
+
+  <p class="fineprint"><strong>Risk disclosure:</strong> Fenix Yield is a non-custodial software tool built by Fenix Labs LLC. We do not hold, control, or have access to your funds. DeFi protocols carry inherent risks including smart-contract vulnerabilities, liquidity risk, and market volatility. Yield percentages are variable and not guaranteed; past performance is not indicative of future results. Nothing on this page constitutes financial, investment, legal, or tax advice. See our <a href="terms.html" style="color:var(--teal)">Terms of Service</a>, <a href="privacy.html" style="color:var(--teal)">Privacy Policy</a>, and <a href="security.html" style="color:var(--teal)">Security Guide</a>.</p>
+</main>
+<footer>
+  © 2026 Fenix Labs LLC, doing business as Fenix Yield · <a href="index.html">Home</a> · <a href="security.html">Security</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
+</footer>
+</body>
+</html>
