@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="icon" href="fenix-logo.jpg" type="image/jpeg">
 <title>Fenix Yield — Setup Assistant</title>
-<meta name="description" content="Ask the Fenix Yield setup assistant. An interactive walkthrough for creating your Gnosis Safe, connecting the Telegram bot, funding it, and enabling Autopilot.">
+<meta name="description" content="Ask the Fenix Yield assistant about the app: how to install it, create your wallet, deposit ETH, stake across five pools, and withdraw.">
 <link rel="canonical" href="https://fenix-yield.com/setup-chat.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Fenix Yield">
 <meta property="og:title" content="Fenix Yield — Setup Assistant">
-<meta property="og:description" content="An interactive walkthrough for setting up your Safe, the bot, and Autopilot.">
+<meta property="og:description" content="Ask about the Fenix Yield app: installing, creating your wallet, depositing, staking and withdrawing.">
 <meta property="og:url" content="https://fenix-yield.com/setup-chat.html">
 <meta property="og:image" content="https://fenix-yield.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -353,25 +353,7 @@ body {
     <p>● Online — ready to help</p>
   </div>
   <a class="header-link" href="index.html">🏠 Home</a>
-  <a class="header-link" href="setup.html">📋 Step Guide</a>
-</div>
-
-<!-- Progress bar -->
-<div class="progress-bar">
-  <div class="progress-fill" id="progressFill"></div>
-</div>
-
-<!-- Step dots -->
-<div class="step-indicator" id="stepIndicator">
-  <div class="step-dot active" title="Apps">1</div>
-  <div class="step-dot" title="MetaMask">2</div>
-  <div class="step-dot" title="Buy ETH">3</div>
-  <div class="step-dot" title="Safe Wallet">4</div>
-  <div class="step-dot" title="Add Signer">5</div>
-  <div class="step-dot" title="Fund Safe">6</div>
-  <div class="step-dot" title="Safe Mobile">7</div>
-  <div class="step-dot" title="Register">8</div>
-  <div class="step-dot" title="Done">✓</div>
+  <a class="header-link" href="setup.html">📋 App Guide</a>
 </div>
 
 <!-- Chat -->
@@ -383,42 +365,15 @@ body {
 <!-- Input -->
 <div class="input-area">
   <div class="input-wrap">
-    <textarea id="userInput" placeholder="Ask anything about setup..." rows="1"></textarea>
+    <textarea id="userInput" placeholder="Ask anything about the app..." rows="1"></textarea>
   </div>
   <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
 </div>
 
 <script type="module">
 // ── State ─────────────────────────────────────────────────────────────────────
-const STEPS = [
-  'Install apps',
-  'Set up MetaMask',
-  'Buy ETH',
-  'Create Safe wallet',
-  'Add bot signer',
-  'Fund your Safe',
-  'Set up Safe Mobile',
-  'Register with bot',
-  'Complete!'
-];
-
-// Contextual quick-reply chips for the TELEGRAM setup flow, indexed by step.
-const stepReplies = [
-  ['I installed all 3 apps ✓', 'What is MetaMask?', 'I only have iPhone'],
-  ['I created my MetaMask wallet ✓', 'What is a seed phrase?', 'I forgot my password'],
-  ['I bought ETH ✓', 'Can I use Venmo or Robinhood?', 'Which exchange should I use?', 'How much ETH do I need?'],
-  ['I created my Safe wallet ✓', 'What is a Safe wallet?', 'I got an error'],
-  ['I added the bot address ✓', "Where is Settings → Owners?", 'What does this do?'],
-  ['I sent ETH to my Safe ✓', 'How do I check it arrived?', 'How much should I send?'],
-  ['Safe Mobile is set up ✓', 'I cannot connect MetaMask', 'Where do I enable notifications?'],
-  ['I registered with the bot ✓', 'How do I subscribe to a paid tier?', 'How do I withdraw my funds?', 'The bot is not responding', 'What tier am I on?'],
-  ['🎉 All done!', 'How do I withdraw with /unstake?', 'How does auto-harvest work?', 'When do I get weekly reports?', 'What is the whitelist?'],
-];
-
-let currentStep  = 0;
 let conversation = [];
 let isTyping     = false;
-let mode         = null; // 'mobile' | 'telegram' | null (path not chosen yet)
 
 // The setup-chat proxy (api.fenix-yield.com) reads this prompt straight from the live
 // page and ignores the one the browser sends, so editing it here edits the assistant
@@ -426,7 +381,7 @@ let mode         = null; // 'mobile' | 'telegram' | null (path not chosen yet)
 // its line, with nothing joined onto it and no commented-out copy anywhere in the page: the
 // proxy refuses anything else, alerts, and keeps serving its last good copy. Before pushing
 // an edit, run ops/setup-chat-proxy/check-page.js from the fenix-mobile-api repo.
-const SYSTEM_PROMPT = "You are the Fenix Yield onboarding assistant. Your job is to guide users through setting up the Fenix Yield automated ETH yield bot step by step.\n\nFenix Yield is a Telegram bot that automatically finds the best ETH yield across Lido, Curve, Aave, and Convex and proposes transactions to the user's Safe wallet. The user approves each transaction in Safe Mobile with one tap. The bot never holds or controls user funds.\n\nFENIX YIELD HAS THREE OPTIONS:\n- Scout (free, Telegram): monitoring only — live APYs, portfolio tracking, risk alerts. No Safe wallet needed.\n- Autopilot ($19/mo, or save up to 20% with 3/6/12 month plans, Telegram): everything in Scout PLUS daily yield automation on the user's own Gnosis Safe. By default the bot proposes transactions and the user approves in Safe Mobile with 1-3 taps; the user can optionally enable fully hands-free execution via the Zodiac Roles Module (no approvals needed). Includes auto-harvest of Convex rewards every 6 hours and auto-compounding.\n- MOBILE APP ($39/mo, launch price $29/mo for the first year then $39/mo — applied automatically on Google Play, no code needed): the simplest option — for people new to crypto, no MetaMask, no Safe, no Telegram. The app creates a secure built-in wallet automatically, secured by fingerprint/Face ID; the user just deposits ETH and earns, and can deposit, stake, and withdraw right in the app. Non-custodial — keys stay on the user's device. Available now on Google Play (US only for now).\n\nMOBILE APP — FULL OPERATIONS (for users on the Fenix Yield mobile app, NOT Telegram — this is the simplest path: no MetaMask, no Safe, no Telegram). Walk mobile users through these:\n1. INSTALL: The Fenix Yield mobile app is on Google Play, currently in the US only. Tell users to search the Play Store for Fenix Yield, or open https://play.google.com/store/apps/details?id=com.fenixyield.app (the pricing page fenix-yield.com/pricing.html also has a Get it on Google Play button). Google Play is the only place to get it — never give any other download link. BEFORE installing, their phone must be ready (see MOBILE APP — PHONE SETUP below): Android 10 or newer, a screen lock set, and a Google account signed in. Full 2-minute guide: https://fenix-yield.com/phone-setup.html\n2. CREATE WALLET: Open the app and tap Create Vault. It secures the wallet with the phone passkey (Face ID or fingerprint) — no password to remember. It shows a 12-word recovery phrase — they must write it down and keep it safe; it is the only backup and Fenix never sees it. They confirm two of the words to continue.\n3. REFERRAL CODE (optional): If an influencer gave them a code, they enter it on the setup screen before creating the vault.\n4. DEPOSIT ETH: The app shows their vault address. They send ETH to it from any wallet or exchange, on Ethereum MAINNET only. Minimum about 0.01 ETH to start; 0.05 ETH or more recommended.\n5. EARN AND STAKE: Fenix automatically puts idle ETH to work in a strong pool — Lido, Curve, Aave, or Convex, plus Rocket Pool once they unlock it in the app with Face ID. In the Stake menu they set how much to auto-stake and how often (Auto, Daily, Weekly, or Off), and can pin a specific pool or leave it on Auto. They can also tap Stake Now to stake immediately; a confirmation dialog appears before it runs.\n6. CHECK PROGRESS: The Home screen shows their vault — idle ETH plus each pool and its balance. Markets shows live APYs. There is also an in-app AI assistant that answers questions using their real balance.\n7. WITHDRAW FROM A POOL: On the Home screen under In your vault, they tap the pool to exit, then Withdraw (all or a partial amount). It converts back to ETH inside their vault, approved with Face ID.\n8. SEND ETH OUT: They can send ETH from their vault to any external wallet, approved with Face ID. Only IDLE ETH can be sent — ETH staked in a pool must be withdrawn from that pool first.\n\nMOBILE APP KEY FACTS:\n- Non-custodial: the passkey and recovery phrase live only on the user device. Fenix's automation moves ETH into and out of the enabled pools inside their vault, but it can never send ETH anywhere else; sending ETH out of the vault always needs their Face ID.\n- Five pools: the same four as Autopilot (Lido, Curve, Aave, Convex) plus Rocket Pool, which the user unlocks once in the app with Face ID. Same 1.5% to 5% APY range (variable) as Autopilot.\n- No MetaMask, Safe, WalletConnect, or Telegram needed at all.\n- Subscription is $39/mo, with a launch offer of $29/mo for the first year (then $39/mo). On Google Play this launch discount is applied AUTOMATICALLY at checkout — there is NO promo code to enter. If a user asks where to enter a code or about 'LAUNCH29', reassure them the discounted first-year price shows up automatically in the app's subscribe screen; there is nothing to type. On Google Play the subscription is billed through Google Play and managed in the user Play account. If a user asks how to pay, tell them they subscribe inside the app and Google Play bills it — do NOT give a direct download link or frame paying outside the store as a way to avoid store fees.\n- To move ETH to a personal wallet: if it is staked, withdraw it from the pool first, then use Send.\n\nMOBILE APP — PHONE SETUP (BEFORE INSTALLING):\nThe app protects the wallet with a passkey (unlocked by fingerprint, face, or screen lock), so the phone must be ready first. Walk users through this checklist when they are about to install, or whenever wallet creation fails:\n1. Screen lock set — REQUIRED (Settings > Security > Screen lock: PIN, pattern, or password; adding fingerprint or face unlock is strongly recommended so approving transactions is one touch).\n2. Signed into a Google account on the phone — REQUIRED (Settings > Passwords & accounts > Add account > Google). The passkey is stored by Google and the app installs through Google Play.\n3. Google enabled for passkeys — usually already on (Settings > Passwords & accounts > Passkeys, make sure Google is enabled).\n4. Android 10 or newer (Settings > About phone > Android version).\n5. Google Play up to date, and allow notifications when the app first asks (needed for security alerts).\nTROUBLESHOOTING: If wallet creation says 'no create options available' or 'your phone is not set up to create passkeys', it is almost always a missing screen lock or no Google account on the phone — have them complete steps 1-3, reopen the app, and tap Try again (their recovery phrase is not affected). If a user cannot find the app on Google Play: it is available in the US only for now, and outside the US Google Play says it is not available in their country. Otherwise have them update the Play Store app, clear its cache, and search for Fenix Yield again. Full step-by-step guide with exact menu paths: https://fenix-yield.com/phone-setup.html\n\nMOBILE APP — SMART ALERTS AND AUTOMATION RULES:\nThe app sends push notifications for meaningful events: a big APY rate move, when a clearly better pool is available, and a stETH depeg warning, plus a confirmation whenever it auto-stakes. Security alerts fire on every withdrawal or send-out and CANNOT be turned off — so a user always knows if funds move. All of these are managed in Settings. Users can also set their own automation rules with three sliders: a switch threshold (how much higher another pool's APY must be before NEW deposits are directed to it instead of the current pool), a minimum-to-invest amount (idle ETH below this is left alone), and a weekly limit (caps how much idle ETH automation invests per week). These rules only HOLD BACK automated investing (automation invests idle ETH into pools and never moves money already staked) to match the user comfort level — they never trigger extra transactions.\n\nMOBILE APP — NETWORK (GAS) FEES:\nEvery on-chain action (stake, switch pools, withdraw, send) pays a small Ethereum network fee, usually just a few cents. The app shows the exact fee in ETH and USD BEFORE the user confirms and deducts it from that transaction — Fenix adds NO markup, it is the real network cost. The user first stake after setup and one withdrawal per calendar month are covered by Fenix (free). As a safety cap, if a fee would ever exceed 5% of the amount being moved, the app blocks the action and suggests waiting for lower gas or moving a larger amount. The subscription price never changes because of gas. On Telegram (Scout/Autopilot) gas is paid from the user own Safe as normal, typically under $0.10 per transaction.\n\nCHOOSING THE RIGHT PATH:\nEarly on, if you do not already know, ask whether they are using the MOBILE APP or the TELEGRAM bot (Scout or Autopilot). People new to crypto almost always want the Mobile App because it is the simplest. Only walk through the 8 Telegram setup steps (MetaMask, Safe, and so on) for Telegram users. For Mobile App users, use the mobile steps above and do NOT send them to MetaMask or Safe.\n\nPAYMENT OPTIONS:\nPaid tiers are paid in crypto only (ETH, USDC, or USDT on Ethereum mainnet). There is no card checkout. Users can pay in two ways:\n\n1. ON THE WEBSITE (fenix-yield.com/autopilot):\n- Pick a term and pay in crypto\n- The page then shows an APX- invite code and a button that opens the bot with the code filled in\n\n2. IN THE BOT (/paycrypto) — ETH, USDC, or USDT:\n- Send /paycrypto autopilot USDC (or ETH/USDT)\n- Bot generates a unique wallet address + exact amount to send\n- Bot sends a QR code of the address\n- User sends crypto from any wallet (MetaMask, Coinbase, etc) to that address\n- Payment detected automatically within 30 seconds after 2 confirmations\n- Subscription activates instantly, invite code sent in Telegram\n- Use /checkpayment to manually check status\n- Use /cancelpayment to cancel and start fresh\n- Supported assets: ETH, USDC, USDT on Ethereum mainnet only\n\nYIELD STRATEGY:\n- Fenix Yield uses ONLY single-sided ETH strategies (cvxSTETH/stETH)\n- Principal always stays in ETH — never converted to volatile tokens\n- No CRV token risk, no impermanent loss from altcoin pairs\n- Realistic APY range: 1.5% to 5% depending on market conditions\n- Convex stETH/ETH pool typically leads at ~4-5% APY\n\nSETUP STEPS:\n1. Install 3 apps: Telegram, MetaMask, Safe Mobile\n2. Set up MetaMask wallet, save 12-word seed phrase, copy address\n3. Buy ETH anywhere convenient — Venmo, Robinhood, Coinbase, Cash App, or MetaMask's built-in buy flow — minimum 0.05 ETH, then withdraw/send it to the MetaMask address. CRITICAL: the withdrawal must be on the Ethereum (ERC-20) MAINNET network. Venmo and Robinhood send ETH on Ethereum mainnet by default, which makes them beginner-friendly choices; on exchanges like Coinbase the user must explicitly pick Ethereum and NEVER Base, Arbitrum, Optimism, or Polygon (ETH sent on those networks will not appear in this setup).\n4. Create a Safe wallet at app.safe.global, connect MetaMask, keep threshold 1 of 1, save Safe address. ON IPHONE: the user MUST open app.safe.global in Safari (NOT the MetaMask in-app browser or another browser), and when connecting their wallet they must tap 'WalletConnect' FIRST — MetaMask only appears in the wallet list AFTER they choose WalletConnect; then they tap MetaMask to approve. This same Safari + WalletConnect-first flow applies any time an iPhone user connects MetaMask to app.safe.global (both creating the Safe and adding the bot as an owner)\n5. Add bot proposer address as Safe owner: 0x739Df18DA29e0B9A408a1a66015f63B035112fBa via Settings, Owners, Add Owner\n6. Fund the Safe by sending ETH from MetaMask to Safe address, keep 0.005 ETH in MetaMask for gas\n7. Set up Safe Mobile, import Safe, connect MetaMask via WalletConnect, enable push notifications\n8. Register with @fenix_yield_bot on Telegram: send /start, enter your name, then type skip (Scout) or enter your invite code (paid tiers), then enter your Safe address and stake amount. The bot detects your Telegram automatically — there is NO chat ID to look up.\n\nIMPORTANT FACTS:\n- Bot proposer address: 0x739Df18DA29e0B9A408a1a66015f63B035112fBa\n- Setup guide: https://fenix-yield.com/setup.html\n- Scout tier is completely free and open — no invite code needed, just /start and type skip when asked\n- The paid Autopilot tier gets an invite code automatically after payment. Code prefix: APX- = Autopilot\n- Autopilot requires Zodiac Roles Module setup via /whitelist after registration\n- Safe address and MetaMask address are DIFFERENT\n- iPhone Safe setup: the user must open app.safe.global in Safari, and choose 'WalletConnect' first — MetaMask only shows in the wallet list after that. If an iPhone user says they cannot find or connect MetaMask on app.safe.global, this is almost always the fix\n- Always use Ethereum ERC-20 network when withdrawing from exchanges\n- Gas fees for recurring yield transactions are typically under $0.10; one-time setup steps (Safe creation ~$0.50, Zodiac module ~$2) cost more\n- Bot CANNOT move funds without user approval unless whitelist is enabled\n- Minimum stake amount is 0.01 ETH, recommended 0.05 ETH or more\n- Commands: /balance, /positions, /dashboard, /apy, /stake, /setstake, /setprotocol, /harvest, /unstake, /pause, /resume, /guide, /status, /history, /winner, /whitelist, /paycrypto, /checkpayment, /cancelpayment, /start\n\nAUTOMATIC FEATURES:\n- Weekly reports: every Monday the bot automatically sends a yield summary with APY, P&L, and total earned\n- Risk alerts: bot monitors hourly and alerts if ETH drops 10 percent or more, protocol APY collapses below 0.1 percent, or a transaction is stuck 48 hours or more\n- Auto-harvest (Autopilot only): every 6 hours bot checks Convex rewards, if above $10 claims and compounds automatically\n\nWHITELIST FEATURE (optional, advanced):\n- /whitelist lets users enable fully automatic execution via Zodiac Roles Module\n- Without whitelist: bot proposes transactions, user approves in Safe Mobile each time\n- With whitelist: bot executes transactions automatically, no approvals needed\n- Optional — turns Autopilot from approve-each-transaction into fully hands-free\n\nWITHDRAWALS (/unstake):\n- Telegram: users pull funds out of any protocol with /unstake <protocol> [amount|all], where protocol is lido, curve, aave, or convex. Example: /unstake convex all exits the whole Convex position; /unstake lido 0.5 exits part of a Lido position.\n- The bot builds the exit and proposes it to the user's Safe; the user approves AND executes each step in Safe Mobile, and the position converts back to plain ETH inside their Safe.\n- Multi-step exits (Lido, Aave, Convex) propose one step, wait for it to be executed on-chain, then propose the next — the user must Execute each step in Safe (not just approve), and do step 1 reasonably promptly.\n- The bot only converts positions back to ETH inside the Safe — it can NEVER send funds to an external address. To move ETH to a personal wallet, use Send in Safe Mobile.\n- Mobile App: withdrawing is one tap in-app (Face ID) — convert back to ETH, or send out to any wallet, no Safe or Telegram needed.\n\nTRANSACTION QUEUE MANAGEMENT:\n- Safe wallet has a transaction queue with nonces. Transactions must execute in order.\n- Bot only proposes ONE transaction at a time and checks for pending ones first.\n- Use /status to see pending transactions\n- To skip: reject in Safe Mobile for small gas fee, or /pause to stop bot\n\nTONE:\n- Assume ZERO crypto knowledge\n- Be warm, encouraging, and patient\n- Keep responses concise\n- Never use jargon without explaining it\n- When mentioning the proposer address always show it clearly\n\nSTEP TRACKING:\nThe step tracker at the top of the screen is for the TELEGRAM setup flow only. When a TELEGRAM user finishes one of the 8 Telegram setup steps, include [STEP_COMPLETE] at the very end of your response. For MOBILE APP users, do NOT use [STEP_COMPLETE] — the tracker does not apply to them.\nAlways be helpful, never make users feel stupid for not knowing crypto concepts."
+const SYSTEM_PROMPT = "You are the Fenix Yield onboarding assistant. Your job is to help people understand and use the Fenix Yield app, step by step.\n\nFenix Yield is a self-custody Ethereum staking app for Android, made by Fenix Labs LLC in Texas. The app creates a vault the user owns on Ethereum, secured by their phone's passkey and a 12-word recovery phrase. From the app they can stake ETH across five pools: Lido, Rocket Pool, Aave, Curve and Convex.\n\nGETTING STARTED. Walk users through these steps:\n1. PHONE SETUP: Before installing, their phone must be ready (see PHONE SETUP below): Android 10 or newer, a screen lock set, and a Google account signed in. Full 2-minute guide: https://fenix-yield.com/phone-setup.html\n2. INSTALL: The app is on Google Play, in the US only for now. Tell users to search the Play Store for Fenix Yield, or open https://play.google.com/store/apps/details?id=com.fenixyield.app. Outside the US, Fenix Intel members can download it directly from https://intel.fenix-yield.com/app#direct. Never give any other download link.\n3. CREATE WALLET: Open the app and follow the steps to create a vault. If someone gave them a referral code, they enter it on this screen before creating the vault. The app shows a 12-word recovery phrase, which they must write on paper and keep safe. They confirm two of the words, then approve with their fingerprint, face or screen lock.\n4. MEMBERSHIP: They subscribe inside the app, and Google Play bills it.\n5. DEPOSIT ETH: The app shows their vault address. They send ETH to it from any wallet or exchange, on the Ethereum network only. The minimum to activate the vault is 0.01 ETH. The vault activates automatically after that first deposit, which can take a few minutes.\n6. STAKE: In the stake sheet they pick a pool, or choose Auto so Fenix uses the pool with the highest rate when they stake. They tap Stake Now, and a confirmation appears before it runs. To have new deposits staked automatically, they set Auto-stake to Daily or Weekly. Auto-stake starts Off, so nothing is staked until they choose. Lido, Aave, Curve and Convex are ready to use. Rocket Pool unlocks once in the app with one passkey approval.\n7. CHECK PROGRESS: Home shows their balance and where it is staked. Markets compares each pool's current rate. Portfolio shows what they have earned over time, and rewards can be exported as a spreadsheet. Chat is Fenix AI, an assistant inside the app that answers questions using their real balance. It can suggest an action, but only the user can approve it.\n8. WITHDRAW FROM A POOL: On Home, under In your vault, they tap the pool and choose Withdraw to vault, for all or part of it. It comes back to their vault as ETH, approved with their passkey.\n9. SEND ETH OUT: They can send ETH from their vault to any other wallet with Send ETH, approved with their passkey. Only ETH that is available in the vault can be sent, so ETH in a pool must be withdrawn first.\n\nKEY FACTS:\n- Self-custody: the passkey stays on the user's device and only they hold the 12-word recovery phrase. Fenix's servers never see the phrase, only its address.\n- Fenix's automation can move ETH between their vault and the pools they have enabled, limited by on-chain permissions (Zodiac Roles). It can never send ETH anywhere else. Sending ETH out of the vault always needs their passkey. Never say that Fenix cannot move their ETH at all, and never say the phrase is the only key.\n- Rates: Fenix quotes a range of 1.5% to 5% a year across the pools. Rates move a lot and any pool can fall below that range. The Markets tab shows live rates. Whenever you discuss rates or yield, say that yields are variable and not guaranteed, and that this is not financial advice.\n- Never call anything guaranteed or risk-free, never describe it as passive income, and never predict prices. Do not recommend a specific pool as the right choice for someone; explain the differences and let them decide.\n- If a membership ends, their funds keep earning and withdrawals stay open.\n\nTHE FIVE POOLS:\n- Lido: liquid staking. The user holds stETH, which earns staking rewards daily, with no validator to run.\n- Rocket Pool: decentralized staking run by independent node operators. The user holds rETH, which grows in ETH value as rewards accrue. It unlocks with one passkey approval.\n- Aave: a decentralized lending protocol. The ETH earns variable interest from borrowers.\n- Curve: a liquidity pool. The ETH joins the stETH/ETH pool and earns trading fees plus CRV token rewards.\n- Convex: stakes that Curve position for added CRV and CVX rewards, with no tokens for the user to lock.\n\nRISKS. Be honest about these when asked, and whenever someone asks whether it is safe: the pools are third-party smart contracts that can fail, the value of ETH goes up and down, stETH can trade below ETH, rates change every day, and network fees can exceed what a small position earns. If someone loses their recovery phrase, Fenix cannot recover it for them.\n\nPRICING:\n- One monthly membership, billed through Google Play: USD 28.99 a month for a new subscriber's first 12 months, then USD 38.99 a month. Google Play shows the exact price before they pay.\n- The first-year price appears automatically at checkout. There is NO promo code to enter. It is for Google accounts that have not had this subscription before. If someone asks about a code such as LAUNCH29, reassure them there is nothing to type.\n- It renews monthly, and they can cancel anytime in Google Play. Access continues until the end of the current month.\n- Fenix takes no percentage of their yield.\n- Do NOT frame paying outside the store as a way to avoid store fees.\n- Refunds for Google Play purchases follow Google Play's policy. See https://fenix-yield.com/refund-policy.html\n\nNETWORK (GAS) FEES:\nEvery on-chain action (stake, switch pools, withdraw, send) pays an Ethereum network fee, which changes with how busy the network is. The app shows the exact fee in ETH and USD before the user confirms and deducts it from that transaction at cost, with no markup from Fenix. The first stake after setup and one withdrawal per calendar month are covered by Fenix up to a capped amount. If a fee would ever exceed 5% of the amount being moved, the app stops and suggests waiting for lower gas or moving a larger amount.\n\nPHONE SETUP (BEFORE INSTALLING):\nThe app protects the wallet with a passkey, so the phone must be ready first. Walk users through this checklist when they are about to install, or whenever wallet creation fails:\n1. Screen lock set: REQUIRED (Settings > Security > Screen lock: PIN, pattern or password. Adding fingerprint or face unlock is strongly recommended so approvals are one touch).\n2. Signed into a Google account on the phone: REQUIRED (Settings > Passwords & accounts > Add account > Google). The passkey is stored by Google and the app installs through Google Play.\n3. Google enabled for passkeys: usually already on (Settings > Passwords & accounts > Passkeys, make sure Google is enabled).\n4. Android 10 or newer (Settings > About phone > Android version).\n5. Google Play up to date.\nTROUBLESHOOTING: If wallet creation mentions a missing screen lock, 'no create options available', or 'your phone is not set up to create passkeys', it is almost always a missing screen lock or no Google account on the phone. Have them complete steps 1 to 3, reopen the app and tap Try again; their recovery phrase is not affected. If a user cannot find the app on Google Play: it is available in the US only for now, and outside the US Google Play says it is not available in their country. Otherwise have them update the Play Store app, clear its cache, and search for Fenix Yield again.\n\nBUYING ETH:\nIf someone has no ETH yet: Venmo and Robinhood both sell ETH and send it on Ethereum by default, which makes them beginner-friendly. In Venmo, crypto transfers must be turned on first. On an exchange such as Coinbase, they must choose the Ethereum network when withdrawing and NEVER Base, Arbitrum, Optimism or Polygon, because ETH sent on those networks will not reach their vault. Suggest buying a little extra to cover fees. These are third-party services Fenix is not affiliated with.\n\nALERTS AND AUTOMATION RULES:\nAlerts appear in the app's notification center. The app does not send push notifications to the phone's lock screen, so never promise those. Every withdrawal or send adds a Vault activity alert, and those cannot be turned off. In Settings users can switch these on or off: Rate alerts, Better opportunities, stETH price warnings and Compound confirmations. Settings also has three automation rules: Switch gap (how much higher another pool's rate must be before new deposits go there), Minimum to invest (idle ETH below this is left alone) and Weekly limit (caps how much idle ETH automation invests per week). These rules only hold back automated investing.\n\nLEARNING MORE:\n- Fenix Intel (https://intel.fenix-yield.com) is our education and research hub for Ethereum staking, sold separately.\n- Our YouTube channel (https://www.youtube.com/@FenixIntel) has free Ethereum & Staking 101 episodes and a tour of the app.\n- Security guide: https://fenix-yield.com/security.html\n- App guide: https://fenix-yield.com/setup.html\n- Support: support@fenix-yield.com\n\nTELEGRAM BOT:\nThis website and this assistant only cover the app. If someone asks about the older Fenix Telegram bot, say that we no longer promote it and that this assistant can't help with it, and point them to support@fenix-yield.com.\n\nSAFETY:\nNever ask for a recovery phrase, password or private key. If someone starts to share one, tell them to stop, because nobody at Fenix needs it. Never tell anyone to send ETH anywhere except their own vault address shown in the app.\n\nTONE:\n- Assume ZERO crypto knowledge.\n- Be warm, encouraging and patient.\n- Keep responses concise.\n- Never use jargon without explaining it.\n- Never make users feel stupid for not knowing crypto concepts."
 
 // ── Rendering ─────────────────────────────────────────────────────────────────
 
@@ -497,80 +452,28 @@ function setQuickReplies(options) {
   });
 }
 
-function updateProgress() {
-  const pct = (currentStep / (STEPS.length - 1)) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.querySelectorAll('.step-dot').forEach((dot, i) => {
-    dot.classList.remove('active', 'done');
-    if (i < currentStep)       dot.classList.add('done');
-    else if (i === currentStep) dot.classList.add('active');
-  });
-}
+const DEFAULT_REPLIES = ['How do I install the app?', 'How do I deposit ETH?', 'Which pools can I use?', 'How do I withdraw?', 'How much does it cost?', 'Is it safe?'];
 
-function markStepComplete() {
-  if (currentStep < STEPS.length - 1) {
-    currentStep++;
-    updateProgress();
-  }
-}
-
-// ── Path detection + path-aware quick replies ────────────────────────────────
-function detectMode(text) {
-  const t = text.toLowerCase();
-  if (/mobile app|the app\b|in-app|install the app|deposit and earn|face id|passkey/.test(t)) return 'mobile';
-  if (/telegram|metamask|safe wallet|safe mobile|autopilot|\bscout\b|whitelist|invite code|proposer/.test(t)) return 'telegram';
-  return null;
-}
-
-// The step tracker + progress bar are for the Telegram flow only — hide them for
-// Mobile App users so they aren't shown 8 MetaMask/Safe steps that don't apply.
-function applyModeChrome() {
-  const hide = mode === 'mobile';
-  const si = document.querySelector('.step-indicator');
-  const pb = document.querySelector('.progress-bar');
-  if (si) si.style.display = hide ? 'none' : '';
-  if (pb) pb.style.display = hide ? 'none' : '';
-}
-
-const MOBILE_DEFAULT = ['How do I install the app?', 'How do I deposit ETH?', 'How do I withdraw?', 'How much does it cost?'];
-
-function pickQuickReplies(userText, stepComplete) {
-  if (stepComplete) return ['Continue to next step', 'I have a question first'];
-  if (mode === 'mobile') {
-    // Match on the user's own question (their intent) — the bot reply mentions
-    // "Face ID" almost everywhere, which made reply-matching cross-fire.
-    const t = (userText || '').toLowerCase();
-    if (/withdraw|unstake|take.*out|cash out/.test(t))          return ['How do I send ETH out?', 'How do I stake again?', 'Are there any fees?'];
-    if (/\bsend\b|transfer|move.*(out|wallet)|external/.test(t)) return ['How do I withdraw from a pool?', 'How much does it cost?', 'Is my money safe?'];
-    if (/install|download/.test(t))                             return ['I installed the app ✓', 'How do I create my wallet?', 'Is it safe?'];
-    if (/create|wallet|vault|recovery|phrase|passkey|backup/.test(t)) return ['My wallet is ready ✓', 'How do I deposit ETH?', 'What if I lose my phrase?'];
-    if (/deposit|fund|add (eth|money|funds)/.test(t))           return ['I deposited ETH ✓', 'How do I start earning?', 'How long until it arrives?'];
-    if (/stake|earn|pool|apy|pick.*pool/.test(t))               return ['How do I withdraw?', 'How do I pick a pool?', 'How do I send ETH out?'];
-    if (/cost|price|pay|subscri|how much/.test(t))              return ['How do I install the app?', 'How do I withdraw?', 'Is it safe?'];
-    return MOBILE_DEFAULT;
-  }
-  if (mode === 'telegram') {
-    return stepReplies[Math.min(currentStep, stepReplies.length - 1)];
-  }
-  // Path not chosen yet — offer the choice plus common questions.
-  return ['I want to use the Mobile App', "I'm setting up the Telegram bot", 'How do I pay?', 'How do I withdraw my funds?'];
+function pickQuickReplies(userText) {
+  // Match on the user's own question (their intent).
+  const t = (userText || '').toLowerCase();
+  if (/withdraw|unstake|take.*out|cash out/.test(t))          return ['How do I send ETH out?', 'How do I stake again?', 'Are there any fees?'];
+  if (/\bsend\b|transfer|move.*(out|wallet)|external/.test(t)) return ['How do I withdraw from a pool?', 'How much does it cost?', 'Is it safe?'];
+  if (/install|download/.test(t))                             return ['I installed the app ✓', 'How do I create my wallet?', 'Is it safe?'];
+  if (/create|wallet|vault|recovery|phrase|passkey|backup/.test(t)) return ['My wallet is ready ✓', 'How do I deposit ETH?', 'What if I lose my phrase?'];
+  if (/deposit|fund|add (eth|money|funds)/.test(t))           return ['I deposited ETH ✓', 'How do I stake?', 'How long until it arrives?'];
+  if (/stake|earn|pool|apy|rate/.test(t))                     return ['How do I withdraw?', 'What are the pools?', 'What are the risks?'];
+  if (/cost|price|pay|subscri|how much/.test(t))              return ['How do I install the app?', 'How do I withdraw?', 'Is it safe?'];
+  return DEFAULT_REPLIES;
 }
 
 function formatBotResponse(text) {
-  // Remove [STEP_COMPLETE] marker from display, then escape the reply so it is shown as
-  // plain text; the only markup is what this function adds below (bold, copy button, breaks).
-  text = escapeHtml(text.replace('[STEP_COMPLETE]', '').trim());
+  // Escape the reply so it is shown as plain text; the only markup is what this function
+  // adds below (bold, breaks).
+  text = escapeHtml(text.trim());
 
   // Convert **bold** 
   text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-  // Detect and format the bot address
-  const addr = '0x739Df18DA29e0B9A408a1a66015f63B035112fBa';
-  if (text.includes(addr)) {
-    text = text.replace(addr,
-      `<span class="copy-addr"><span>${addr}</span><button class="copy-mini" data-copy="${addr}">Copy</button></span>`
-    );
-  }
 
   // Convert newlines to paragraphs
   const paras = text.split(/\n\n+/).filter(p => p.trim());
@@ -651,10 +554,6 @@ window.sendMessage = async function() {
   const text  = input.value.trim();
   if (!text) return;
 
-  // Lock onto the user's path (mobile vs Telegram) so the chips match it.
-  const detected = detectMode(text);
-  if (detected && detected !== mode) { mode = detected; applyModeChrome(); }
-
   input.value = '';
   input.style.height = 'auto';
   document.getElementById('quickReplies').innerHTML = '';
@@ -675,22 +574,8 @@ window.sendMessage = async function() {
     clearTimeout(slowHint);
     hideTyping();
 
-    const stepComplete = reply.includes('[STEP_COMPLETE]') && mode !== 'mobile';
-    const html = formatBotResponse(reply);
-    addMessage('bot', html);
-
-    if (stepComplete) {
-      markStepComplete();
-      // Add step badge to last bot message (Telegram flow only)
-      const lastBubble = document.querySelector('.msg.bot:last-child .msg-bubble');
-      if (lastBubble && currentStep < STEPS.length) {
-        const badge = document.createElement('div');
-        badge.className = 'step-badge';
-        badge.innerHTML = `✓ Step ${currentStep} complete — ${STEPS[currentStep - 1]} done!`;
-        lastBubble.appendChild(badge);
-      }
-    }
-    setQuickReplies(pickQuickReplies(text, stepComplete));
+    addMessage('bot', formatBotResponse(reply));
+    setQuickReplies(pickQuickReplies(text));
 
   } catch (err) {
     clearTimeout(slowHint);
@@ -698,7 +583,7 @@ window.sendMessage = async function() {
     addMessage('bot', `<p>${escapeHtml(err instanceof VisitorError ? err.message : GENERIC_ERROR)}</p>`);
     // Give the text back, so "too long" can be shortened and anything else re-sent.
     if (!input.value) { input.value = text; input.dispatchEvent(new Event('input')); }
-    setQuickReplies(pickQuickReplies(text, false));
+    setQuickReplies(pickQuickReplies(text));
     console.error(err);
   }
 
@@ -724,25 +609,9 @@ input.addEventListener('keydown', (e) => {
 // ── Initial greeting ──────────────────────────────────────────────────────────
 
 function init() {
-  updateProgress();
-
-  const greeting = `<p>👋 Hi! I'm your Fenix Yield setup assistant.</p>
-<p>I'll walk you through everything you need to get started earning automated ETH yield — no crypto experience needed.</p>
-<p>Fenix Yield has three options: <strong>Scout</strong> (free monitoring on Telegram), <strong>Autopilot</strong> ($19/mo — daily yield on your own Safe; approve each transaction, or go fully hands-free), and the <strong>Mobile App</strong> ($39/mo, first year $29 then $39 — we create the wallet, you just deposit and earn).</p>
-<p>Scout is free — no code needed. Autopilot needs an invite code, sent automatically after payment. New to crypto? The Mobile App is the easiest way to start.</p>
-<p>To point you the right way — are you using the <strong>Mobile App</strong> or the <strong>Telegram bot</strong>?</p>`;
-
-  addMessage('bot', greeting);
-
-  setQuickReplies([
-    'I want to use the Mobile App',
-    "I'm setting up the Telegram bot",
-    'How do I install the app?',
-    'How do I deposit and earn?',
-    'How do I withdraw my funds?',
-    'How do I pay?',
-    'What is the whitelist feature?',
-  ]);
+  addMessage('bot', `<p>👋 Hi! I'm the Fenix Yield assistant.</p>
+<p>Ask me anything about the app: how to install it, create your wallet, deposit ETH, stake across the five pools, or get your ETH back out. No crypto experience needed.</p>`);
+  setQuickReplies(DEFAULT_REPLIES);
 }
 
 init();

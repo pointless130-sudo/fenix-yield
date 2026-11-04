@@ -1,350 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pricing — Fenix Yield</title>
-<meta name="description" content="Fenix Yield plans — compare Scout and Autopilot for the Telegram yield bot, plus the mobile app. Autopilot is paid in crypto on fixed terms with no auto-renewal; the app is billed through Google Play.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing: Fenix Yield App</title>
+<meta name="description" content="Fenix Yield is one monthly membership billed through Google Play: $28.99/month for new subscribers' first 12 months, then $38.99/month. No cut of your yield. Ethereum network fees apply.">
 <link rel="canonical" href="https://fenix-yield.com/pricing.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Fenix Yield">
-<meta property="og:title" content="Pricing — Fenix Yield">
-<meta property="og:description" content="Compare Scout and Autopilot, plus the mobile app on Google Play. Autopilot: crypto, fixed terms, no auto-renewal.">
+<meta property="og:title" content="Pricing: Fenix Yield App">
+<meta property="og:description" content="One monthly membership through Google Play. No cut of your yield.">
 <meta property="og:url" content="https://fenix-yield.com/pricing.html">
 <meta property="og:image" content="https://fenix-yield.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fenix-yield.com/og-image.png">
+<link rel="icon" href="fenix-logo.jpg" type="image/jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@1,400&display=swap" rel="stylesheet">
-<link rel="icon" href="fenix-logo.jpg" type="image/jpeg">
-<style>
-:root {
-  --navy: #0d1117;
-  --navy2: #161b22;
-  --purple: #6B3FA0;
-  --purple2: #8B5FC0;
-  --teal: #4EC8C4;
-  --white: #f0f4f8;
-  --muted: #8b949e;
-  --border: #21262d;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--navy);
-  color: var(--white);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  line-height: 1.6;
-}
-a { color: inherit; }
-nav {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 16px 40px;
-  background: rgba(13,17,23,0.86);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(78,200,196,0.12);
-}
-.nav-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
-.logo-img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
-.nav-logo .fenix { color: var(--teal); }
-.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-.nav-links a:hover { color: var(--white); }
-.nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 8px; color: #fff !important; background: linear-gradient(135deg, var(--purple), var(--teal)); font-weight: 700 !important; }
-.page-header { padding: 140px 24px 60px; text-align: center; background: linear-gradient(160deg, #eef1f7 0%, #dde4ef 100%); position: relative; overflow: hidden; }
-.page-header::before { content: ""; position: absolute; width: 500px; height: 500px; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); background: radial-gradient(ellipse, rgba(78,200,196,0.18) 0%, rgba(107,63,160,0.1) 50%, transparent 72%); }
-.page-header-inner { position: relative; z-index: 1; }
-.page-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
-.page-title { font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: -0.03em; color: #1a1f3a; margin-bottom: 16px; }
-.page-desc { font-size: 17px; color: #4a5568; max-width: 520px; margin: 0 auto; }
-main { max-width: 1000px; margin: 0 auto; padding: 80px 24px 80px; }
-
-/* Coupon box */
-.coupon-box {
-  max-width: 480px;
-  margin: 0 auto 48px;
-  background: var(--navy2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px 28px;
-}
-.coupon-label { font-size: 11px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
-.coupon-row { display: flex; gap: 10px; }
-.coupon-input {
-  flex: 1;
-  background: var(--navy);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: var(--white);
-  font-size: 14px;
-  font-family: inherit;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.coupon-input:focus { border-color: var(--teal); }
-.coupon-input::placeholder { text-transform: none; color: var(--muted); letter-spacing: 0; }
-.coupon-btn {
-  padding: 10px 18px;
-  background: linear-gradient(135deg, var(--purple), var(--teal));
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  font-family: inherit;
-}
-.coupon-btn:hover { opacity: 0.85; }
-.coupon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.coupon-msg { margin-top: 10px; font-size: 13px; min-height: 20px; }
-.coupon-msg.success { color: var(--teal); }
-.coupon-msg.error { color: #f87171; }
-
-/* Pricing grid */
-.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 60px; }
-.pricing-card { background: var(--navy2); border: 1px solid var(--border); border-radius: 20px; padding: 32px 28px; position: relative; display: flex; flex-direction: column; }
-.pricing-card.featured { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal), 0 8px 40px rgba(78,200,196,0.12); }
-.pricing-card.mobile { border-color: rgba(107,63,160,0.5); background: linear-gradient(160deg, rgba(107,63,160,0.14), rgba(78,200,196,0.05)); }
-.ribbon { position: absolute; top: -1px; right: 24px; background: linear-gradient(135deg, var(--purple), var(--teal)); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; padding: 4px 12px; border-radius: 0 0 8px 8px; }
-.ribbon.new { background: linear-gradient(135deg, #6B3FA0, #8B5FC0); }
-.pricing-tier { font-size: 11px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
-.pricing-platform { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
-.price { margin-bottom: 4px; }
-.price strong { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; }
-.price span { font-size: 16px; color: var(--muted); }
-.price-original { font-size: 13px; color: var(--muted); text-decoration: line-through; margin-bottom: 4px; min-height: 20px; }
-.price-savings { font-size: 12px; color: var(--teal); font-weight: 700; margin-bottom: 8px; min-height: 18px; }
-.pricing-desc { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-.pricing-features { list-style: none; margin-bottom: 28px; flex: 1; }
-.pricing-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--white); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.pricing-features li.dim { color: var(--muted); }
-.check { color: var(--teal); font-weight: 700; flex-shrink: 0; }
-.btn-pricing { display: block; text-align: center; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; transition: opacity 0.2s, transform 0.1s; }
-.btn-pricing:hover { opacity: 0.85; transform: translateY(-1px); }
-.btn-outline { border: 1.5px solid var(--teal); color: var(--teal); }
-.btn-filled { background: linear-gradient(135deg, var(--purple), var(--teal)); color: #fff; border: none; }
-.btn-sub { display:block; text-align:center; font-size:12px; color:var(--muted); margin-top:10px; }
-.section-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; }
-.section-heading { font-size: clamp(24px, 4vw, 36px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 40px; }
-.faq { max-width: 680px; margin: 0 auto 60px; }
-.faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
-.faq-item:first-child { border-top: 1px solid var(--border); }
-.faq-q { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
-.faq-a { color: var(--muted); font-size: 14px; line-height: 1.7; }
-.faq-a a { color: var(--teal); text-decoration: none; }
-.security-box { max-width: 720px; margin: 0 auto 40px; padding: 28px 32px; background: var(--navy2); border: 1px solid var(--border); border-radius: 16px; }
-.security-box .label { color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
-.security-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.security-box p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
-.security-box p:last-child { margin-bottom: 0; }
-footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-align: center; }
-.footer-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; margin-bottom: 8px; }
-.footer-logo img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
-.footer-tagline { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
-.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 28px; list-style: none; margin-bottom: 20px; }
-.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; }
-.footer-links a:hover { color: var(--white); }
-.footer-email { color: var(--teal); text-decoration: none; font-size: 13px; display: block; margin-bottom: 24px; }
-.footer-copy { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 720px; margin: 0 auto; }
-@media (max-width: 600px) { nav { padding: 14px 20px; } .nav-links { display: none; } main { padding: 60px 16px 60px; } }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="index.html">
-    <img class="logo-img" src="fenix-logo.jpg" alt="Fenix Yield">
-    <span><span class="fenix">Fenix</span> Yield</span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html#how-it-works">How it works</a></li>
-    <li><a href="index.html#protocols">Protocols</a></li>
-    <li><a href="pricing.html" style="color:var(--white)">Pricing</a></li>
-    <li><a href="setup.html">Setup</a></li>
-    <li><a href="security.html">Security</a></li>
-    <li><a href="https://memory.fenix-yield.com" target="_blank" rel="noreferrer">Fenix Memory ↗</a></li>
-  </ul>
-  <a class="nav-cta" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free →</a>
+<nav aria-label="Main">
+  <div class="wrap nav-row">
+    <a class="brand" href="index.html"><img src="fenix-logo.jpg" alt=""><span><span>Fenix</span> Yield</span></a>
+    <ul class="nav-links">
+      <li class="opt"><a href="index.html#pools">Pools</a></li>
+      <li class="opt"><a href="setup.html">How it works</a></li>
+      <li class="opt"><a href="security.html">Security</a></li>
+      <li class="opt"><a href="pricing.html">Pricing</a></li>
+      <li class="opt"><a href="https://intel.fenix-yield.com" target="_blank" rel="noopener">Fenix Intel ↗</a></li>
+      <li class="opt"><a href="https://www.youtube.com/@FenixIntel" target="_blank" rel="noopener">YouTube ↗</a></li>
+      <li class="opt"><a href="https://memory.fenix-yield.com" target="_blank" rel="noopener">Fenix Memory ↗</a></li>
+      <li><a class="btn btn-fill" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get the app</a></li>
+    </ul>
+  </div>
 </nav>
 
-<div class="page-header">
-  <div class="page-header-inner">
-    <p class="page-eyebrow">Simple, transparent pricing</p>
-    <h1 class="page-title">Start free. Automate when ready.</h1>
-    <p class="page-desc">Two ways to earn: the Telegram bot for crypto-native users, or the mobile app that handles everything for you. No lock-in — cancel anytime.</p>
-  </div>
-</div>
-
 <main>
-
-  <!-- Google Play -->
-  <div class="coupon-box" id="google-play">
-    <p class="coupon-label">📲 Now on Google Play</p>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:14px;line-height:1.6;">The Fenix Yield app is live on Google Play in the US. Install it, create your wallet, and subscribe in the app — the first-year launch price is applied automatically.</p>
-    <a class="coupon-btn" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;">Get it on Google Play →</a>
-  </div>
-
-  <div class="pricing-grid">
-
-    <!-- Scout -->
-    <article class="pricing-card">
-      <p class="pricing-tier">Scout</p>
-      <p class="pricing-platform">✈️ Telegram · Free forever</p>
-      <div class="price"><strong>$0</strong><span>/mo</span></div>
-      <p class="price-original"></p>
-      <p class="price-savings"></p>
-      <p class="pricing-desc">Track your portfolio and learn the system. No wallet, no credit card required.</p>
-      <ul class="pricing-features">
-        <li><span class="check">✓</span>Real-time APY tracking across 4 protocols</li>
-        <li><span class="check">✓</span>Daily P&amp;L &amp; portfolio reports</li>
-        <li><span class="check">✓</span>Risk alerts (ETH price + APY drops)</li>
-        <li><span class="check">✓</span>Safe wallet balance view</li>
-        <li class="dim">— Automated staking</li>
-        <li class="dim">— Auto-harvest &amp; compound</li>
-      </ul>
-      <a class="btn-pricing btn-outline" href="https://t.me/fenix_yield_bot?start=start" target="_blank" rel="noreferrer">Start Free on Telegram</a>
-    </article>
-
-    <!-- Autopilot (Telegram) -->
-    <article class="pricing-card featured">
-      <div class="ribbon">MOST POPULAR</div>
-      <p class="pricing-tier">Autopilot</p>
-      <p class="pricing-platform">✈️ Telegram · Your own Safe wallet</p>
-      <div class="price"><strong id="auto-price">$19</strong><span>/mo</span></div>
-      <p class="price-original" id="auto-original"></p>
-      <p class="price-savings" id="auto-savings"></p>
-      <p class="pricing-desc">Full automation on your own Gnosis Safe. Approve each transaction, or go fully hands-free with Zodiac.</p>
-      <ul class="pricing-features">
-        <li><span class="check">✓</span>Everything in Scout</li>
-        <li><span class="check">✓</span>Bot finds the best yield and stakes daily</li>
-        <li><span class="check">✓</span><span>Approve in Safe Mobile (1–3 taps), <em>or</em> go fully hands-free with Zodiac</span></li>
-        <li><span class="check">✓</span>Auto-harvest &amp; compound Convex rewards</li>
-        <li><span class="check">✓</span>Withdraw any position back to ETH with one command</li>
-        <li><span class="check">✓</span>Pin or exclude protocols · slippage protection</li>
-        <li><span class="check">✓</span>Your Gnosis Safe — you always hold the keys</li>
-      </ul>
-      <a class="btn-pricing btn-filled" id="auto-btn" href="autopilot.html">Start Autopilot →</a>
-    </article>
-
-    <!-- Mobile app -->
-    <article class="pricing-card mobile">
-      <div class="ribbon new">NEW · ON GOOGLE PLAY</div>
-      <p class="pricing-tier">Mobile App</p>
-      <p class="pricing-platform">📱 Google Play (US) · iOS coming soon · No MetaMask needed</p>
-      <div class="price"><strong id="mob-price">$39</strong><span>/mo</span></div>
-      <p class="price-original" id="mob-original"></p>
-      <p class="price-savings" id="mob-savings">🚀 First year $29/mo, then $39/mo — automatic launch pricing</p>
-      <p class="pricing-desc">The easiest way in. We create a secure wallet for you — just deposit ETH and earn. Perfect if you're new to crypto.</p>
-      <ul class="pricing-features">
-        <li><span class="check">✓</span>No MetaMask or Safe setup — a secure passkey wallet is created for you</li>
-        <li><span class="check">✓</span>Unlock with your fingerprint or face — no password, and a 12-word backup phrase only you hold</li>
-        <li><span class="check">✓</span>Tap to deposit, stake, and withdraw — all in-app</li>
-        <li><span class="check">✓</span>Auto-finds the best yield across 5 protocols, including Rocket Pool</li>
-        <li><span class="check">✓</span>Smart alerts — rate moves, better pools, depeg warnings &amp; instant security alerts</li>
-        <li><span class="check">✓</span>Custom automation rules — set your own guardrails</li>
-        <li><span class="check">✓</span>Instant in-app withdrawals to any wallet</li>
-        <li><span class="check">✓</span>Network fees at cost — no markup; first stake &amp; a monthly withdrawal on us</li>
-        <li><span class="check">✓</span>Non-custodial — keys stay on your device, we never hold funds</li>
-      </ul>
-      <a class="btn-pricing btn-filled" id="mob-btn" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get it on Google Play →</a>
-      <span class="btn-sub">Subscribe in the app, billed through Google Play. Launch pricing: first year $29/mo, then $39/mo — applied automatically at checkout. Available in the US for now.<br><a href="phone-setup.html" style="color:var(--teal);text-decoration:none;">Getting the app? Get your phone ready first (2 min) →</a></span>
-    </article>
-
-  </div>
-
-  <div class="security-box">
-    <p class="label">🔐 Non-Custodial Security</p>
-    <h3>We never hold your funds — you do.</h3>
-    <p><strong style="color:var(--white)">Telegram (Autopilot):</strong> the bot proposes transactions to your own Gnosis Safe. On hands-free mode it operates under Zodiac Roles — a strict on-chain permission layer limited to pre-approved yield routes only. It can never send funds to an arbitrary address or change your Safe owners.</p>
-    <p><strong style="color:var(--white)">Mobile app:</strong> your wallet is a passkey-secured smart account. Only your device's Face ID / fingerprint can authorize a transfer. The keys live on your phone — Fenix never has custody. <a href="security.html" style="color:var(--teal);text-decoration:none;">Learn how it works →</a></p>
-  </div>
-
-  <div style="text-align:center;margin-bottom:60px;">
-    <p style="color:var(--muted);font-size:14px;">Cancel anytime — no lock-in. Questions? <a href="mailto:support@fenix-yield.com" style="color:var(--teal);text-decoration:none;">support@fenix-yield.com</a></p>
-  </div>
-
-  <div style="text-align:center;margin-bottom:24px;">
-    <p class="section-label">Common questions</p>
-    <h2 class="section-heading">Pricing FAQ</h2>
-  </div>
-
-  <div class="faq">
-    <div class="faq-item">
-      <p class="faq-q">What's the difference between Autopilot and the Mobile App?</p>
-      <p class="faq-a"><strong style="color:var(--white)">Autopilot ($19)</strong> runs on Telegram and uses your own MetaMask + Gnosis Safe — best if you're comfortable with crypto and want the lowest price. <strong style="color:var(--white)">Mobile App ($39)</strong> creates a secure wallet for you and does everything in one tap — best if you're new to crypto and want zero setup. Both are fully non-custodial.</p>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">Pricing</p>
+      <h1>One membership. No cut of your yield.</h1>
+      <p class="lede">A flat monthly price, billed through Google Play. Fenix takes no percentage of what your ETH earns.</p>
+      <div class="price-card">
+        <div class="price-main">
+          <b>$28.99<small>/month</small></b>
+          <p>For your <strong>first 12 months</strong> as a new subscriber, then <strong>$38.99/month</strong>. Google Play shows your exact price before you pay.</p>
+          <a class="btn btn-fill" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get it on Google Play</a>
+        </div>
+        <div>
+          <ul class="checks">
+            <li>All five pools: Lido, Rocket Pool, Aave, Curve and Convex</li>
+            <li>Auto pool choice, live rates and automatic staking if you want it</li>
+            <li>Balance, earnings and CSV export of your rewards</li>
+            <li>Fenix AI assistant</li>
+            <li>Renews monthly. Cancel anytime in Google Play</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="faq-item">
-      <p class="faq-q">How do I pay?</p>
-      <p class="faq-a"><strong style="color:var(--white)">Telegram Autopilot:</strong> pay in crypto (ETH/USDC/USDT) in the bot or on our <a href="autopilot.html" style="color:var(--teal);text-decoration:none;">Autopilot page</a>, for a fixed term with no auto-renewal. <strong style="color:var(--white)">Mobile App:</strong> subscriptions are billed through Google Play and managed in your store account.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">Does my subscription auto-renew?</p>
-      <p class="faq-a">Subscriptions purchased through Google Play renew automatically and are managed in that store's settings — cancel anytime there. Subscriptions purchased directly (Telegram) are for a fixed period (1, 3, 6, or 12 months) and <strong style="color:var(--white)">do not auto-renew</strong> — you simply re-subscribe when you're ready.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">Can I cancel anytime?</p>
-      <p class="faq-a">Yes. Direct plans stay active until the period you paid for ends — nothing recurs. Store subscriptions can be cancelled in your Google Play account and stay active until the end of the current cycle.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">Do you offer refunds?</p>
-      <p class="faq-a">Direct purchases include a 7-day money-back guarantee on your first payment if the software doesn't work as described — see our <a href="refund-policy.html">Refund Policy</a>. Purchases made through Google Play are refunded under Google Play's refund policy.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">How do discounts and coupon codes work?</p>
-      <p class="faq-a">For the mobile app, the launch discount — first year $29/mo — is applied automatically through Google Play, so there's no code to enter. For Telegram Autopilot, enter your coupon code at checkout in the bot to apply the discount.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">Are there any fees besides the subscription?</p>
-      <p class="faq-a">Every on-chain action — staking, switching pools, withdrawing — pays a small Ethereum network (gas) fee, usually just a few cents at current gas. <strong style="color:var(--white)">Mobile App:</strong> we show the exact fee in ETH and USD before you confirm and deduct it from that transaction — Fenix adds <strong style="color:var(--white)">no markup</strong>. Your first stake after setup and one withdrawal each month are on us. <strong style="color:var(--white)">Telegram Autopilot:</strong> gas is paid from your own Safe as usual. The subscription price never changes.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">What does Fenix Yield actually do?</p>
-      <p class="faq-a">Fenix Yield is a software automation tool. It monitors DeFi protocol APIs, finds the highest available yield across Lido, Curve, Aave and Convex (plus Rocket Pool in the mobile app), and stakes your ETH there — either by proposing a transaction you approve, or automatically within strict on-chain limits you control. It never holds, manages, or has access to your funds. Yield is variable (typically 1.5–5% APY) and not guaranteed.</p>
-    </div>
-  </div>
+  </header>
 
+  <section class="page-sec">
+    <div class="wrap">
+      <h2>Questions about pricing</h2>
+      <div class="faq">
+        <div class="faq-item">
+          <p class="faq-q">How do I pay?</p>
+          <p class="faq-a">You subscribe inside the app, and Google Play bills you and manages the subscription.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Who gets the first-year price?</p>
+          <p class="faq-a">New subscribers. It appears automatically at checkout, so there's no code to enter. It's for Google accounts that haven't had this subscription before. Other accounts pay $38.99/month.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Does it renew automatically?</p>
+          <p class="faq-a">Yes, every month. You can cancel anytime in your Google Play account, and you keep access until the end of the current month.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">What happens to my ETH if my membership ends?</p>
+          <p class="faq-a">It stays in your vault. <strong>Your funds keep earning and withdrawals stay open.</strong> A membership unlocks the app's full features; it doesn't hold your ETH.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Are there fees besides the membership?</p>
+          <p class="faq-a">Every on-chain action pays an Ethereum network fee, which changes with how busy the network is. The app shows the exact fee before you confirm and deducts it from that transaction at cost, with no markup. Your first stake and one withdrawal each calendar month are covered up to a capped amount. If a fee would be more than 5% of the amount you're moving, the app stops and suggests waiting or moving a larger amount.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">What will my ETH earn?</p>
+          <p class="faq-a">We quote a range of 1.5&ndash;5% a year across the five pools. Rates move a lot, and any pool can fall below that range. The app's Markets tab shows live rates. Yields are variable and not guaranteed. Not financial advice.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Can I get a refund?</p>
+          <p class="faq-a">Purchases through Google Play are refunded under Google Play's policy. See our <a href="refund-policy.html">refund policy</a> for details.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">I'm outside the US. Can I use it?</p>
+          <p class="faq-a">Google Play has the app in the US for now. Fenix Intel members anywhere can <a href="https://intel.fenix-yield.com/app#direct" target="_blank" rel="noopener">download it directly</a> and pay in crypto in the app, for a fixed term that doesn't renew automatically.</p>
+        </div>
+      </div>
+      <p class="callout" style="margin-top:28px">Questions? Email <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a> or ask the <a href="setup-chat.html">AI assistant</a>.</p>
+    </div>
+  </section>
 </main>
 
 <footer>
-  <div class="footer-logo">
-    <img src="fenix-logo.jpg" alt="Fenix Yield logo">
-    <span>Fenix Yield</span>
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="brand" href="index.html"><img src="fenix-logo.jpg" alt=""><span><span>Fenix</span> Yield</span></a>
+      <a class="btn btn-fill" href="https://play.google.com/store/apps/details?id=com.fenixyield.app" target="_blank" rel="noopener">Get it on Google Play</a>
+    </div>
+    <ul class="foot-links">
+      <li><a href="staking-app.html">Staking App</a></li>
+      <li><a href="setup.html">How It Works</a></li>
+      <li><a href="phone-setup.html">Phone Setup</a></li>
+      <li><a href="setup-chat.html">AI Assistant</a></li>
+      <li><a href="security.html">Security Guide</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="zodiac-roles-v2-guide.html">Zodiac Roles Field Guide</a></li>
+    </ul>
+    <ul class="foot-links">
+      <li><a href="terms.html">Terms of Service</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="refund-policy.html">Refund Policy</a></li>
+      <li><a href="delete-account.html">Delete Account</a></li>
+      <li><a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a></li>
+      <li><a href="https://app.ens.domains/fenix-yield.eth" target="_blank" rel="noopener">fenix-yield.eth ↗</a></li>
+      <li><a href="https://fenix-labs.dev" target="_blank" rel="noopener">Fenix Labs ↗</a></li>
+    </ul>
+    <p class="fine"><strong>Know the risks.</strong> Staking carries risk. The pools are third-party smart contracts that can fail, the value of ETH goes up and down, and rates change every day. Yields are variable and not guaranteed, and past performance doesn't predict future results. Nothing on this site is financial, investment, legal or tax advice.</p>
+    <p class="fine">Fenix Yield is made by Fenix Labs LLC, Texas. © 2026 Fenix Labs LLC, doing business as Fenix Yield. By using Fenix Yield you agree to our <a href="terms.html" style="color:inherit">Terms of Service</a>.</p>
   </div>
-  <p class="footer-tagline">Put your crypto to work.</p>
-  <ul class="footer-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="setup.html">Setup Guide</a></li>
-    <li><a href="setup-chat.html">AI Assistant</a></li>
-    <li><a href="security.html">Security</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="terms.html">Terms of Service</a></li>
-    <li><a href="privacy.html">Privacy Policy</a></li>
-    <li><a href="refund-policy.html">Refund Policy</a></li>
-    <li><a href="delete-account.html">Delete Account</a></li>
-  </ul>
-  <a class="footer-email" href="mailto:support@fenix-yield.com">support@fenix-yield.com</a>
-  <p class="footer-copy">© 2026 Fenix Labs LLC, doing business as Fenix Yield. All rights reserved.<br><br>
-    <strong>Risk Disclosure:</strong> Fenix Yield is a non-custodial automation tool. We do not hold, control, or have access to your funds at any time. DeFi protocols carry inherent risks including smart contract vulnerabilities, liquidity risk, and market volatility. Yield percentages are variable and not guaranteed. Past performance is not indicative of future results.<br><br>
-    <strong>Not Financial Advice:</strong> Nothing on this website constitutes financial, investment, legal, or tax advice. You are solely responsible for your investment decisions.
-  </p>
 </footer>
-
-<script>
-// Referral tracking
-const refParam = new URLSearchParams(window.location.search).get('ref');
-if (refParam) sessionStorage.setItem('fenix_ref', refParam);
-</script>
 
 </body>
 </html>
