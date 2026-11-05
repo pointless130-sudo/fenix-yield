@@ -43,7 +43,7 @@
     <div class="wrap">
       <p class="eyebrow">Security guide</p>
       <h1>What protects your ETH, and what you need to protect.</h1>
-      <p class="lede">Your ETH sits in a vault you own on Ethereum, not in a Fenix account. That keeps custody with you, and it also means your phone and your recovery phrase matter.</p>
+      <p class="lede">Your ETH sits in a vault you own on Ethereum, not in a Fenix account. That means your phone and your recovery phrase matter, and so does the automation permission explained below.</p>
     </div>
   </header>
 
@@ -51,22 +51,22 @@
     <div class="wrap">
       <h2>Who can do what</h2>
       <dl class="ledger">
-        <div class="ledger-row"><dt>Your passkey</dt><dd>Opens your vault day to day. <strong>Withdrawals and sends to any other wallet need your approval</strong> with it, using your fingerprint, face or screen lock.</dd></div>
+        <div class="ledger-row"><dt>Your passkey</dt><dd>Opens your vault day to day. <strong>In the app, withdrawals and sends to any other wallet need your approval</strong> with it, using your fingerprint, face or screen lock.</dd></div>
         <div class="ledger-row"><dt>Your 12-word phrase</dt><dd>The on-chain recovery key for your vault. <strong>Only you hold it.</strong> Fenix's servers never see the phrase, only its address.</dd></div>
-        <div class="ledger-row"><dt>Fenix's automation</dt><dd>Can move ETH in and out of the pools you've enabled, limited by on-chain permissions. <strong>It can't send your ETH anywhere else.</strong></dd></div>
+        <div class="ledger-row"><dt>Fenix's automation</dt><dd>Moves ETH in and out of the pools you've enabled, using a wallet whose key Fenix holds and an on-chain permission. <strong>That permission doesn't limit every action, so a stolen key could move funds out of your vault.</strong></dd></div>
         <div class="ledger-row"><dt>Fenix AI</dt><dd>Answers questions about your vault and the pools. It can suggest an action, but <strong>only you can approve it.</strong></dd></div>
-        <div class="ledger-row"><dt>Fenix Labs</dt><dd>Writes the software. <strong>We don't hold your funds or your keys.</strong></dd></div>
+        <div class="ledger-row"><dt>Fenix Labs</dt><dd>Writes the software and runs the automation wallet. <strong>We don't hold your funds, your passkey or your phrase.</strong></dd></div>
       </dl>
     </div>
   </section>
 
   <section class="page-sec" id="zodiac">
     <div class="wrap">
-      <h2>How the automation limits work</h2>
-      <p>Your vault is a Safe smart account on Ethereum. It comes with a Zodiac Roles module, an audited, open-source permissions contract from Gnosis Guild. Fenix's automation wallet holds one narrow role in that module.</p>
+      <h2>How the automation permission works</h2>
+      <p>Your vault is a Safe smart account on Ethereum. It comes with a Zodiac Roles module, an audited, open-source permissions contract from Gnosis Guild. Fenix's automation wallet holds one role in that module.</p>
       <ul class="plain">
-        <li><strong>A short list of allowed actions.</strong> The role can only call specific functions on the contracts of the pools your vault has enabled.</li>
-        <li><strong>Checked on-chain.</strong> Every call is checked by the module before anything moves, and anything outside the list is rejected. So the limits hold even if Fenix's servers were compromised.</li>
+        <li><strong>Limited to certain contracts.</strong> The role can only reach the contracts of the pools your vault has enabled, and a direct ETH send to any other address is rejected on-chain.</li>
+        <li><strong>Not limited to certain actions.</strong> On those contracts the role can call any function, including token transfers and an Aave deposit credited to someone else. Fenix's software only sends staking and exit calls, but the contract doesn't enforce that. So if our servers were compromised, funds could be moved out of your vault.</li>
         <li><strong>The module belongs to your vault.</strong> After setup, Fenix can't widen its own permissions. Adding Rocket Pool takes your passkey approval.</li>
         <li><strong>You set how it behaves.</strong> Auto-stake can be Daily, Weekly or Off. In Settings you can also set a Switch gap, a Minimum to invest and a Weekly limit.</li>
       </ul>
@@ -115,6 +115,7 @@
       <h2>The risks that remain</h2>
       <ul class="plain no">
         <li><strong>Smart contracts can fail.</strong> The pools are third-party contracts that can have bugs or be exploited, and that could lose funds.</li>
+        <li><strong>Fenix's automation key could be stolen.</strong> The permission above doesn't limit every action, so a thief with that key could move funds out of your vault.</li>
         <li><strong>ETH's value moves.</strong> Its price goes up and down, and the app doesn't protect you from that.</li>
         <li><strong>Pool tokens can drift.</strong> stETH can trade below ETH, which can affect what you get when you withdraw.</li>
         <li><strong>Rates change daily.</strong> Yields are variable and not guaranteed, and network fees can exceed what a small position earns.</li>

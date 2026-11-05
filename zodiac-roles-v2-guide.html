@@ -187,7 +187,7 @@ hr.divider{border:none;border-top:1px solid var(--border);margin:44px 0 0;}
   <div class="section-eyebrow">Background</div>
   <h2 class="section-title">What the Roles Modifier does, in one minute</h2>
   <p>The <a href="https://github.com/gnosisguild/zodiac-modifier-roles" rel="noopener">Zodiac Roles Modifier</a> is an audited module by Gnosis Guild that attaches to a Gnosis Safe and lets you grant a third-party address a <strong>role</strong>: a narrowly scoped permission to execute specific functions on specific contracts <em>through</em> the Safe, without being a Safe owner and without per-transaction approval.</p>
-  <p>It is the cleanest primitive that exists today for non-custodial automation. A bot can be allowed to call <code class="inline">submit()</code> on Lido and <code class="inline">add_liquidity()</code> on a Curve pool, while the same bot is cryptographically incapable of transferring funds out, changing Safe owners, or calling anything not on its list. Every boundary is enforced on-chain by the module itself — if the operator's server is fully compromised, the attacker inherits only the whitelist.</p>
+  <p><strong>Correction, November 2026:</strong> an earlier version of this guide said a bot set up as shown below could not transfer funds out. That was wrong. In Roles v2, <code class="inline">allowTarget</code> clears every function on a contract, so the <code class="inline">allowTarget</code> + <code class="inline">allowFunction</code> pairs below make calls pass but do not restrict them. To restrict a role, use <code class="inline">scopeTarget</code> with <code class="inline">allowFunction</code>, and add parameter conditions on spender and recipient fields. Fenix Yield's own vaults currently use the <code class="inline">allowTarget</code> pattern, so they don't have that restriction yet.</p>
   <p>The permission model has <strong>two layers</strong>, and this is the root of most of the failures below:</p>
   <table>
     <tr><th>Layer</th><th>Call</th><th>Answers</th></tr>
@@ -366,7 +366,7 @@ convexBooster.<span class="f">deposit</span>(pid, amount, true)      <span class
 
 <div class="content">
   <div class="footer-note">
-    Written and maintained by the builder of <a href="https://fenix-yield.com">Fenix Yield</a>, which runs this exact permission model in production for non-custodial ETH yield automation.<br>
+    Written and maintained by the builder of <a href="https://fenix-yield.com">Fenix Yield</a>, which uses the Roles Modifier in production for ETH yield automation.<br>
     Found an inaccuracy or a gotcha we missed? <a href="mailto:support@fenix-yield.com">support@fenix-yield.com</a> — corrections credited.
   </div>
 </div>

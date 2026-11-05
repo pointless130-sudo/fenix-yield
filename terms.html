@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Terms of Service — Fenix Yield</title>
-<meta name="description" content="Terms of Service for Fenix Yield, the self-custody ETH staking app. Your funds stay in your own vault and we never hold them.">
+<meta name="description" content="Terms of Service for Fenix Yield, the ETH staking app for Android.">
 <link rel="canonical" href="https://fenix-yield.com/terms.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -158,14 +158,14 @@ footer {
   <div class="page-header-inner">
     <p class="page-eyebrow">Legal</p>
     <h1 class="page-title">Terms of Service</h1>
-    <p class="page-meta">Effective date: June 27, 2026 &nbsp;·&nbsp; Last updated: November 3, 2026</p>
+    <p class="page-meta">Effective date: June 27, 2026 &nbsp;·&nbsp; Last updated: November 4, 2026</p>
   </div>
 </div>
 
 <main>
 
   <div class="highlight-box">
-    <p><strong style="color:var(--white)">Summary:</strong> Fenix Yield is a software automation tool. We do not hold or have custody of your funds or your keys. You are solely responsible for your wallet, your keys, and your investment decisions. By using Fenix Yield you agree to these terms.</p>
+    <p><strong style="color:var(--white)">Summary:</strong> Fenix Yield is a software automation tool. We do not hold your funds or your keys, but we do hold the key to an automation wallet that has a permission on your vault (see Sections 2 and 6). You are solely responsible for your wallet, your keys, and your investment decisions. By using Fenix Yield you agree to these terms.</p>
   </div>
 
   <div class="doc-section">
@@ -177,15 +177,15 @@ footer {
 
   <div class="doc-section">
     <h2>2. Description of Service</h2>
-    <p>Fenix Yield is a non-custodial software automation tool that:</p>
+    <p>Fenix Yield is a software automation tool that:</p>
     <ul>
       <li>Monitors publicly available DeFi protocol APIs to identify yield opportunities</li>
-      <li>Through the Fenix Yield mobile app, creates a self-custodial smart vault for you, secured by your passkey / device biometrics and a 12-word recovery phrase that only you hold</li>
+      <li>Through the Fenix Yield mobile app, creates a smart vault that you own, secured by your passkey / device biometrics and a 12-word recovery phrase that only you hold</li>
       <li>Lets you deposit, stake, and withdraw ETH across third-party protocols, with withdrawals and sends out of your vault approved by you on your device</li>
-      <li>If you turn on automation, moves ETH between your vault and the protocols you have enabled, within on-chain permission limits (the Zodiac Roles Module). It cannot send your ETH to any other address</li>
+      <li>When you stake, or if you turn on automation, moves ETH between your vault and the protocols you have enabled, using an automation wallet that Fenix controls and that holds an on-chain permission on your vault (the Zodiac Roles Module). That permission limits which contracts the wallet can reach, but not every action on those contracts (see Section 6)</li>
       <li>Provides portfolio tracking, alerts, and reporting</li>
     </ul>
-    <p><strong>Fenix Yield is not a financial institution, investment advisor, broker, exchange, or custodian.</strong> We do not hold your funds or your keys. All assets remain in your self-custodial vault or in the protocols you choose, and our automation can act only within the limits described above.</p>
+    <p><strong>Fenix Yield is not a financial institution, investment advisor, broker, exchange, or custodian.</strong> We do not hold your funds or your keys. All assets remain in your vault or in the protocols you choose.</p>
   </div>
 
   <div class="doc-section">
@@ -204,7 +204,7 @@ footer {
   </div>
 
   <div class="doc-section">
-    <h2>5. Non-Custodial Nature &amp; No Financial Advice</h2>
+    <h2>5. No Financial Advice</h2>
     <p><strong>We are not a financial advisor.</strong> Nothing provided by Fenix Yield — including APY data, protocol recommendations, transaction proposals, alerts, or any other output — constitutes financial, investment, legal, or tax advice.</p>
     <p>You are solely responsible for:</p>
     <ul>
@@ -224,6 +224,7 @@ footer {
       <li><strong>Market risk:</strong> Cryptocurrency values are highly volatile. Yield percentages are variable and not guaranteed</li>
       <li><strong>Protocol risk:</strong> Third-party protocols (Lido, Rocket Pool, Aave, Curve and Convex) may change, pause, or fail independently of Fenix Yield</li>
       <li><strong>Software risk:</strong> The Service is provided "as is." Bugs, network outages, or errors may cause missed transactions or incorrect behavior</li>
+      <li><strong>Automation key risk:</strong> Fenix holds the key to the automation wallet. Its on-chain permission does not limit every action on the contracts it can reach, so if that key were stolen or misused, funds could be moved out of your vault</li>
       <li><strong>Gas risk:</strong> Blockchain transactions require gas fees which fluctuate and may exceed yield earned</li>
     </ul>
     <p>Past yield performance is not indicative of future results.</p>
