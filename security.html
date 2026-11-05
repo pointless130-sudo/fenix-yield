@@ -66,9 +66,11 @@
       <p>Your vault is a Safe smart account on Ethereum. It comes with a Zodiac Roles module, an audited, open-source permissions contract from Gnosis Guild. Fenix's automation wallet holds one role in that module.</p>
       <ul class="plain">
         <li><strong>Limited to certain contracts.</strong> The role can only reach the contracts of the pools your vault has enabled, and a direct ETH send to any other address is rejected on-chain.</li>
-        <li><strong>Not limited to certain actions.</strong> On those contracts the role can call any function, including token transfers and an Aave deposit credited to someone else. Fenix's software only sends staking and exit calls, but the contract doesn't enforce that. So if our servers were compromised, funds could be moved out of your vault.</li>
         <li><strong>The module belongs to your vault.</strong> After setup, Fenix can't widen its own permissions. Adding Rocket Pool takes your passkey approval.</li>
         <li><strong>You set how it behaves.</strong> Auto-stake can be Daily, Weekly or Off. In Settings you can also set a Switch gap, a Minimum to invest and a Weekly limit.</li>
+      </ul>
+      <ul class="plain no">
+        <li><strong>Not limited to certain actions.</strong> On those contracts the role can call any function, including token transfers and an Aave deposit credited to someone else. Fenix's software only sends staking and exit calls, but the contract doesn't enforce that. So if our servers were compromised, funds could be moved out of your vault.</li>
       </ul>
       <p>No software is free of risk, and these limits don't protect you from the risks listed below. Developers can read our <a href="zodiac-roles-v2-guide.html">Zodiac Roles field guide</a> for the technical detail.</p>
     </div>
