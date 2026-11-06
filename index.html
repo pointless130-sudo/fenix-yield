@@ -93,13 +93,13 @@
       <li class="pool" data-pool="curve">
         <div class="pool-name"><span class="dot" style="background:var(--curve)"></span><div><b>Curve</b><small>You hold steCRV</small></div></div>
         <div class="pool-type">Liquidity pool</div>
-        <p class="pool-what">Your ETH joins the stETH/ETH pool and earns trading fees plus CRV token rewards.</p>
+        <p class="pool-what">Your ETH joins the stETH/ETH pool and earns trading fees and the staking yield of the stETH it holds.</p>
         <div class="pool-rate"><b class="r">&ndash;</b><small class="u">in the app</small><span class="tag">Highest today</span></div>
       </li>
       <li class="pool" data-pool="convex">
         <div class="pool-name"><span class="dot" style="background:var(--convex)"></span><div><b>Convex</b><small>You hold cvxstETH</small></div></div>
-        <div class="pool-type">Boosted Curve rewards</div>
-        <p class="pool-what">Stakes that Curve position for added CRV and CVX rewards, with no tokens for you to lock.</p>
+        <div class="pool-type">Staked Curve position</div>
+        <p class="pool-what">Holds that same Curve position and earns about what Curve does, at higher network fees. Its own CRV and CVX rewards are close to zero right now, and Fenix doesn't collect them.</p>
         <div class="pool-rate"><b class="r">&ndash;</b><small class="u">in the app</small><span class="tag">Highest today</span></div>
       </li>
     </ol>
@@ -135,7 +135,7 @@
     <dl class="ledger">
       <div class="ledger-row"><dt>Your passkey</dt><dd>Opens your vault day to day. <strong>In the app, withdrawals and sends to any other wallet need your approval</strong> with it.</dd></div>
       <div class="ledger-row"><dt>Your 12-word phrase</dt><dd>The on-chain recovery key for your vault. <strong>Only you hold it.</strong> Fenix's servers never see the phrase, only its address.</dd></div>
-      <div class="ledger-row"><dt>Fenix's automation</dt><dd>Moves ETH in and out of the pools you've enabled, using a wallet whose key Fenix holds and an on-chain permission (Zodiac Roles). <strong>That permission doesn't limit every action, so a stolen key could move funds out of your vault.</strong></dd></div>
+      <div class="ledger-row"><dt>Fenix's automation</dt><dd>Stakes idle ETH into the pools you've enabled, using a wallet whose key Fenix holds and an on-chain permission (Zodiac Roles). <strong>That permission doesn't limit every action, so a stolen key could move funds out of your vault.</strong></dd></div>
       <div class="ledger-row"><dt>Fenix AI</dt><dd>Answers questions about your vault and the pools. It can suggest an action, but <strong>only you can approve it.</strong></dd></div>
       <div class="ledger-row"><dt>If your membership ends</dt><dd>Your funds keep earning and <strong>withdrawals stay open.</strong></dd></div>
     </dl>
@@ -175,7 +175,7 @@
         <ul class="checks">
           <li>All five pools, with Auto and live rates</li>
           <li>Automatic staking of new deposits, if you want it</li>
-          <li>Balance, earnings and CSV export of your rewards</li>
+          <li>Balance, earnings and a CSV export of your holdings</li>
           <li>Fenix AI assistant</li>
           <li>Renews monthly. Cancel anytime in Google Play</li>
         </ul>
