@@ -293,6 +293,7 @@ footer { border-top: 1px solid var(--border); padding: 48px 40px 32px; text-alig
       <li><strong>Expo</strong> — mobile app updates (a random installation ID and the app version are sent when the app checks for an update) and push notification delivery, together with Apple &amp; Google push services.</li>
       <li><strong>Cloudflare</strong> — DNS, CDN, and tunnel infrastructure.</li>
       <li><strong>Alchemy / public RPC</strong> — Ethereum node access for reading and broadcasting on-chain data.</li>
+      <li><strong>PublicNode, dRPC and Blast API</strong> — public Ethereum services the mobile app asks directly, just before you approve a withdrawal, a send or a pool unlock, so it can check what our server is asking you to sign. Each one sees your device's IP address and your vault address and, for a withdrawal from a pool, which pool and how much. The app sends them no name, account or passkey details.</li>
       <li><strong>Safe (Gnosis Safe)</strong> — the smart-account contracts your vault is built on, and transaction APIs.</li>
     </ul>
     <p>We do not sell, rent, or share your personal data with any third party for marketing purposes.</p>
