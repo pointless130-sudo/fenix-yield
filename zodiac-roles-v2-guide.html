@@ -187,7 +187,7 @@ hr.divider{border:none;border-top:1px solid var(--border);margin:44px 0 0;}
   <div class="section-eyebrow">Background</div>
   <h2 class="section-title">What the Roles Modifier does, in one minute</h2>
   <p>The <a href="https://github.com/gnosisguild/zodiac-modifier-roles" rel="noopener">Zodiac Roles Modifier</a> is an audited module by Gnosis Guild that attaches to a Gnosis Safe and lets you grant a third-party address a <strong>role</strong>: a narrowly scoped permission to execute specific functions on specific contracts <em>through</em> the Safe, without being a Safe owner and without per-transaction approval.</p>
-  <p><strong>Correction, November 2026:</strong> an earlier version of this guide said a bot set up as shown below could not transfer funds out. That was wrong. In Roles v2, <code class="inline">allowTarget</code> clears every function on a contract, so the <code class="inline">allowTarget</code> + <code class="inline">allowFunction</code> pairs below make calls pass but do not restrict them. To restrict a role, use <code class="inline">scopeTarget</code> with <code class="inline">allowFunction</code>, and add parameter conditions on spender and recipient fields. Fenix Yield's own vaults currently use the <code class="inline">allowTarget</code> pattern, so they don't have that restriction yet.</p>
+  <p><strong>Correction, November 2026:</strong> an earlier version of this guide said a bot set up as shown below could not transfer funds out. That was wrong. In Roles v2, <code class="inline">allowTarget</code> clears every function on a contract, so the <code class="inline">allowTarget</code> + <code class="inline">allowFunction</code> pairs below make calls pass but do not restrict them. To restrict a role, use <code class="inline">scopeTarget</code> with <code class="inline">allowFunction</code>, and add parameter conditions on spender and recipient fields. Since November 2026, Fenix Yield's vaults use <code class="inline">scopeTarget</code> with pinned parameters: on each pool contract the role can call one stake function, and nothing else.</p>
   <p>The permission model has <strong>two layers</strong>, and this is the root of most of the failures below:</p>
   <table>
     <tr><th>Layer</th><th>Call</th><th>Answers</th></tr>
@@ -212,9 +212,12 @@ hr.divider{border:none;border-top:1px solid var(--border);margin:44px 0 0;}
   <pre><span class="c">// ❌ WRONG — confirms on-chain, permission never takes effect</span>
 <span class="bad">await roles.allowFunction(ROLE, LIDO, SELECTOR_SUBMIT, options);</span>
 
-<span class="c">// ✅ RIGHT — target first, then function</span>
-<span class="good">await roles.allowTarget(ROLE, LIDO, targetOptions);</span>
-<span class="good">await roles.allowFunction(ROLE, LIDO, SELECTOR_SUBMIT, fnOptions);</span></pre>
+<span class="c">// ✅ RIGHT — scope the target first, then allow the function (Send bit on the function)</span>
+<span class="good">await roles.scopeTarget(ROLE, LIDO);</span>
+<span class="good">await roles.allowFunction(ROLE, LIDO, SELECTOR_SUBMIT, fnOptions);</span>
+
+<span class="c">// ⚠️ PASSES BUT DOESN'T RESTRICT — allowTarget clears every function on LIDO</span>
+<span class="bad">await roles.allowTarget(ROLE, LIDO, targetOptions);</span></pre>
   <p>Nothing warns you about the missing half. The config transaction succeeding is <em>not</em> evidence the permission works — only an actual execution test is (see the <a href="#verify">verification checklist</a>).</p>
 </div>
 
@@ -333,14 +336,15 @@ convexBooster.<span class="f">deposit</span>(pid, amount, true)      <span class
   <span class="k">return</span> receipt;
 }</pre>
   <p>And the corresponding scoping sequence for one payable protocol plus one two-step flow:</p>
-  <pre><span class="c">// Payable protocol (e.g. a staking submit) — Send bit required</span>
-<span class="k">await</span> roles.<span class="f">allowTarget</span>(ROLE_KEY, STAKING_CONTRACT, 1);
-<span class="k">await</span> roles.<span class="f">allowFunction</span>(ROLE_KEY, STAKING_CONTRACT, SEL_SUBMIT, 0);
+  <pre><span class="c">// Payable protocol (e.g. a staking submit) — Send bit on the function</span>
+<span class="k">await</span> roles.<span class="f">scopeTarget</span>(ROLE_KEY, STAKING_CONTRACT);
+<span class="k">await</span> roles.<span class="f">allowFunction</span>(ROLE_KEY, STAKING_CONTRACT, SEL_SUBMIT, 1);
 
 <span class="c">// Two-step flow: approve on the TOKEN, deposit on the VAULT (Gotcha 04)</span>
-<span class="k">await</span> roles.<span class="f">allowTarget</span>(ROLE_KEY, LP_TOKEN, 0);
-<span class="k">await</span> roles.<span class="f">allowFunction</span>(ROLE_KEY, LP_TOKEN, SEL_APPROVE, 0);
-<span class="k">await</span> roles.<span class="f">allowTarget</span>(ROLE_KEY, VAULT, 0);
+<span class="c">// Pin the approve's spender with scopeFunction conditions, or the role can approve anyone</span>
+<span class="k">await</span> roles.<span class="f">scopeTarget</span>(ROLE_KEY, LP_TOKEN);
+<span class="k">await</span> roles.<span class="f">scopeFunction</span>(ROLE_KEY, LP_TOKEN, SEL_APPROVE, SPENDER_IS_VAULT_CONDITIONS, 0);
+<span class="k">await</span> roles.<span class="f">scopeTarget</span>(ROLE_KEY, VAULT);
 <span class="k">await</span> roles.<span class="f">allowFunction</span>(ROLE_KEY, VAULT, SEL_DEPOSIT, 0);</pre>
   <div class="alert success"><span class="alert-icon">🔐</span><span><strong>Key hygiene:</strong> the role member should be a dedicated, freshly generated EOA used for nothing else. Never reuse a key that also proposes to the Safe queue or holds any other permission — one key, one role, one blast radius.</span></div>
 </div>

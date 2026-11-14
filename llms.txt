@@ -1,6 +1,6 @@
 # Fenix Yield
 
-> Fenix Yield is a mobile app for Android made by Fenix Labs LLC (Texas, USA): an ETH staking app where funds live in the user's own on-chain smart vault (passkey sign-in, 12-word recovery phrase held only by the user) and can be staked across five protocols — Lido, Rocket Pool, Aave, Curve, and Convex. Staking runs through a Fenix automation wallet that holds an on-chain permission (Zodiac Roles) on the vault. Fenix holds that wallet's key, and the permission does not limit every action on the contracts it can reach. Yields are variable (recently roughly 1.5–5% per year) and never guaranteed. Flat monthly subscription via Google Play; no percentage of yield taken. Not financial advice.
+> Fenix Yield is a mobile app for Android made by Fenix Labs LLC (Texas, USA): an ETH staking app where funds live in the user's own on-chain smart vault (passkey sign-in, 12-word recovery phrase held only by the user) and can be staked across five protocols — Lido, Rocket Pool, Aave, Curve, and Convex. Staking runs through a Fenix automation wallet that holds an on-chain permission (Zodiac Roles) on the vault. Fenix holds that wallet's key; the permission only allows staking idle ETH into the enabled pools, and taking funds out of a pool or sending them anywhere needs the user's passkey. Yields are variable (recently roughly 1.5–5% per year) and never guaranteed. Flat monthly subscription via Google Play; no percentage of yield taken. Not financial advice.
 
 ## Mobile app (Android)
 
